@@ -15,15 +15,20 @@
 @layer components {
 	/* Vùng scope của utility footer: style của chính thẻ <footer> đặt ở đây. */
 	.site-footer {
-		@apply bg-footer pt-12 text-[#cbd5e1];
+		@apply bg-footer pt-12 text-[15px] leading-relaxed text-footer-text lg:pt-14;
 	}
 
-	/* Menu chân trang (wp_nav_menu, class "footer-nav"). */
+	/* Tiêu đề cột (vàng, in hoa). */
+	.footer-heading {
+		@apply mb-4 text-[15px] leading-snug font-bold text-footer-accent uppercase lg:text-base;
+	}
+
+	/* Menu "Điều khoản chính sách" (wp_nav_menu vị trí footer, class "footer-nav"): mỗi mục có dấu chấm đầu dòng. */
 	.footer-nav li + li {
 		@apply mt-2;
 	}
 
 	.footer-nav a {
-		@apply text-white hover:text-green;
+		@apply flex gap-2 text-footer-text before:content-['·'] hover:text-footer-accent;
 	}
 }

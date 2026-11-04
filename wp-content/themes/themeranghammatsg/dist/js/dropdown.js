@@ -1,0 +1,1 @@
+var e=document.querySelectorAll(`.js-dropdown`);document.addEventListener(`click`,t=>{e.forEach(e=>{e.open&&!e.contains(t.target)&&(e.open=!1)})}),document.addEventListener(`keydown`,t=>{t.key===`Escape`&&e.forEach(e=>{e.open&&(e.open=!1,e.querySelector(`summary`)?.focus())})});

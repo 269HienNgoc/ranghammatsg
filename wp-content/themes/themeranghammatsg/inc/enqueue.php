@@ -81,18 +81,6 @@ function rhm_enqueue_assets(): void {
 add_action( 'wp_enqueue_scripts', 'rhm_enqueue_assets' );
 
 /**
- * Site dùng Classic Editor (block editor đã tắt trong functions.php)
- * → bỏ CSS của block library / global styles để tránh CSS thừa.
- */
-function rhm_dequeue_block_styles(): void {
-	wp_dequeue_style( 'wp-block-library' );
-	wp_dequeue_style( 'wp-block-library-theme' );
-	wp_dequeue_style( 'classic-theme-styles' );
-	wp_dequeue_style( 'global-styles' );
-}
-add_action( 'wp_enqueue_scripts', 'rhm_dequeue_block_styles', 100 );
-
-/**
  * Preload font Roboto (2 subset dùng cho tiếng Việt) để chữ hiển thị sớm.
  */
 function rhm_preload_fonts(): void {

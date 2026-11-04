@@ -24,6 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 $rhm_hotline      = rhm_get_option( 'rhm_hotline' );
 $rhm_hotline_note = rhm_get_option( 'rhm_hotline_note', __( 'Tư vấn miễn phí 24/7', 'themeranghammatsg' ) );
+$rhm_current_url = get_pagenum_link( max( 1, (int) get_query_var( 'paged' ) ), false );
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -31,6 +32,9 @@ $rhm_hotline_note = rhm_get_option( 'rhm_hotline_note', __( 'Tư vấn miễn ph
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php wp_head(); ?>
+	<link rel="alternate" hreflang="vi-vn" href="<?php echo esc_url( $rhm_current_url ); ?>" />
+	<link rel="alternate" hreflang="vi" href="<?php echo esc_url( $rhm_current_url ); ?>" />
+	<link rel="alternate" hreflang="x-default" href="<?php echo esc_url( $rhm_current_url ); ?>" />
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
@@ -40,9 +44,9 @@ $rhm_hotline_note = rhm_get_option( 'rhm_hotline_note', __( 'Tư vấn miễn ph
 	<div class="header-bar site-container flex items-center gap-2.5 py-3 xs:gap-3 lg:min-h-[113px] lg:gap-3 lg:py-3 xl:gap-6">
 		<div class="site-branding order-1 min-w-0 flex-1 lg:flex-initial">
 			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
+				<?php rhm_custom_logo(); ?>
 			<?php else : ?>
-				<a class="block text-base leading-tight font-bold text-dark uppercase hover:text-primary xs:text-lg xl:text-2xl" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+				<a class="inline-block text-base leading-tight font-bold text-dark uppercase hover:text-primary xs:text-lg xl:text-2xl" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 			<?php endif; ?>
 		</div>
 
@@ -83,9 +87,9 @@ $rhm_hotline_note = rhm_get_option( 'rhm_hotline_note', __( 'Tư vấn miễn ph
 		<div class="flex shrink-0 items-center gap-3 px-5 pt-4 pb-3 lg:hidden">
 			<div class="drawer-logo min-w-0 flex-1">
 				<?php if ( has_custom_logo() ) : ?>
-					<?php the_custom_logo(); ?>
+					<?php rhm_custom_logo(); ?>
 				<?php else : ?>
-					<a class="block text-base leading-tight font-bold text-dark uppercase" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+					<a class="inline-block text-base leading-tight font-bold text-dark uppercase" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 				<?php endif; ?>
 			</div>
 			<?php rhm_flag_links(); ?>

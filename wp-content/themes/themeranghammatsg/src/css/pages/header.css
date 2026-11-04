@@ -35,12 +35,20 @@
 		@apply shadow-[0_4px_16px_rgb(16_33_45/0.08)];
 	}
 
+	/* Link logo (WordPress in <a class="custom-logo-link"> inline bọc <img> block): nếu để inline, vùng bấm giãn hết
+	 * chiều rộng khối cha → bấm khoảng trắng cạnh logo cũng về trang chủ. block + w-fit: vùng bấm = đúng kích thước ảnh. */
+	.site-header .custom-logo-link {
+		@apply block w-fit;
+	}
+
+	/* Logo: chiều cao CỐ ĐỊNH (không dùng max-h → kích thước trước/sau khi ảnh tải giống nhau, CLS 0).
+	 * Header phải khớp RHM_LOGO_HEIGHTS (inc/setup.php): 46 / 56 / 64 / 84px. Ngăn kéo 44px (dùng chung file với header). */
 	.site-branding .custom-logo {
-		@apply h-auto max-h-[46px] w-auto xs:max-h-14 lg:max-h-16 xl:max-h-[84px];
+		@apply h-[46px] w-auto xs:h-14 lg:h-16 xl:h-[84px];
 	}
 
 	.drawer-logo .custom-logo {
-		@apply h-auto max-h-11 w-auto;
+		@apply h-11 w-auto;
 	}
 
 	/* ---- Nút hamburger (3 vạch) ---- */

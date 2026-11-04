@@ -12,16 +12,61 @@
 		@apply mt-4;
 	}
 
+	/*
+	 * Tiêu đề trong nội dung: mỗi cấp có dấu hiệu riêng để nhìn là biết thứ bậc.
+	 * H2 vạch dọc gradient (dài theo số dòng) | H3 chấm tròn viền | H4 gạch chân ngắn | H5 nhãn in hoa | H6 ghi chú nhỏ.
+	 * Khoảng cách trên giảm dần theo cấp (H2 28/32px → H3 24 → H4–H6 20px); tiêu đề → phần tử kế tiếp 12px (sát hơn
+	 * khoảng cách giữa 2 đoạn 16px để tiêu đề gắn với nội dung của nó).
+	 */
+	.entry-content :is(h2, h3, h4, h5, h6) {
+		@apply leading-snug font-bold text-balance;
+	}
+
 	.entry-content h2 {
-		@apply mt-8 text-2xl leading-snug font-bold text-dark;
+		@apply relative mt-7 pl-4 text-[22px] text-teal-dark lg:mt-8 lg:pl-5 lg:text-[28px];
+	}
+
+	.entry-content h2::before {
+		@apply absolute inset-y-[0.15em] left-0 w-1.5 rounded-full bg-linear-to-b from-primary-light to-teal-dark content-[''];
 	}
 
 	.entry-content h3 {
-		@apply mt-6 text-xl leading-snug font-bold text-dark;
+		@apply relative mt-6 pl-6 text-lg text-primary lg:pl-7 lg:text-[22px];
+	}
+
+	/* Chấm tròn căn giữa dòng đầu: nửa chiều cao dòng (1.375em / 2) trừ nửa kích thước chấm. */
+	.entry-content h3::before {
+		@apply absolute top-[calc(0.6875em-0.375rem)] left-0 size-3 rounded-full border-[3px] border-primary bg-white content-[''] lg:top-[calc(0.6875em-0.4375rem)] lg:size-3.5;
 	}
 
 	.entry-content h4 {
-		@apply mt-6 text-lg font-bold text-dark;
+		@apply mt-5 w-fit border-b-2 border-mint-dark pb-1 text-base text-teal-dark lg:text-lg;
+	}
+
+	.entry-content h5 {
+		@apply mt-5 text-[13px] tracking-wider text-primary uppercase lg:text-sm;
+	}
+
+	.entry-content h6 {
+		@apply mt-5 text-sm font-medium text-muted;
+	}
+
+	/* Tiêu đề đứng ngay sau tiêu đề (vd H2 → H3): sát lại. Tiêu đề đầu nội dung: không cách trên. */
+	.entry-content :is(h2, h3, h4, h5, h6) + :is(h3, h4, h5, h6) {
+		@apply mt-2;
+	}
+
+	/* Phần tử ngay sau tiêu đề (đoạn, danh sách, bảng…): sát tiêu đề hơn khoảng cách giữa 2 đoạn. */
+	.entry-content :is(h2, h3, h4, h5, h6) + :not(h2, h3, h4, h5, h6) {
+		@apply mt-3;
+	}
+
+	.entry-content > :is(h2, h3, h4, h5, h6):first-child {
+		@apply mt-0;
+	}
+
+	.entry-content :is(h2, h3, h4, h5, h6) a {
+		@apply text-inherit no-underline hover:underline;
 	}
 
 	.entry-content a {

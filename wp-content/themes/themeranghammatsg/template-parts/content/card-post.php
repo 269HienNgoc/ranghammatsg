@@ -2,7 +2,12 @@
 /**
  * Thẻ bài viết trong danh sách (tin tức, danh mục, tìm kiếm). CSS: archive.css
  *
+ * - < 640px: dạng hàng — ảnh trái (38%, nhãn chuyên mục đè góc dưới), phải là tiêu đề, mô tả, ngày + nút mũi tên.
+ * - ≥ 640px: thẻ dọc — ảnh trên, ngày, tiêu đề, mô tả, "Xem chi tiết".
+ * Ngày là 1 phần tử duy nhất, đổi vị trí bằng order (mobile xuống cuối).
+ *
  * $args['sizes']: độ rộng hiển thị thật của ảnh theo lưới đang dùng (bỏ trống = mặc định của WordPress).
+ * Mobile ảnh rộng 38% khung → phần cuối sizes nên là calc(38vw - 12px).
  *
  * @package themeranghammatsg
  */
@@ -17,19 +22,31 @@ $rhm_image_attrs = array(
 if ( ! empty( $args['sizes'] ) ) {
 	$rhm_image_attrs['sizes'] = $args['sizes'];
 }
+
+$rhm_is_post  = 'post' === get_post_type();
+$rhm_category = $rhm_is_post ? ( get_the_category()[0] ?? null ) : null;
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'flex flex-col overflow-hidden rounded-lg border border-line bg-white shadow-card' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'flex items-start gap-3 sm:flex-col sm:items-stretch sm:gap-0 sm:overflow-hidden sm:rounded-lg sm:border sm:border-line sm:bg-white sm:shadow-card' ); ?>>
 	<?php if ( has_post_thumbnail() ) : ?>
-		<a class="block" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
+		<a class="relative block w-[38%] shrink-0 overflow-hidden rounded-lg sm:w-auto sm:rounded-none" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
 			<?php the_post_thumbnail( 'rhm-card', $rhm_image_attrs ); ?>
+			<?php if ( $rhm_category ) : ?>
+				<span class="absolute bottom-1.5 left-1.5 max-w-[calc(100%-12px)] truncate rounded-md bg-mint px-2 py-0.5 text-[10px] font-bold text-teal-dark uppercase sm:hidden"><?php echo esc_html( $rhm_category->name ); ?></span>
+			<?php endif; ?>
 		</a>
 	<?php endif; ?>
-	<div class="flex flex-1 flex-col p-6">
-		<?php if ( 'post' === get_post_type() ) : ?>
-			<p class="mb-2 text-sm text-muted"><?php rhm_posted_on(); ?></p>
+	<div class="relative flex min-w-0 flex-1 flex-col sm:p-6">
+		<?php if ( $rhm_is_post ) : ?>
+			<p class="mt-1.5 flex items-center gap-1 pr-10 text-xs text-muted max-sm:order-1 sm:mt-0 sm:mb-2 sm:pr-0 sm:text-sm">
+				<?php echo rhm_get_icon( 'calendar', 'size-3.5 shrink-0 sm:hidden' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+				<?php rhm_posted_on(); ?>
+			</p>
 		<?php endif; ?>
-		<h2 class="mb-3 text-xl leading-snug font-bold"><a class="text-dark hover:text-primary" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-		<p class="mb-4 line-clamp-3 text-muted"><?php echo esc_html( get_the_excerpt() ); ?></p>
-		<a class="mt-auto font-semibold" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Xem chi tiết', 'themeranghammatsg' ); ?></a>
+		<h2 class="line-clamp-3 text-[15px] leading-snug font-bold sm:mb-3 sm:line-clamp-none sm:text-xl"><a class="text-teal-dark hover:text-primary sm:text-dark" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+		<p class="mt-1 line-clamp-2 text-[13px] leading-snug text-muted sm:mt-0 sm:mb-4 sm:line-clamp-3 sm:text-base sm:leading-relaxed"><?php echo esc_html( get_the_excerpt() ); ?></p>
+		<a class="mt-auto font-semibold max-sm:hidden" href="<?php the_permalink(); ?>"><?php esc_html_e( 'Xem chi tiết', 'themeranghammatsg' ); ?></a>
+		<a class="absolute right-0 bottom-0 flex size-8 items-center justify-center rounded-full bg-mint text-teal-dark transition-colors hover:bg-teal-dark hover:text-white sm:hidden" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
+			<?php echo rhm_get_icon( 'arrow-right', 'size-4' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+		</a>
 	</div>
 </article>

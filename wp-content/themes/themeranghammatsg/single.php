@@ -1,6 +1,6 @@
 <?php
 /**
- * Chi tiết bài viết. CSS: single-post.css
+ * Chi tiết bài viết: banner → mô tả bài viết (excerpt) → mục lục (inc/toc.php) → nội dung. CSS: single-post.css
  *
  * @package themeranghammatsg
  */
@@ -13,9 +13,13 @@ while ( have_posts() ) :
 	the_post();
 	get_template_part( 'template-parts/components/page-banner' );
 	?>
-	<div class="site-container max-w-[852px] py-12 lg:py-20">
+	<div class="site-container max-w-[852px] py-5 lg:py-6">
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			
+			<?php if ( has_excerpt() ) : ?>
+				<?php // Mô tả bài viết (sapo). Mục lục tự chèn ngay dưới (đầu the_content, inc/toc.php). ?>
+				<p class="mb-6 text-lg leading-relaxed font-medium text-dark"><?php echo esc_html( get_the_excerpt() ); ?></p>
+			<?php endif; ?>
+
 			<div class="entry-content">
 				<?php
 				the_content();

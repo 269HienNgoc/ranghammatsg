@@ -137,3 +137,61 @@ function rhm_breadcrumb(): void {
 	}
 	echo '</ol></nav>';
 }
+
+/**
+ * <picture> cho ảnh hiển thị ở độ rộng CSS cố định theo từng khoảng màn hình (logo, icon…):
+ * mỗi khoảng là 1 <source media> chỉ định sẵn file → trình duyệt tải đúng 1 file, không phải đoán từ sizes.
+ * srcset mỗi khoảng: 1x + 2x = file nhỏ nhất cùng tỉ lệ (bản gốc + các size đã tạo) có độ rộng ≥ độ rộng CSS × mật độ điểm ảnh.
+ *
+ * @param array<string, int> $widths media query => độ rộng CSS (px), theo thứ tự ưu tiên (media lớn trước);
+ *                                   khóa '' = mặc định cho <img> (bắt buộc).
+ * @param array<string, string> $attrs Thuộc tính thêm cho <img> (class, alt, loading…).
+ */
+function rhm_get_picture( int $id, array $widths, array $attrs = array() ): string {
+	$meta = wp_get_attachment_metadata( $id );
+	$url  = (string) wp_get_attachment_url( $id );
+	if ( empty( $meta['width'] ) || empty( $meta['height'] ) || '' === $url || ! isset( $widths[''] ) ) {
+		return '';
+	}
+
+	$ratio = $meta['width'] / $meta['height'];
+	$dir   = trailingslashit( dirname( $url ) );
+	$files = array( (int) $meta['width'] => $url );
+	foreach ( $meta['sizes'] ?? array() as $size ) {
+		if ( abs( $size['width'] / $size['height'] - $ratio ) < 0.01 ) {
+			$files[ (int) $size['width'] ] = $dir . $size['file'];
+		}
+	}
+	ksort( $files );
+
+	$pick   = static function ( int $min ) use ( $files ): string {
+		foreach ( $files as $width => $file ) {
+			if ( $width >= $min ) {
+				return $file;
+			}
+		}
+		return $files[ array_key_last( $files ) ];
+	};
+	$srcset = static function ( int $width ) use ( $pick ): string {
+		$x1 = $pick( $width );
+		$x2 = $pick( 2 * $width );
+		return $x1 === $x2 ? $x1 : "{$x1} 1x, {$x2} 2x";
+	};
+
+	$html = '';
+	foreach ( $widths as $media => $width ) {
+		if ( '' !== $media ) {
+			$html .= '<source' . rhm_html_attrs( array( 'media' => $media, 'srcset' => $srcset( $width ) ) ) . '>';
+		}
+	}
+
+	$width = $widths[''];
+	$img   = array(
+		'src'    => $pick( $width ),
+		'srcset' => $srcset( $width ),
+		'width'  => $width,
+		'height' => (int) round( $width / $ratio ),
+	) + $attrs;
+
+	return '<picture>' . $html . '<img' . rhm_html_attrs( $img ) . '></picture>';
+}

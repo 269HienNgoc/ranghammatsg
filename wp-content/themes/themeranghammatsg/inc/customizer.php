@@ -3,6 +3,7 @@
  * Customizer (Giao diện → Tùy biến):
  * - "Thông tin phòng khám": dùng lại nhiều nơi (header, footer, CTA).
  * - Các section trang chủ: Hero banner, Dịch vụ nổi bật, Giới thiệu, Tin tức, Chứng nhận.
+ * - "Chân trang (Footer)", "Trang Liên hệ", "Bài viết" (mục lục).
  * Thêm field: rhm_customize_fields() (field đơn) / rhm_customize_repeater() (nhóm lặp N lần)
  * / rhm_customize_list() (danh sách động có nút "Thêm mới", inc/customize-list.php).
  *
@@ -23,10 +24,7 @@ function rhm_customizer_fields(): array {
 		'rhm_email'           => array( __( 'Email', 'themeranghammatsg' ), 'email', 'sanitize_email' ),
 		'rhm_address'         => array( __( 'Địa chỉ', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
 		'rhm_working_hours'   => array( __( 'Giờ làm việc', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
-		'rhm_map_url'         => array( __( 'Link Google Maps (embed)', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-		'rhm_facebook'        => array( __( 'Facebook URL', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-		'rhm_zalo'            => array( __( 'Zalo URL', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-		'rhm_youtube'         => array( __( 'YouTube URL', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
+		'rhm_map_url'         => array( __( 'Link nhúng Google Maps (Chia sẻ → Nhúng bản đồ → lấy link trong src). Trống: tự tạo từ địa chỉ', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
 		'rhm_booking_page'    => array( __( 'Trang Liên hệ / Đặt lịch', 'themeranghammatsg' ), 'dropdown-pages', 'absint' ),
 		'rhm_booking_form_id' => array( __( 'ID form đặt lịch (Fluent Forms)', 'themeranghammatsg' ), 'number', 'absint' ),
 	);
@@ -265,3 +263,144 @@ function rhm_customize_certificates( WP_Customize_Manager $wp_customize ): void 
 	);
 }
 add_action( 'customize_register', 'rhm_customize_certificates' );
+
+/**
+ * Chân trang (inc/footer.php). Địa chỉ / hotline / email / giờ làm việc lấy từ "Thông tin phòng khám".
+ */
+function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rhm_footer',
+		array(
+			'title'       => __( 'Chân trang (Footer)', 'themeranghammatsg' ),
+			'description' => __( 'Logo: Biểu tượng trang web (Nhận diện website). Địa chỉ, hotline, email, giờ làm việc: sửa ở "Thông tin phòng khám". Điều khoản chính sách: Menu → vị trí "Menu chân trang".', 'themeranghammatsg' ),
+			'priority'    => 36,
+		)
+	);
+
+	$defaults = rhm_footer_defaults();
+	$text     = static fn( string $key, string $label, string $type = 'text' ): array => array(
+		$label,
+		$type,
+		'textarea' === $type ? 'sanitize_textarea_field' : 'sanitize_text_field',
+		array( 'default' => $defaults[ $key ] ),
+	);
+
+	rhm_customize_fields(
+		$wp_customize,
+		'rhm_footer',
+		array(
+			'rhm_footer_slogan'             => $text( 'slogan', __( 'Khẩu hiệu dưới logo', 'themeranghammatsg' ) ),
+			'rhm_footer_title'              => $text( 'title', __( 'Tiêu đề cột liên hệ', 'themeranghammatsg' ) ),
+			'rhm_footer_branch_title'       => $text( 'branch_title', __( 'Chi nhánh – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_footer_branch_button_text' => $text( 'branch_button_text', __( 'Chi nhánh – chữ nút (để trống: ẩn nút)', 'themeranghammatsg' ) ),
+			'rhm_footer_branch_button_link' => array( __( 'Chi nhánh – link nút (để trống: trang Liên hệ / Đặt lịch)', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
+			'rhm_footer_policy_title'       => $text( 'policy_title', __( 'Điều khoản chính sách – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_footer_social_title'       => $text( 'social_title', __( 'Mạng xã hội – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_footer_copyright'          => $text( 'copyright', __( 'Dòng bản quyền ({year} = năm hiện tại)', 'themeranghammatsg' ), 'textarea' ),
+		)
+	);
+
+	rhm_customize_list(
+		$wp_customize,
+		'rhm_footer',
+		'rhm_footer_branches',
+		__( 'Danh sách chi nhánh', 'themeranghammatsg' ),
+		__( 'Chi nhánh', 'themeranghammatsg' ),
+		rhm_footer_branch_fields()
+	);
+
+	rhm_customize_list(
+		$wp_customize,
+		'rhm_footer',
+		'rhm_footer_socials',
+		__( 'Mạng xã hội', 'themeranghammatsg' ),
+		__( 'Mạng xã hội', 'themeranghammatsg' ),
+		rhm_footer_social_fields(),
+		__( 'Icon vuông (.svg hoặc .png ≥ 80×80px), hiển thị 40×40px. Mục thiếu icon hoặc link sẽ bị bỏ qua.', 'themeranghammatsg' )
+	);
+
+	rhm_customize_list(
+		$wp_customize,
+		'rhm_footer',
+		'rhm_footer_badges',
+		__( 'Huy hiệu cuối trang', 'themeranghammatsg' ),
+		__( 'Huy hiệu', 'themeranghammatsg' ),
+		rhm_footer_badge_fields(),
+		__( 'Vd: "Đã thông báo Bộ Công Thương", DMCA. Ảnh .png/.jpg, hiển thị cao 40px.', 'themeranghammatsg' )
+	);
+}
+add_action( 'customize_register', 'rhm_customize_footer' );
+
+/**
+ * Trang Liên hệ – Đặt lịch (inc/contact.php). Thông tin liên hệ, bản đồ, ID form: "Thông tin phòng khám"; chi nhánh, mạng xã hội: "Chân trang (Footer)".
+ */
+function rhm_customize_contact( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rhm_contact',
+		array(
+			'title'       => __( 'Trang Liên hệ', 'themeranghammatsg' ),
+			'description' => __( 'Hotline, email, địa chỉ, giờ làm việc, link bản đồ, ID form đặt lịch: sửa ở "Thông tin phòng khám". Chi nhánh và mạng xã hội: "Chân trang (Footer)". Bản đồ tự tạo từ địa chỉ nếu không nhập link embed.', 'themeranghammatsg' ),
+			'priority'    => 37,
+		)
+	);
+
+	$defaults = rhm_contact_defaults();
+	$text     = static fn( string $key, string $label, string $type = 'text' ): array => array(
+		$label,
+		$type,
+		'textarea' === $type ? 'sanitize_textarea_field' : 'sanitize_text_field',
+		array( 'default' => $defaults[ $key ] ),
+	);
+
+	rhm_customize_fields(
+		$wp_customize,
+		'rhm_contact',
+		array(
+			'rhm_contact_intro'      => $text( 'intro', __( 'Đoạn giới thiệu dưới tiêu đề trang', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_form_title' => $text( 'form_title', __( 'Form – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_contact_form_note'  => $text( 'form_note', __( 'Form – mô tả', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_cta_title'  => $text( 'cta_title', __( 'Khối hotline – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_contact_cta_text'   => $text( 'cta_text', __( 'Khối hotline – mô tả', 'themeranghammatsg' ), 'textarea' ),
+		)
+	);
+}
+add_action( 'customize_register', 'rhm_customize_contact' );
+
+/**
+ * Bài viết (inc/toc.php): mục lục tự động + mặc định cho shortcode [toc].
+ */
+function rhm_customize_post( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rhm_post',
+		array(
+			'title'       => __( 'Bài viết', 'themeranghammatsg' ),
+			'description' => __( 'Mục lục tự chèn ngay dưới mô tả bài viết khi bài có đủ số tiêu đề tối thiểu. Đặt mục lục ở vị trí khác: gõ [toc] trong nội dung. Ẩn mục lục 1 bài: [toc hide="yes"]. Thuộc tính khác: title="…", levels="2,3", open="no".', 'themeranghammatsg' ),
+			'priority'    => 38,
+		)
+	);
+
+	rhm_customize_fields(
+		$wp_customize,
+		'rhm_post',
+		array(
+			'rhm_toc_auto'   => array( __( 'Tự chèn mục lục vào bài viết', 'themeranghammatsg' ), 'checkbox', 'rest_sanitize_boolean', array( 'default' => RHM_TOC_DEFAULTS['auto'] ) ),
+			'rhm_toc_title'  => array( __( 'Tiêu đề mục lục', 'themeranghammatsg' ), 'text', 'sanitize_text_field', array( 'default' => rhm_toc_default_title() ) ),
+			'rhm_toc_levels' => array(
+				__( 'Cấp tiêu đề đưa vào mục lục', 'themeranghammatsg' ),
+				'select',
+				'sanitize_text_field',
+				array(
+					'default' => RHM_TOC_DEFAULTS['levels'],
+					'choices' => array(
+						'2'     => 'H2',
+						'2,3'   => 'H2 – H3',
+						'2,3,4' => 'H2 – H4',
+					),
+				),
+			),
+			'rhm_toc_min'    => array( __( 'Số tiêu đề tối thiểu để tự chèn', 'themeranghammatsg' ), 'number', 'absint', array( 'default' => RHM_TOC_DEFAULTS['min'], 'input_attrs' => array( 'min' => 1, 'max' => 20 ) ) ),
+			'rhm_toc_open'   => array( __( 'Mở sẵn mục lục (bỏ chọn: thu gọn, bấm để mở)', 'themeranghammatsg' ), 'checkbox', 'rest_sanitize_boolean', array( 'default' => RHM_TOC_DEFAULTS['open'] ) ),
+		)
+	);
+}
+add_action( 'customize_register', 'rhm_customize_post' );

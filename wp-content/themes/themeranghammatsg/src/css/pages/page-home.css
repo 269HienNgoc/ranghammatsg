@@ -34,8 +34,8 @@
 		@apply invisible;
 	}
 
-	/* Iframe YouTube / <video> do src/js/video.js tạo khi bấm ▶ (section Giới thiệu). */
-	.video-player {
+	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu). */
+	.embed-player {
 		@apply absolute inset-0 size-full border-0 bg-black;
 	}
 }

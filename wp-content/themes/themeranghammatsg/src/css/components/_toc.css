@@ -1,0 +1,65 @@
+/*
+ * Mục lục bài viết (inc/toc.php, markup do PHP sinh trong the_content). Import SAU _entry-content.css
+ * để ghi đè style danh sách / link của .entry-content (cùng độ ưu tiên, khai báo sau thắng).
+ */
+@layer components {
+	.rhm-toc {
+		@apply my-8 overflow-hidden rounded-2xl border border-line bg-soft;
+	}
+
+	.rhm-toc__head {
+		@apply flex cursor-pointer list-none items-center gap-2.5 px-5 py-4 text-base font-bold text-teal-dark select-none lg:text-lg;
+	}
+
+	.rhm-toc__head::-webkit-details-marker {
+		@apply hidden;
+	}
+
+	.rhm-toc__icon {
+		@apply size-5 shrink-0 text-primary;
+	}
+
+	.rhm-toc__title {
+		@apply flex-1;
+	}
+
+	.rhm-toc__chevron {
+		@apply size-5 shrink-0 transition-transform duration-200;
+	}
+
+	.rhm-toc details[open] .rhm-toc__chevron {
+		@apply rotate-180;
+	}
+
+	/* Bỏ số / thụt lề của .entry-content ol (0,1,1). Lề trong do 2 rule dưới đặt (độ ưu tiên cao hơn). */
+	.rhm-toc ol {
+		@apply list-none;
+	}
+
+	.rhm-toc .rhm-toc__list {
+		@apply mt-0 border-t border-line px-5 pt-4 pb-5;
+	}
+
+	.rhm-toc li + li {
+		@apply mt-2;
+	}
+
+	/* Cấp 2 trở đi: thụt vào, có vạch dọc. */
+	.rhm-toc li ol {
+		@apply mt-2 ml-1 border-l-2 border-mint-dark pl-4;
+	}
+
+	.rhm-toc a {
+		@apply text-body no-underline transition-colors hover:text-primary;
+	}
+
+	.rhm-toc__list > li > a {
+		@apply font-medium text-dark;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.rhm-toc__chevron {
+			transition: none;
+		}
+	}
+}

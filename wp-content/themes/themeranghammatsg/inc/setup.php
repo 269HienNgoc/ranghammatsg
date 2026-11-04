@@ -31,7 +31,7 @@ function rhm_setup(): void {
 	register_nav_menus(
 		array(
 			'primary' => __( 'Menu chính', 'themeranghammatsg' ),
-			'footer'  => __( 'Menu chân trang', 'themeranghammatsg' ),
+			'footer'  => __( 'Menu chân trang (Điều khoản chính sách)', 'themeranghammatsg' ),
 		)
 	);
 
@@ -64,27 +64,48 @@ function rhm_content_width(): void {
 add_action( 'after_setup_theme', 'rhm_content_width', 0 );
 
 /**
- * Logo: thay sizes mặc định của WordPress ("100vw" → tải file 1000px+ cho logo ~110px)
- * bằng chiều rộng hiển thị thật, tính từ chiều cao CSS × tỉ lệ ảnh.
- * Chiều cao phải khớp `.site-branding .custom-logo` trong src/css/pages/header.css.
+ * Chiều cao CSS của logo header theo breakpoint (media lớn trước, '' = mặc định).
+ * Phải khớp class h-* của `.site-branding .custom-logo` trong src/css/pages/header.css.
  */
-function rhm_custom_logo_sizes( array $attr, int $logo_id ): array {
-	$logo = wp_get_attachment_image_src( $logo_id, 'full' );
-	if ( ! $logo || ! $logo[2] ) {
-		return $attr;
+const RHM_LOGO_HEIGHTS = array(
+	'(min-width: 1280px)' => 84,
+	'(min-width: 1024px)' => 64,
+	'(min-width: 560px)'  => 56,
+	''                    => 46,
+);
+
+/**
+ * In Logo (Nhận diện website → Logo) thay the_custom_logo(): <a class="custom-logo-link"><picture> (rhm_get_picture).
+ * Logo hiển thị theo CHIỀU CAO CSS cố định mỗi breakpoint → độ rộng = chiều cao × tỉ lệ ảnh → mỗi <source media> trỏ đúng file.
+ * Không dùng the_custom_logo(): WordPress gắn src = file gốc (1409px) và tự thêm fetchpriority="high" cho logo
+ * (tranh băng thông với ảnh LCP thật: hero / ảnh bài nổi bật).
+ *
+ * Logo trong ngăn kéo menu (cao 44px) gọi cùng hàm → CÙNG file với logo header ở mọi breakpoint → trình duyệt chỉ tải 1 lần
+ * (ngăn kéo ẩn trên desktop vẫn bị tải ảnh nếu file khác). Kích thước hiển thị do CSS quyết định.
+ */
+function rhm_custom_logo(): void {
+	$heights = RHM_LOGO_HEIGHTS;
+	$id   = (int) get_theme_mod( 'custom_logo' );
+	$meta = wp_get_attachment_metadata( $id );
+	if ( empty( $meta['width'] ) || empty( $meta['height'] ) ) {
+		return;
 	}
 
-	$ratio = $logo[1] / $logo[2];
-	$width = static fn( int $height ): int => (int) ceil( $height * $ratio );
+	$ratio = $meta['width'] / $meta['height'];
+	$alt   = trim( (string) get_post_meta( $id, '_wp_attachment_image_alt', true ) );
 
-	$attr['sizes'] = sprintf(
-		'(min-width: 1280px) %1$dpx, (min-width: 1024px) %2$dpx, (min-width: 560px) %3$dpx, %4$dpx',
-		$width( 84 ),
-		$width( 64 ),
-		$width( 56 ),
-		$width( 46 )
+	printf(
+		'<a href="%1$s" class="custom-logo-link" rel="home"%2$s>%3$s</a>',
+		esc_url( home_url( '/' ) ),
+		is_front_page() ? ' aria-current="page"' : '',
+		rhm_get_picture( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes escaped in rhm_html_attrs().
+			$id,
+			array_map( static fn( int $height ): int => (int) ceil( $height * $ratio ), $heights ),
+			array(
+				'class'    => 'custom-logo',
+				'alt'      => '' !== $alt ? $alt : get_bloginfo( 'name' ),
+				'decoding' => 'async',
+			)
+		)
 	);
-
-	return $attr;
 }
-add_filter( 'get_custom_logo_image_attributes', 'rhm_custom_logo_sizes', 10, 2 );

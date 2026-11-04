@@ -18,11 +18,17 @@
 	--color-icon: #12a14a;           /* icon menu */
 	--color-dark: #10212d;           /* chữ menu, hotline */
 	--color-teal: #1d5c5a;           /* icon Trang chủ */
+	--color-teal-dark: #10665c;      /* thanh lọc chuyên mục: nút đang chọn, chữ */
+	--color-mint: #ecf7f3;           /* thanh lọc chuyên mục: nền nút */
+	--color-mint-dark: #dcefe8;      /* thanh lọc chuyên mục: nền nút khi rê chuột */
 	--color-body: #1f2d36;           /* chữ nội dung */
 	--color-muted: #74767e;
 	--color-line: #e3e8ee;
 	--color-soft: #f0fafa;           /* nền thanh menu */
-	--color-footer: #0f2537;
+	--color-footer: #003442;         /* nền chân trang */
+	--color-footer-accent: #d3d867;  /* chân trang: tiêu đề cột, icon chi nhánh */
+	--color-footer-text: #c5dbe2;    /* chân trang: chữ */
+	--color-footer-muted: #a3bdc8;   /* chân trang: dòng bản quyền */
 
 	/* Khung nội dung: max-w-site */
 	--container-site: 90rem;         /* 1440px */

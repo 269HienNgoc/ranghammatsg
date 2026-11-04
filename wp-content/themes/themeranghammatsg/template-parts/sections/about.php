@@ -1,7 +1,7 @@
 <?php
 /**
  * Section: giới thiệu (ảnh/video + chữ + số liệu). Dữ liệu: inc/about.php. CSS: page-home.css
- * Video (nếu có) chỉ tải khi bấm ▶ — src/js/video.js, chỉ nạp khi section có video.
+ * Video (nếu có) chỉ tải khi bấm ▶ — src/js/embed.js, chỉ nạp khi section có video.
  *
  * @package themeranghammatsg
  */
@@ -16,8 +16,8 @@ if ( '' === $rhm_about['title'] ) {
 
 $rhm_video = $rhm_about['image'] ? $rhm_about['video'] : array();
 
-if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/video.js' ) ) {
-	wp_enqueue_script_module( 'rhm-video', RHM_THEME_URI . '/dist/js/video.js', array(), rhm_asset_version( 'dist/js/video.js' ) );
+if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
+	wp_enqueue_script_module( 'rhm-embed', RHM_THEME_URI . '/dist/js/embed.js', array(), rhm_asset_version( 'dist/js/embed.js' ) );
 }
 ?>
 <section class="py-12 lg:py-10" aria-labelledby="about-title">
@@ -42,7 +42,7 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/video.js' ) ) {
 					);
 					?>
 					<?php if ( $rhm_video ) : ?>
-						<button class="group absolute inset-0 flex cursor-pointer items-center justify-center bg-dark/15 transition-colors hover:bg-dark/25" type="button" data-video-type="<?php echo esc_attr( $rhm_video['type'] ); ?>" data-video-src="<?php echo esc_url( $rhm_video['src'] ); ?>">
+						<button class="group absolute inset-0 flex cursor-pointer items-center justify-center bg-dark/15 transition-colors hover:bg-dark/25" type="button" data-embed-type="<?php echo esc_attr( $rhm_video['type'] ); ?>" data-embed-src="<?php echo esc_url( $rhm_video['src'] ); ?>">
 							<span class="flex size-16 items-center justify-center rounded-full bg-white/90 text-primary shadow-card transition-transform duration-300 group-hover:scale-110 lg:size-20">
 								<?php echo rhm_get_icon( 'play', 'ml-1 size-7 lg:size-9' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 							</span>
