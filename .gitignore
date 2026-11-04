@@ -1,0 +1,16 @@
+.claude
+AGENTS.md
+CLAUDE.md
+wp-config.php
+compose.yaml
+php.ini
+/wp-content/advanced-cache.php
+/wp-content/upgrade/*
+/wp-content/uploads/*
+/wp-content/plugins/*
+/wp-content/cache/*
+/wp-content/themes/themeranghammatsg/node_modules/*
+/wp-content/wp-rocket-config/*
+/wp-content/uploads-webpc/*
+/wp-content/upgrade-temp-backup/*
+/wp-content/upgrade/*
