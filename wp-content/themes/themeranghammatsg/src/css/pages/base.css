@@ -1,0 +1,63 @@
+/*
+ * base.css — nạp ở MỌI trang, trước các file khác.
+ * Preflight (reset), font Roboto, style nền, component dùng chung (.site-container, .btn…).
+ * KHÔNG sinh utility (utility được sinh theo vùng trong header.css / page-*.css / footer.css).
+ */
+@import "../_tailwind.css";
+@import "tailwindcss/preflight.css" layer(base);
+@import "../components/_fonts.css";
+
+@layer base {
+	html {
+		-webkit-text-size-adjust: 100%;
+		/* Header sticky: chừa chỗ khi nhảy tới anchor (#dat-lich…). --header-h do main.js cập nhật. */
+		scroll-padding-top: calc(var(--header-h, 0px) + 16px);
+		/* Chặn kéo ngang cả trang nếu có phần tử tràn (iOS Safari không luôn tôn trọng overflow chỉ đặt trên body).
+		   clip (không phải hidden) để không làm hỏng position: sticky của header. */
+		@apply overflow-x-clip scroll-smooth;
+		/* Vuốt ngang trong trang không kích hoạt hiệu ứng trượt/nảy ngang hay cử chỉ "quay lại trang trước"
+		   của trình duyệt (trông như layout bị kéo lệch). Không ảnh hưởng vuốt dọc, slider và cử chỉ mép màn hình của hệ điều hành. */
+		overscroll-behavior-x: none;
+	}
+
+	body {
+		/* clip (không phải hidden) để không làm hỏng position: sticky của header. */
+		@apply overflow-x-clip bg-white font-sans text-base leading-relaxed text-body antialiased;
+	}
+
+	a {
+		@apply text-primary transition-colors;
+	}
+
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-green;
+	}
+}
+
+@layer components {
+	/* Khung nội dung 1440px, lề 16px. */
+	.site-container {
+		@apply mx-auto w-full max-w-site px-4;
+	}
+
+	.btn {
+		@apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-primary px-6 py-3 font-semibold transition-colors;
+	}
+
+	.btn-primary {
+		@apply bg-primary text-white hover:border-primary-dark hover:bg-primary-dark hover:text-white;
+	}
+
+	.btn-outline {
+		@apply bg-transparent text-primary hover:bg-primary hover:text-white;
+	}
+
+	/* Class chuẩn của WordPress cho nội dung chỉ dành cho trình đọc màn hình. */
+	.screen-reader-text {
+		@apply sr-only;
+	}
+
+	.skip-link:focus {
+		@apply not-sr-only fixed top-2 left-2 z-[1000] bg-white px-4 py-2;
+	}
+}

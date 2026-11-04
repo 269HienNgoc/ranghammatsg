@@ -1,0 +1,29 @@
+/*
+ * footer.css — nạp ở MỌI trang.
+ */
+@import "../_tailwind.css";
+
+/* Utility chỉ áp dụng trong .site-footer (footer). */
+@layer utilities {
+	.site-footer {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../footer.php";
+
+@layer components {
+	/* Vùng scope của utility footer: style của chính thẻ <footer> đặt ở đây. */
+	.site-footer {
+		@apply bg-footer pt-12 text-[#cbd5e1];
+	}
+
+	/* Menu chân trang (wp_nav_menu, class "footer-nav"). */
+	.footer-nav li + li {
+		@apply mt-2;
+	}
+
+	.footer-nav a {
+		@apply text-white hover:text-green;
+	}
+}

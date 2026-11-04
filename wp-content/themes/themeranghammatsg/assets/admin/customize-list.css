@@ -1,0 +1,94 @@
+/* Control "danh sách động" trong Customizer — assets/admin/customize-list.js */
+.rhm-list {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.rhm-list-item {
+	margin: 0 0 10px;
+	padding: 10px 12px 12px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.rhm-list-head {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.rhm-list-head strong {
+	flex: 1;
+}
+
+.rhm-list-btn.dashicons {
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	font-size: 18px;
+	line-height: 28px;
+	color: #50575e;
+	background: none;
+	border: 0;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.rhm-list-btn:hover:not(:disabled) {
+	color: #2271b1;
+	background: #f0f0f1;
+}
+
+.rhm-list-btn.dashicons-trash:hover {
+	color: #b32d2e;
+}
+
+.rhm-list-btn:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.rhm-list-field {
+	display: block;
+	margin-top: 10px;
+}
+
+.rhm-list-label {
+	display: block;
+	margin-bottom: 4px;
+	font-weight: 500;
+}
+
+.rhm-list-image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 140px;
+	margin-bottom: 4px;
+	padding: 6px;
+	color: #646970;
+	background: #f6f7f7;
+	border: 1px dashed #c3c4c7;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.rhm-list-image:hover {
+	border-color: #2271b1;
+}
+
+.rhm-list-image img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.rhm-list-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}

@@ -1,0 +1,16 @@
+/*
+ * page-contact.css — chỉ trang dùng template "Liên hệ – Đặt lịch" (kèm form Fluent Forms).
+ */
+@import "../_tailwind.css";
+@import "../components/_entry-content.css";
+
+/* Utility chỉ áp dụng trong .site-main (vùng <main>). */
+@layer utilities {
+	.site-main {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../page-templates/tpl-lien-he.php";
+@source "../../../template-parts/components/page-banner.php";
+@source "../../../inc/template-tags.php";

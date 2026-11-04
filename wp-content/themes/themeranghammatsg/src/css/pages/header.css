@@ -1,0 +1,307 @@
+/*
+ * header.css — nạp ở MỌI trang.
+ * Layout header dùng utility trong header.php; file này style phần markup do WordPress sinh ra
+ * (wp_nav_menu, custom logo), ngăn kéo menu mobile + hoạt ảnh, nút hamburger.
+ */
+@import "../_tailwind.css";
+
+/* Utility chỉ áp dụng trong .site-header (header). */
+@layer utilities {
+	.site-header {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../header.php";
+@source "../../../searchform.php";
+@source "../../../inc/menus.php";
+@source "../../../inc/flag-links.php";
+@source "../../../inc/icons.php";
+@source "../../../inc/template-tags.php";
+
+@layer components {
+	/* Vùng scope của utility header: style của chính thẻ <header> đặt ở đây.
+	 * Sticky: dính đầu trang khi cuộn. */
+	.site-header {
+		@apply sticky top-0 z-50 bg-white transition-shadow duration-200;
+	}
+
+	/* Thanh admin WordPress (khi đăng nhập) cố định 32px / 46px; ≤ 600px nó cuộn theo trang. */
+	.admin-bar .site-header {
+		@apply top-[46px] min-[783px]:top-8 max-[600px]:top-0;
+	}
+
+	.site-header.is-stuck {
+		@apply shadow-[0_4px_16px_rgb(16_33_45/0.08)];
+	}
+
+	.site-branding .custom-logo {
+		@apply h-auto max-h-[46px] w-auto xs:max-h-14 lg:max-h-16 xl:max-h-[84px];
+	}
+
+	.drawer-logo .custom-logo {
+		@apply h-auto max-h-11 w-auto;
+	}
+
+	/* ---- Nút hamburger (3 vạch) ---- */
+	.menu-toggle__bar,
+	.menu-toggle__bar::before,
+	.menu-toggle__bar::after {
+		@apply relative block h-0.5 w-5 rounded-full bg-primary;
+	}
+
+	.menu-toggle__bar::before,
+	.menu-toggle__bar::after {
+		@apply absolute left-0 content-[''];
+	}
+
+	.menu-toggle__bar::before {
+		@apply -top-1.5;
+	}
+
+	.menu-toggle__bar::after {
+		@apply top-1.5;
+	}
+
+	/* =====================================================================
+	 * Menu chính (wp_nav_menu, class "main-nav"), tối đa 3 cấp.
+	 * Một menu duy nhất (#menu-menu-chinh) cho cả desktop và mobile, cùng kiểu chữ / icon / màu như desktop.
+ * Mobile (< 1024px): danh sách dọc trong ngăn kéo; menu con là accordion (li.is-open).
+	 * Desktop (≥ 1024px): cấp 2 dropdown dưới mục cha, cấp 3 bay sang phải; mở khi hover/focus
+	 * hoặc khi bấm nút mũi tên (cảm ứng, bàn phím).
+	 * ===================================================================== */
+	.main-nav {
+		@apply flex flex-col lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-1 xl:gap-x-3 2xl:gap-x-4;
+	}
+
+	.main-nav li {
+		@apply relative flex flex-wrap items-center;
+	}
+
+	.main-nav > li + li {
+		@apply border-t border-line lg:border-0;
+	}
+
+	.main-nav a {
+		@apply flex min-h-12 flex-1 items-center gap-1.5 px-2 py-3 text-[15px] font-medium text-dark uppercase hover:text-primary lg:min-h-0 lg:gap-1 lg:px-0 lg:py-[17px] lg:text-xs lg:whitespace-nowrap xl:gap-1.5 xl:text-sm 2xl:text-base;
+	}
+
+	.main-nav .current-menu-item > a,
+	.main-nav .current-menu-ancestor > a {
+		@apply text-primary;
+	}
+
+	.main-nav .menu-icon {
+		@apply size-5 shrink-0 text-icon lg:size-3.5 xl:size-5;
+	}
+
+	.main-nav .menu-item-home .menu-icon {
+		@apply size-6 text-teal lg:size-5 xl:size-[30px];
+	}
+
+	.main-nav .menu-item-home a:hover .menu-icon,
+	.main-nav .menu-item-home.current-menu-item .menu-icon {
+		@apply text-primary;
+	}
+
+	.main-nav .menu-text--home {
+		@apply lg:sr-only;
+	}
+
+	/* Nút mũi tên mở menu con. Trạng thái xoay theo aria-expanded (đổi ngay khi bấm). */
+	.submenu-toggle {
+		@apply inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-dark hover:text-primary lg:-ml-0.5 lg:size-5;
+	}
+
+	.submenu-toggle .icon {
+		@apply size-4 transition-transform duration-200 lg:size-3.5;
+	}
+
+	.submenu-toggle[aria-expanded="true"] .icon {
+		@apply rotate-180;
+	}
+
+	/* Menu con: ẩn mặc định. */
+	.main-nav .sub-menu {
+		@apply mb-2 ml-2 hidden basis-full border-l-2 border-line pl-3 lg:absolute lg:top-full lg:-left-4 lg:z-10 lg:mb-0 lg:ml-0 lg:min-w-60 lg:border-t-[3px] lg:border-l-0 lg:border-green lg:bg-white lg:py-2 lg:pl-0 lg:shadow-card;
+	}
+
+	.main-nav li.is-open > .sub-menu {
+		@apply block;
+	}
+
+	.main-nav .sub-menu a {
+		@apply min-h-10 py-2 text-[15px] normal-case lg:min-h-0 lg:px-4 lg:py-2.5 lg:whitespace-normal;
+	}
+
+	.main-nav .sub-menu .submenu-toggle {
+		@apply size-10 lg:mr-3 lg:size-5;
+	}
+
+	/* ---- Mobile: ngăn kéo + lớp phủ + kiểu mục menu ---- */
+	@media (width < 64rem) {
+		/* Ngăn kéo: trượt từ trái.
+		 * Khi đóng KHÔNG dùng visibility: hidden — Chrome bỏ qua transition của phần tử đang ẩn bằng visibility,
+		 * khiến lúc mở bị "giật". Thay vào đó main.js gắn thuộc tính inert cho ngăn kéo khi đóng
+		 * (không bấm / Tab / đọc được), còn lớp phủ dùng pointer-events: none. */
+		.site-nav {
+			position: fixed;
+			inset-block: 0;
+			left: 0;
+			z-index: 60;
+			display: flex;
+			flex-direction: column;
+			width: min(85vw, 360px);
+			height: 100dvh;
+			background: var(--color-white, #fff);
+			border-radius: 0 1rem 1rem 0;
+			box-shadow: 8px 0 32px rgb(16 33 45 / 0.18);
+			/* Lùi thêm 48px để bóng đổ cũng khuất hẳn khi đóng. */
+			transform: translateX(calc(-100% - 48px));
+			transition: transform 220ms cubic-bezier(0.4, 0, 1, 1);
+		}
+
+		.nav-open .site-nav {
+			transform: none;
+			transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+		}
+
+		/* Lớp phủ: tối + mờ nội dung phía sau. */
+		.nav-backdrop {
+			position: fixed;
+			inset: 0;
+			z-index: 55;
+			background: rgb(16 33 45 / 0.5);
+			backdrop-filter: blur(2px);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 220ms ease;
+		}
+
+		.nav-open .nav-backdrop {
+			opacity: 1;
+			pointer-events: auto;
+			transition: opacity 320ms ease;
+		}
+
+		/* Danh sách menu: phần giữa ngăn kéo, cuộn riêng. */
+		.drawer-body {
+			flex: 1;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			padding: 0 0.75rem 0.75rem;
+		}
+
+		/* Mục menu hiện lần lượt khi mở (--i do main.js gán theo thứ tự). */
+		.site-nav .main-nav > li {
+			opacity: 0;
+			transform: translateX(-8px);
+			transition:
+				opacity 200ms ease,
+				transform 200ms ease;
+		}
+
+		.nav-open .site-nav .main-nav > li {
+			opacity: 1;
+			transform: none;
+			transition-duration: 300ms;
+			transition-delay: calc(80ms + var(--i, 0) * 25ms);
+		}
+
+		/* Khóa cuộn trang khi mở ngăn kéo. */
+		html.nav-open {
+			overflow: hidden;
+		}
+	}
+
+	/* ---- Desktop: dropdown ---- */
+	@media (width >= 64rem) {
+		/* Ngăn kéo/lớp phủ không áp dụng trên desktop. */
+		.nav-backdrop {
+			display: none;
+		}
+
+		.main-nav li:hover > .sub-menu,
+		.main-nav li:focus-within > .sub-menu {
+			@apply block;
+		}
+
+		.main-nav li:hover > .submenu-toggle .icon {
+			@apply rotate-180;
+		}
+
+		/* Cấp 3: bay ra bên phải mục cha; mũi tên chỉ sang phải. */
+		.main-nav .sub-menu .sub-menu {
+			@apply top-[-11px] left-full border-t-0 border-l-[3px];
+		}
+
+		.main-nav .sub-menu .submenu-toggle .icon,
+		.main-nav .sub-menu li:hover > .submenu-toggle .icon,
+		.main-nav .sub-menu .submenu-toggle[aria-expanded="true"] .icon {
+			@apply -rotate-90;
+		}
+
+		/* 2 mục cuối (sát mép phải): dropdown canh phải, cấp 3 bay sang trái để không tràn màn hình. */
+		.main-nav > li:nth-last-child(-n + 2) > .sub-menu {
+			@apply right-[-16px] left-auto;
+		}
+
+		.main-nav > li:nth-last-child(-n + 2) .sub-menu .sub-menu {
+			@apply right-full left-auto border-r-[3px] border-l-0;
+		}
+	}
+
+	/* Người dùng bật "giảm chuyển động": tắt hoạt ảnh ngăn kéo / mục menu. */
+	@media (prefers-reduced-motion: reduce) {
+		.site-nav,
+		.nav-backdrop,
+		.site-nav .main-nav > li,
+		.submenu-toggle .icon {
+			transition: none !important;
+		}
+	}
+}
+
+/*
+ * Header thu gọn khi cuộn xuống (desktop): .is-stuck do src/js/main.js gắn.
+ * CHỈ dùng transform → kích thước bố cục của header không đổi, không đẩy phần tử nào (CLS = 0;
+ * Chrome không tính dịch chuyển do transform là layout shift).
+ * - Header dịch lên 41px: hàng logo 113px chỉ còn lộ 72px, thanh menu đi lên theo.
+ * - Phần tử trong hàng logo dịch xuống 20px (vào giữa 72px còn lại) và thu nhỏ: logo 84 → 52px, còn lại 52 → 44px.
+ * Mobile không áp dụng (transform trên .site-header sẽ làm lệch ngăn kéo menu position: fixed).
+ */
+@media (width >= 64rem) {
+	.site-header {
+		transition:
+			transform 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.site-header.is-stuck {
+		transform: translateY(-41px);
+	}
+
+	.header-bar > * {
+		transition:
+			transform 200ms ease,
+			opacity 200ms ease;
+	}
+
+	.site-header.is-stuck .site-branding {
+		transform-origin: left center;
+		transform: translateY(20px) scale(0.62);
+	}
+
+	.site-header.is-stuck .header-bar > :not(.site-branding) {
+		transform: translateY(20px) scale(0.85);
+	}
+
+	/* Dòng phụ dưới hotline mờ đi (vẫn giữ chỗ) → dịch khối hotline xuống thêm để số nằm giữa hàng. */
+	.site-header.is-stuck .header-bar > .header-hotline {
+		transform: translateY(28px) scale(0.85);
+	}
+
+	.site-header.is-stuck .header-hotline-note {
+		opacity: 0;
+	}
+}

@@ -1,0 +1,14 @@
+/*
+ * Phần đầu chung của MỌI entry trong pages/: thứ tự layer + design tokens.
+ *
+ * Utility KHÔNG import ở đây. Mỗi entry tự sinh utility trong phạm vi vùng DOM của nó:
+ *   header.css → .site-header   |   page-*.css, archive.css, single-*.css, 404.css → .site-main   |   footer.css → .site-footer
+ * Lý do: khi utility nằm ở nhiều file, một utility thường (vd .text-sm) ở file nạp sau sẽ đè
+ * utility responsive (vd 2xl:text-xl) ở file nạp trước. Chia vùng DOM tách biệt → không file nào đè file nào.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "./theme.css";
+
+/* Bỏ utility .container của Tailwind (theme dùng .site-container); tránh bắt nhầm chữ 'container' trong code PHP. */
+@source not inline("container");

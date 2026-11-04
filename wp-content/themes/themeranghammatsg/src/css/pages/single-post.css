@@ -1,0 +1,36 @@
+/*
+ * single-post.css — chi tiết bài viết (single.php).
+ */
+@import "../_tailwind.css";
+@import "../components/_entry-content.css";
+
+/* Utility chỉ áp dụng trong .site-main (vùng <main>). */
+@layer utilities {
+	.site-main {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../single.php";
+@source "../../../template-parts/sections/booking-cta.php";
+@source "../../../template-parts/components/page-banner.php";
+@source "../../../inc/template-tags.php";
+
+@layer components {
+	/* Bài trước / bài sau (the_post_navigation). */
+	.post-navigation .nav-links {
+		@apply mt-12 flex justify-between gap-6 border-t border-line pt-6;
+	}
+
+	.post-navigation .nav-next {
+		@apply ml-auto text-right;
+	}
+
+	.post-navigation a {
+		@apply text-sm text-muted hover:text-primary;
+	}
+
+	.post-navigation a span {
+		@apply text-base font-semibold text-dark;
+	}
+}

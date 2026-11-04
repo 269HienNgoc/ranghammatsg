@@ -1,0 +1,15 @@
+/*
+ * 404.css — trang không tìm thấy.
+ */
+@import "../_tailwind.css";
+
+/* Utility chỉ áp dụng trong .site-main (vùng <main>). */
+@layer utilities {
+	.site-main {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../404.php";
+@source "../../../searchform.php";
+@source "../../../inc/icons.php";

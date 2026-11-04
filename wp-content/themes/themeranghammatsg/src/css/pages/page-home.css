@@ -1,0 +1,41 @@
+/*
+ * page-home.css — chỉ Trang chủ (front-page.php).
+ * Thêm @source khi tạo section mới trong template-parts/sections/.
+ */
+@import "../_tailwind.css";
+/* CSS lõi Swiper (hero banner), đặt vào layer components để utility vẫn ghi đè được. */
+@import "swiper/css" layer(components);
+@import "../components/_entry-content.css";
+
+/* Utility chỉ áp dụng trong .site-main (vùng <main>). */
+@layer utilities {
+	.site-main {
+		@tailwind utilities source(none);
+	}
+}
+
+@source "../../../front-page.php";
+@source "../../../template-parts/sections/";
+@source "../../../inc/hero.php";
+@source "../../../inc/news.php";
+
+@layer components {
+	/* Chấm phân trang hero (Swiper Pagination tự sinh span .swiper-pagination-bullet). */
+	.hero-pagination .swiper-pagination-bullet {
+		@apply h-2.5 w-2.5 cursor-pointer rounded-full bg-white/70 shadow-[0_0_0_1px_rgb(16_33_45/0.15)] transition-[width,background-color] duration-300;
+	}
+
+	.hero-pagination .swiper-pagination-bullet-active {
+		@apply w-7 bg-primary;
+	}
+
+	/* Nút ‹ › của slider .js-carousel khi mọi ảnh đã vừa khung (Swiper gắn .swiper-button-lock). Giữ chỗ để không xô lệch bố cục. */
+	.js-carousel .swiper-button-lock {
+		@apply invisible;
+	}
+
+	/* Iframe YouTube / <video> do src/js/video.js tạo khi bấm ▶ (section Giới thiệu). */
+	.video-player {
+		@apply absolute inset-0 size-full border-0 bg-black;
+	}
+}

@@ -1,0 +1,96 @@
+/*
+ * Nội dung soạn trong Classic Editor (the_content). Chỉ import vào entry của trang có nội dung bài/trang.
+ * Chống tràn ngang trên mobile: chữ/link dài tự xuống dòng, bảng và code cuộn ngang trong khối của nó,
+ * ảnh / iframe / video / chú thích ảnh (Classic Editor gắn width cố định) không vượt khung.
+ */
+@layer components {
+	.entry-content {
+		@apply leading-relaxed text-body wrap-break-word;
+	}
+
+	.entry-content > * + * {
+		@apply mt-4;
+	}
+
+	.entry-content h2 {
+		@apply mt-8 text-2xl leading-snug font-bold text-dark;
+	}
+
+	.entry-content h3 {
+		@apply mt-6 text-xl leading-snug font-bold text-dark;
+	}
+
+	.entry-content h4 {
+		@apply mt-6 text-lg font-bold text-dark;
+	}
+
+	.entry-content a {
+		@apply underline underline-offset-2 hover:text-primary-dark;
+	}
+
+	.entry-content ul {
+		@apply list-disc pl-6;
+	}
+
+	.entry-content ol {
+		@apply list-decimal pl-6;
+	}
+
+	.entry-content li + li {
+		@apply mt-1;
+	}
+
+	.entry-content img {
+		@apply h-auto max-w-full rounded-lg;
+	}
+
+	.entry-content blockquote {
+		@apply border-l-4 border-primary bg-soft px-5 py-3 italic;
+	}
+
+	/* Mobile: bảng tự cuộn ngang trong khung của nó (chữ không bị bẻ), trang không bị kéo ngang. */
+	.entry-content table {
+		@apply w-full border-collapse max-sm:block max-sm:overflow-x-auto;
+	}
+
+	.entry-content th,
+	.entry-content td {
+		@apply border border-line p-2 text-left;
+	}
+
+	.entry-content th {
+		@apply bg-soft font-semibold;
+	}
+
+	.entry-content iframe,
+	.entry-content video,
+	.entry-content embed,
+	.entry-content object {
+		@apply max-w-full;
+	}
+
+	.entry-content pre {
+		@apply max-w-full overflow-x-auto rounded-lg bg-soft p-4 text-sm;
+	}
+
+	/* Căn ảnh của Classic Editor. */
+	.entry-content .alignleft {
+		@apply mr-4 mb-2 sm:float-left;
+	}
+
+	.entry-content .alignright {
+		@apply mb-2 ml-4 sm:float-right;
+	}
+
+	.entry-content .aligncenter {
+		@apply mx-auto block;
+	}
+
+	.entry-content .wp-caption {
+		@apply max-w-full;
+	}
+
+	.entry-content .wp-caption-text {
+		@apply mt-1 text-sm text-muted;
+	}
+}

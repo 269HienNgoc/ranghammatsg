@@ -1,0 +1,24 @@
+/*
+ * Phân trang (the_posts_pagination). Chỉ import vào entry của trang danh sách.
+ */
+@layer components {
+	.pagination {
+		@apply mt-12;
+	}
+
+	.pagination .nav-links {
+		@apply flex flex-wrap justify-center gap-2;
+	}
+
+	.pagination .page-numbers {
+		@apply min-w-10 rounded-lg border border-line px-3 py-2 text-center text-dark hover:border-primary hover:text-primary;
+	}
+
+	.pagination .page-numbers.current {
+		@apply border-primary bg-primary text-white;
+	}
+
+	.pagination .page-numbers.dots {
+		@apply border-transparent;
+	}
+}
