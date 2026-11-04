@@ -9,7 +9,7 @@ update_post_thumbnail_cache( $wp_query );
 
 	<?php if ( have_posts() ) : ?>
 		<?php
-		if ( ! is_paged() ) {
+		if ( ! is_paged() && ! $rhm_is_doctor ) { // Trang 1 chuyên mục, không phải danh sách bác sĩ → hiển thị bài nổi bật.
 			the_post();
 			get_template_part( 'template-parts/content/featured-post', null, array( 'label' => $rhm_is_doctor ? __( 'Bác sĩ', 'themeranghammatsg' ) : single_cat_title( '', false ) ) );
 		}
