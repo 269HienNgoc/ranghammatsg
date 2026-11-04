@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
-// get_template_part( 'template-parts/components/page-banner' );
+// get_template_part( 'template-parts/components/page-title' );
 ?>
 <div class="site-container py-4 lg:py-4">
 

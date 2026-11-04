@@ -62,6 +62,14 @@ function rhm_posted_on(): void {
 }
 
 /**
+ * Thời gian đọc (phút, tối thiểu 1) của bài hiện tại: ~220 chữ/phút (tiếng Việt, mỗi tiếng tách bởi khoảng trắng).
+ */
+function rhm_get_reading_minutes(): int {
+	$words = preg_split( '/\s+/u', trim( wp_strip_all_tags( strip_shortcodes( (string) get_post_field( 'post_content' ) ) ) ), -1, PREG_SPLIT_NO_EMPTY );
+	return max( 1, (int) round( count( (array) $words ) / 220 ) );
+}
+
+/**
  * Phân trang danh sách.
  */
 function rhm_pagination(): void {
@@ -99,7 +107,7 @@ function rhm_get_page_title(): string {
 }
 
 /**
- * Breadcrumb đơn giản: Trang chủ › [Tin tức | trang cha] › Hiện tại.
+ * Breadcrumb đơn giản: Trang chủ › [chuyên mục cha › chuyên mục (bài viết) | trang cha] › Hiện tại.
  */
 function rhm_breadcrumb(): void {
 	if ( is_front_page() ) {
@@ -110,9 +118,15 @@ function rhm_breadcrumb(): void {
 	$items[] = array( __( 'Trang chủ', 'themeranghammatsg' ), home_url( '/' ) );
 
 	if ( is_singular( 'post' ) ) {
-		$posts_page = (int) get_option( 'page_for_posts' );
-		if ( $posts_page ) {
-			$items[] = array( get_the_title( $posts_page ), get_permalink( $posts_page ) );
+		// Chuyên mục đầu tiên của bài + các chuyên mục cha (SEO + người đọc quay lại đúng nhóm bài); không có → trang Tin tức.
+		$category = get_the_category( get_queried_object_id() )[0] ?? null;
+		if ( $category ) {
+			foreach ( array_reverse( get_ancestors( $category->term_id, 'category' ) ) as $ancestor ) {
+				$items[] = array( get_cat_name( $ancestor ), get_category_link( $ancestor ) );
+			}
+			$items[] = array( $category->name, get_category_link( $category ) );
+		} elseif ( (int) get_option( 'page_for_posts' ) ) {
+			$items[] = array( get_the_title( (int) get_option( 'page_for_posts' ) ), get_permalink( (int) get_option( 'page_for_posts' ) ) );
 		}
 	} elseif ( is_page() ) {
 		foreach ( array_reverse( get_post_ancestors( get_queried_object_id() ) ) as $ancestor ) {
@@ -122,16 +136,24 @@ function rhm_breadcrumb(): void {
 
 	$items[] = array( rhm_get_page_title(), '' );
 
-	echo '<nav class="text-sm text-muted" aria-label="' . esc_attr__( 'Breadcrumb', 'themeranghammatsg' ) . '"><ol class="flex flex-wrap items-center gap-2">';
+	// 1 dòng: các mục trước giữ nguyên, mục cuối (trang hiện tại, vd tiêu đề bài dài) tự cắt "…" thay vì rớt xuống dòng.
+	$last = count( $items ) - 1;
+	// Link màu teal-dark (mục đầu kèm icon nhà), ngăn cách bằng mũi tên nhỏ, trang hiện tại in đậm.
+	echo '<nav class="text-[15px] leading-6" aria-label="' . esc_attr__( 'Breadcrumb', 'themeranghammatsg' ) . '"><ol class="flex items-center gap-2">';
 	foreach ( $items as $index => [ $label, $url ] ) {
-		echo '<li class="flex items-center gap-2">';
+		echo '<li class="' . ( $index === $last ? 'flex min-w-0 items-center gap-2' : 'flex shrink-0 items-center gap-2' ) . '">';
 		if ( $index > 0 ) {
-			echo '<span aria-hidden="true">›</span>';
+			echo rhm_get_icon( 'chevron', 'size-3.5 shrink-0 -rotate-90 text-muted' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
 		}
 		if ( $url ) {
-			echo '<a class="text-muted hover:text-primary" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+			printf(
+				'<a class="inline-flex items-center gap-1.5 font-medium text-teal-dark transition-colors hover:text-primary" href="%1$s">%2$s%3$s</a>',
+				esc_url( $url ),
+				0 === $index ? rhm_get_icon( 'home', 'size-4 shrink-0' ) : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+				esc_html( $label )
+			);
 		} else {
-			echo '<span aria-current="page">' . esc_html( $label ) . '</span>';
+			echo '<span class="truncate font-bold text-dark" aria-current="page" title="' . esc_attr( $label ) . '">' . esc_html( $label ) . '</span>';
 		}
 		echo '</li>';
 	}

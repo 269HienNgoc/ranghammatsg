@@ -367,22 +367,28 @@ function rhm_customize_contact( WP_Customize_Manager $wp_customize ): void {
 add_action( 'customize_register', 'rhm_customize_contact' );
 
 /**
- * Bài viết (inc/toc.php): mục lục tự động + mặc định cho shortcode [toc].
+ * Bài viết: dòng thông tin dưới tiêu đề (inc/post-meta.php) + mục lục tự động / mặc định cho shortcode [toc] (inc/toc.php).
  */
 function rhm_customize_post( WP_Customize_Manager $wp_customize ): void {
 	$wp_customize->add_section(
 		'rhm_post',
 		array(
 			'title'       => __( 'Bài viết', 'themeranghammatsg' ),
-			'description' => __( 'Mục lục tự chèn ngay dưới mô tả bài viết khi bài có đủ số tiêu đề tối thiểu. Đặt mục lục ở vị trí khác: gõ [toc] trong nội dung. Ẩn mục lục 1 bài: [toc hide="yes"]. Thuộc tính khác: title="…", levels="2,3", open="no".', 'themeranghammatsg' ),
+			'description' => __( 'Dòng thông tin dưới tiêu đề bài: tích chọn mục muốn hiện (bỏ hết = ẩn cả dòng). Mục lục tự chèn ngay dưới mô tả bài viết khi bài có đủ số tiêu đề tối thiểu. Đặt mục lục ở vị trí khác: gõ [toc] trong nội dung. Ẩn mục lục 1 bài: [toc hide="yes"]. Thuộc tính khác: title="…", levels="2,3", open="no".', 'themeranghammatsg' ),
 			'priority'    => 38,
 		)
 	);
+
+	$meta = static fn( string $key, string $label ): array => array( $label, 'checkbox', 'rest_sanitize_boolean', array( 'default' => RHM_POST_META_DEFAULTS[ $key ] ) );
 
 	rhm_customize_fields(
 		$wp_customize,
 		'rhm_post',
 		array(
+			'rhm_post_meta_author'  => $meta( 'author', __( 'Hiển thị tác giả', 'themeranghammatsg' ) ),
+			'rhm_post_meta_date'    => $meta( 'date', __( 'Hiển thị ngày đăng', 'themeranghammatsg' ) ),
+			'rhm_post_meta_updated' => $meta( 'updated', __( 'Hiển thị ngày cập nhật (khi bài được sửa sau ngày đăng)', 'themeranghammatsg' ) ),
+			'rhm_post_meta_reading' => $meta( 'reading', __( 'Hiển thị thời gian đọc', 'themeranghammatsg' ) ),
 			'rhm_toc_auto'   => array( __( 'Tự chèn mục lục vào bài viết', 'themeranghammatsg' ), 'checkbox', 'rest_sanitize_boolean', array( 'default' => RHM_TOC_DEFAULTS['auto'] ) ),
 			'rhm_toc_title'  => array( __( 'Tiêu đề mục lục', 'themeranghammatsg' ), 'text', 'sanitize_text_field', array( 'default' => rhm_toc_default_title() ) ),
 			'rhm_toc_levels' => array(

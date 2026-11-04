@@ -18,6 +18,36 @@
 @source "../../../inc/template-tags.php";
 
 @layer components {
+	/*
+	 * Nền banner bài viết (template-parts/components/page-banner.php), thuần CSS (không ảnh):
+	 * mint → trắng + vầng sáng xanh góc trên phải | ::before lưới chấm mờ dần từ góc phải.
+	 */
+	.post-banner {
+		@apply bg-white;
+		background-image:
+			radial-gradient(ellipse 60% 90% at 100% 0%, rgb(17 160 108 / 0.12), transparent 70%),
+			linear-gradient(to bottom, var(--color-mint), var(--color-white));
+	}
+
+	.post-banner::before {
+		@apply pointer-events-none absolute inset-0 content-[''];
+		background-image: radial-gradient(var(--color-mint-dark) 1.2px, transparent 1.4px);
+		background-size: 20px 20px;
+		mask-image: linear-gradient(to left, #000, transparent 65%);
+	}
+
+	/* Cỡ chữ nội dung bài viết (độc giả 30+): 17px mobile, 18px desktop, dòng 1.75 — tiêu đề / bảng tự lớn theo (em). */
+	.entry-content {
+		--entry-font-size: 1.0625rem;
+		--entry-line-height: 1.75;
+	}
+
+	@media (width >= 64rem) {
+		.entry-content {
+			--entry-font-size: 1.125rem;
+		}
+	}
+
 	/* Bài trước / bài sau (the_post_navigation). */
 	.post-navigation .nav-links {
 		@apply mt-12 flex justify-between gap-6 border-t border-line pt-6;
@@ -34,4 +64,15 @@
 	.post-navigation a span {
 		@apply text-base font-semibold text-dark;
 	}
+}
+
+/*
+ * Sao đánh giá (plugin kk-star-ratings) trong banner bài viết: chữ "4.5/5 - (n bình chọn)" của plugin có font-size nội tuyến
+ * (19.2px) và CSS plugin không nằm trong @layer → ghi đè NGOÀI layer + !important, chỉ trong .post-banner.
+ * Cỡ ngôi sao giữ theo cài đặt plugin (độ rộng phần sao "đã chấm" được plugin tính theo px).
+ */
+.post-banner .kk-star-ratings .kksr-legend {
+	margin-inline: 0.625rem 0;
+	color: var(--color-muted);
+	font-size: 0.875rem !important;
 }

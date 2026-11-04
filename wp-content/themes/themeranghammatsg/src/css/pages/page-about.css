@@ -13,5 +13,5 @@
 
 @source "../../../page-templates/tpl-gioi-thieu.php";
 @source "../../../template-parts/sections/booking-cta.php";
-@source "../../../template-parts/components/page-banner.php";
+@source "../../../template-parts/components/page-title.php";
 @source "../../../inc/template-tags.php";

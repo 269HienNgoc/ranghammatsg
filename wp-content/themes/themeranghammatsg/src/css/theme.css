@@ -25,7 +25,8 @@
 	--color-muted: #74767e;
 	--color-line: #e3e8ee;
 	--color-soft: #f0fafa;           /* nền thanh menu */
-	--color-footer: #003442;         /* nền chân trang */
+	--color-deep: #003442;           /* xanh đậm thương hiệu: H1 bài viết (tương phản 12:1 trên nền mint) */
+	--color-footer: var(--color-deep); /* nền chân trang */
 	--color-footer-accent: #d3d867;  /* chân trang: tiêu đề cột, icon chi nhánh */
 	--color-footer-text: #c5dbe2;    /* chân trang: chữ */
 	--color-footer-muted: #a3bdc8;   /* chân trang: dòng bản quyền */

@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
-// get_template_part( 'template-parts/components/page-banner' );
+// get_template_part( 'template-parts/components/page-title' );
 ?>
 <div class="site-container py-12 lg:py-20">
 	<?php if ( get_the_archive_description() ) : ?>

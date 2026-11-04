@@ -16,7 +16,7 @@
 @source "../../../category.php";
 @source "../../../search.php";
 @source "../../../template-parts/content/";
-@source "../../../template-parts/components/page-banner.php";
+@source "../../../template-parts/components/page-title.php";
 @source "../../../template-parts/components/category-filter.php";
 @source "../../../inc/template-tags.php";
 @source "../../../searchform.php";
