@@ -9,7 +9,8 @@
  * Fluent tự khởi tạo khi được nạp muộn (document đã tải xong → setTimeout(init, 100)); cấu hình từng form là
  * script thuần (window.fluent_form_*) nên chạy ngay không cần jQuery.
  * An toàn: nếu trang có script KHÁC (không phải của Fluent) phụ thuộc jQuery → không hoãn gì (in bình thường).
- * Liên quan: inc/cleanup.php đưa jQuery xuống footer + bỏ jquery-migrate; style form ở trang Liên hệ: page-contact.css.
+ * Liên quan: inc/cleanup.php đưa jQuery xuống footer + bỏ jquery-migrate. Liên hệ/hồ sơ bác sĩ dùng partial
+ * src/css/components/_booking-form.css thay cho CSS của Fluent (gỡ ở cuối file).
  *
  * @package themeranghammatsg
  */
@@ -115,3 +116,19 @@ function rhm_fluent_lazy_tag( string $tag, string $handle ): string {
 	return $processor->get_updated_html();
 }
 add_filter( 'script_loader_tag', 'rhm_fluent_lazy_tag', 10, 2 );
+
+/**
+ * Liên hệ và hồ sơ bác sĩ: bỏ 2 file CSS của Fluent (~9 kB gzip, chặn hiển thị) — form đã có đủ style
+ * trong partial _booking-form.css (khối .rhm-booking). Trang khác có form Fluent vẫn dùng CSS của plugin.
+ * Fluent enqueue CSS lúc render shortcode (giữa trang) → gỡ cả ở wp_enqueue_scripts lẫn đầu wp_footer (trước khi WordPress in
+ * style nạp muộn rồi đẩy lên <head>).
+ */
+function rhm_fluent_dequeue_styles(): void {
+	if ( ! is_page_template( 'page-templates/tpl-lien-he.php' ) && ! is_singular( 'bac-si' ) ) {
+		return;
+	}
+	wp_dequeue_style( 'fluent-form-styles' );
+	wp_dequeue_style( 'fluentform-public-default' );
+}
+add_action( 'wp_enqueue_scripts', 'rhm_fluent_dequeue_styles', 100 );
+add_action( 'wp_footer', 'rhm_fluent_dequeue_styles', 1 );

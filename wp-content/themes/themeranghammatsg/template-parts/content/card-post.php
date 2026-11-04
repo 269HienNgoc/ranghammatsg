@@ -6,21 +6,25 @@
  * - ≥ 640px: thẻ dọc — ảnh trên, ngày, tiêu đề, mô tả, "Xem chi tiết".
  * Ngày là 1 phần tử duy nhất, đổi vị trí bằng order (mobile xuống cuối).
  *
- * $args['sizes']: độ rộng hiển thị thật của ảnh theo lưới đang dùng (bỏ trống = mặc định của WordPress).
- * Mobile ảnh rộng 38% khung → phần cuối sizes nên là calc(38vw - 12px).
+ * $args['sizes']: độ rộng hiển thị thật của ảnh theo lưới đang dùng. Bỏ trống = lưới 3 cột của index.php / archive.php / search.php
+ * (grid gap-6 sm:grid-cols-2 lg:grid-cols-3 trong .site-container: khung 1440px, lề 16px, khe 24px). Mobile ảnh rộng 38% khung → calc(38vw - 12px).
+ * $args['loading']: 'lazy' (mặc định) | 'eager' (ảnh trong màn hình đầu) | 'lcp' (ảnh LCP: eager + fetchpriority=high) —
+ * trang danh sách không có bài nổi bật dùng rhm_list_image_loading() (inc/template-tags.php).
  *
  * @package themeranghammatsg
  */
 
 defined( 'ABSPATH' ) || exit;
 
+$rhm_loading     = $args['loading'] ?? 'lazy';
 $rhm_image_attrs = array(
 	'class'    => 'aspect-[3/2] w-full object-cover',
-	'loading'  => 'lazy',
-	'decoding' => 'async',
+	'sizes'    => $args['sizes'] ?? '(min-width: 1440px) 453px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc((100vw - 56px) / 2), calc(38vw - 12px)',
+	'loading'  => 'lazy' === $rhm_loading ? 'lazy' : 'eager',
+	'decoding' => 'lcp' === $rhm_loading ? 'auto' : 'async', // Ảnh LCP: không async (WordPress tự gắn async nếu bỏ trống).
 );
-if ( ! empty( $args['sizes'] ) ) {
-	$rhm_image_attrs['sizes'] = $args['sizes'];
+if ( 'lcp' === $rhm_loading ) {
+	$rhm_image_attrs['fetchpriority'] = 'high';
 }
 
 $rhm_is_post  = 'post' === get_post_type();
@@ -41,6 +45,9 @@ $rhm_category = $rhm_is_post ? ( get_the_category()[0] ?? null ) : null;
 				<?php echo rhm_get_icon( 'calendar', 'size-3.5 shrink-0 sm:hidden' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 				<?php rhm_posted_on(); ?>
 			</p>
+		<?php endif; ?>
+		<?php if ( 'bac-si' === get_post_type() && rhm_get_doctor_field( 'position', get_the_ID() ) ) : ?>
+			<p class="mb-1 text-sm font-semibold text-teal-dark"><?php echo esc_html( rhm_get_doctor_field( 'position', get_the_ID() ) ); ?></p>
 		<?php endif; ?>
 		<h2 class="line-clamp-3 text-[15px] leading-snug font-bold sm:mb-3 sm:line-clamp-none sm:text-xl"><a class="text-teal-dark hover:text-primary sm:text-dark" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 		<p class="mt-1 line-clamp-2 text-[13px] leading-snug text-muted sm:mt-0 sm:mb-4 sm:line-clamp-3 sm:text-base sm:leading-relaxed"><?php echo esc_html( get_the_excerpt() ); ?></p>

@@ -129,7 +129,7 @@ while ( have_posts() ) :
 					<span class="pointer-events-none absolute -right-6 -bottom-20 size-40 rounded-full bg-white/5" aria-hidden="true"></span>
 					<h2 class="relative text-xl font-bold lg:text-2xl"><?php echo esc_html( rhm_contact_text( 'cta_title' ) ); ?></h2>
 					<?php if ( rhm_contact_text( 'cta_text' ) ) : ?>
-						<p class="relative mt-2 text-white/80"><?php echo esc_html( rhm_contact_text( 'cta_text' ) ); ?></p>
+						<p class="relative mt-2 text-white/90"><?php echo esc_html( rhm_contact_text( 'cta_text' ) ); ?></p>
 					<?php endif; ?>
 					<a class="relative mt-5 inline-flex items-center gap-3 rounded-2xl bg-white/10 py-3 pr-5 pl-3 text-white transition-colors hover:bg-white/15 hover:text-white" href="<?php echo esc_url( rhm_get_tel_href( $rhm_hotline ) ); ?>">
 						<span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white text-teal-dark">
@@ -138,7 +138,7 @@ while ( have_posts() ) :
 						<span class="leading-tight">
 							<span class="block text-2xl font-bold lg:text-[28px]"><?php echo esc_html( $rhm_hotline ); ?></span>
 							<?php if ( $rhm_note ) : ?>
-								<span class="mt-1 block text-sm text-white/75"><?php echo esc_html( $rhm_note ); ?></span>
+								<span class="mt-1 block text-sm text-white"><?php echo esc_html( $rhm_note ); ?></span>
 							<?php endif; ?>
 						</span>
 					</a>

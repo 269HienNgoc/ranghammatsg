@@ -14,6 +14,8 @@
 @source "../../../index.php";
 @source "../../../archive.php";
 @source "../../../category.php";
+@source "../../../archive-bac-si.php";
+@source "../../../template-parts/components/featured-grid.php";
 @source "../../../search.php";
 @source "../../../template-parts/content/";
 @source "../../../template-parts/components/page-title.php";

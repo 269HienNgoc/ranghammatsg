@@ -17,7 +17,7 @@ while ( have_posts() ) :
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<?php if ( has_excerpt() ) : ?>
 				<?php // Mô tả bài viết (sapo). Mục lục tự chèn ngay dưới (đầu the_content, inc/toc.php). ?>
-				<p class="mb-6 text-[19px] leading-relaxed font-medium text-dark lg:text-xl"><?php echo esc_html( get_the_excerpt() ); ?></p>
+				<p class="mb-6 text-lg leading-relaxed font-medium text-dark lg:text-xl"><?php echo esc_html( get_the_excerpt() ); ?></p>
 			<?php endif; ?>
 
 			<div class="entry-content">

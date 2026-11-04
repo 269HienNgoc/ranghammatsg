@@ -78,7 +78,7 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 			<h2 id="about-title" class="mb-4 text-[28px] leading-tight font-bold text-dark lg:text-4xl">
 				<?php echo esc_html( $rhm_about['title'] ); ?>
 				<?php if ( $rhm_about['title_highlight'] ) : ?>
-					<span class="text-green"><?php echo esc_html( $rhm_about['title_highlight'] ); ?></span>
+					<span class="text-green-dark"><?php echo esc_html( $rhm_about['title_highlight'] ); ?></span>
 				<?php endif; ?>
 			</h2>
 

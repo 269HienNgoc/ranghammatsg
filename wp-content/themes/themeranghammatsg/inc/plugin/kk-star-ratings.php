@@ -47,6 +47,9 @@ function rhm_star_rating_assets(): void {
 add_action( 'wp_enqueue_scripts', 'rhm_star_rating_assets', 20 );
 
 function update_kk_star_ratings_save($post_id) {
+	if ( 'bac-si' === get_post_type( $post_id ) || ( wp_is_post_revision( $post_id ) && 'bac-si' === get_post_type( wp_get_post_parent_id( $post_id ) ) ) ) {
+		return;
+	}
 
     $ratings = get_post_meta($post_id, '_kksr_ratings_default', true);
     $cont = get_post_meta($post_id, '_kksr_count_default', true);

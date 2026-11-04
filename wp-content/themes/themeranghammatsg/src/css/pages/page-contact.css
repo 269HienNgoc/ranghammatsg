@@ -3,6 +3,7 @@
  */
 @import "../_tailwind.css";
 @import "../components/_entry-content.css";
+@import "../components/_booking-form.css";
 
 /* Utility chỉ áp dụng trong .site-main (vùng <main>). */
 @layer utilities {
@@ -28,112 +29,4 @@
 	.embed-player {
 		@apply absolute inset-0 size-full border-0;
 	}
-}
-
-/*
- * Form Fluent Forms trong khối .rhm-booking — style theo theme.
- * CSS của Fluent KHÔNG nằm trong @layer và nạp SAU file này → phải viết ngoài layer với selector mạnh hơn
- * (thêm tiền tố .rhm-booking). Màu / bo góc chính đổi qua biến của Fluent.
- */
-.rhm-booking .fluentform {
-	--fluentform-primary: var(--color-teal-dark);
-	--fluentform-border-color: var(--color-line);
-	--fluentform-border-radius: 0.75rem;
-}
-
-/* Bố cục: 1 cột; từ 640px các trường có lớp rhm-ff-half (Họ tên, Số điện thoại) chia đôi hàng. */
-.rhm-booking .frm-fluent-form fieldset {
-	display: grid;
-	column-gap: 1rem;
-}
-
-@media (width >= 40rem) {
-	.rhm-booking .frm-fluent-form fieldset {
-		grid-template-columns: 1fr 1fr;
-	}
-
-	.rhm-booking .frm-fluent-form fieldset > :not(.rhm-ff-half) {
-		grid-column: 1 / -1;
-	}
-}
-
-.rhm-booking .ff-default .ff-el-group {
-	margin-bottom: 1.25rem;
-}
-
-.rhm-booking .ff-default .ff-el-input--label label {
-	color: var(--color-dark);
-	font-size: 0.875rem;
-	font-weight: 600;
-}
-
-.rhm-booking .ff-default .ff-el-form-control {
-	min-height: 3rem;
-	padding: 0.75rem 1rem;
-	border-color: var(--color-line);
-	border-radius: 0.75rem;
-	background-color: #fbfdfc;
-	color: var(--color-body);
-	font-size: 0.9375rem;
-	transition:
-		border-color 0.15s,
-		box-shadow 0.15s;
-}
-
-.rhm-booking .ff-default .ff-el-form-control::placeholder {
-	color: #9aa3a8;
-}
-
-.rhm-booking .ff-default .ff-el-form-control:focus {
-	border-color: var(--color-teal-dark);
-	background-color: #fff;
-	box-shadow: 0 0 0 3px rgb(16 102 92 / 0.12);
-}
-
-.rhm-booking .ff-default textarea.ff-el-form-control {
-	min-height: 7.5rem;
-}
-
-.rhm-booking .ff-default .ff-el-is-error .ff-el-form-control {
-	border-color: #e5484d;
-}
-
-/* Nút gửi: Fluent in <style> nội tuyến "form.fluent_form_N .ff-btn-submit:not(.ff_btn_no_style)" → cần selector mạnh hơn. */
-.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	min-height: 3.25rem;
-	padding: 0.75rem 2rem;
-	border: 0;
-	border-radius: 9999px;
-	background-color: var(--color-teal-dark);
-	color: #fff;
-	font-size: 1rem;
-	font-weight: 700;
-	opacity: 1;
-	transition: background-color 0.15s;
-}
-
-.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style):hover,
-.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style):focus-visible {
-	background-color: var(--color-primary);
-	opacity: 1;
-}
-
-@media (width >= 40rem) {
-	.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
-		width: auto;
-	}
-}
-
-/* Thông báo gửi thành công (Fluent thay form bằng khối này). */
-.rhm-booking .ff-message-success {
-	padding: 1.25rem 1.5rem;
-	border: 1px solid var(--color-mint-dark);
-	border-radius: 1rem;
-	background-color: var(--color-mint);
-	color: var(--color-teal-dark);
-	box-shadow: none;
 }

@@ -36,16 +36,10 @@
 		mask-image: linear-gradient(to left, #000, transparent 65%);
 	}
 
-	/* Cỡ chữ nội dung bài viết (độc giả 30+): 17px mobile, 18px desktop, dòng 1.75 — tiêu đề / bảng tự lớn theo (em). */
+	/* Cỡ chữ nội dung bài viết (độc giả 30+): 18px mọi màn hình, dòng 1.75 — tiêu đề / bảng tự lớn theo (em). */
 	.entry-content {
-		--entry-font-size: 1.0625rem;
+		--entry-font-size: 1.125rem;
 		--entry-line-height: 1.75;
-	}
-
-	@media (width >= 64rem) {
-		.entry-content {
-			--entry-font-size: 1.125rem;
-		}
 	}
 
 	/* Bài trước / bài sau (the_post_navigation). */

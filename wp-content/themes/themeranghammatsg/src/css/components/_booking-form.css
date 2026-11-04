@@ -1,0 +1,150 @@
+/*
+ * Form Fluent Forms trong khối .rhm-booking — dùng chung cho Liên hệ và hồ sơ bác sĩ.
+ * Trang Liên hệ KHÔNG nạp 2 file CSS của Fluent (fluent-forms-public.css + fluentform-public-default.css, ~9 kB gzip
+ * chặn hiển thị — gỡ ở inc/plugin/fluentform.php). Phần dưới chỉ chép những gì form dùng: nhãn + dấu * bắt buộc, ô nhập,
+ * lỗi từng trường, thông báo thành công, nút gửi. Thêm loại trường mới (checkbox, upload, nhiều bước…) vào form → thêm style ở đây.
+ * Viết NGOÀI @layer: Fluent in <style> nội tuyến cho nút gửi ("form.fluent_form_N .ff-btn-submit:not(.ff_btn_no_style)").
+ */
+.rhm-booking .fluentform {
+	--rhm-ff-danger: #c62828; /* Chữ lỗi ≥ 4,5:1 trên nền trắng (màu mặc định của Fluent #f56c6c chỉ ~3:1). */
+}
+
+.rhm-booking .ff-hidden,
+.rhm-booking .has-conditions,
+.rhm-booking .ff-errors-in-stack {
+	display: none;
+}
+
+/* Bố cục: 1 cột; từ 640px các trường có lớp rhm-ff-half (Họ tên, Số điện thoại) chia đôi hàng. */
+.rhm-booking .frm-fluent-form fieldset {
+	display: grid;
+	column-gap: 1rem;
+}
+
+@media (width >= 40rem) {
+	.rhm-booking .frm-fluent-form fieldset {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.rhm-booking .frm-fluent-form fieldset > :not(.rhm-ff-half) {
+		grid-column: 1 / -1;
+	}
+}
+
+.rhm-booking .ff-el-group {
+	margin-bottom: 1.25rem;
+}
+
+.rhm-booking .ff-el-input--label {
+	display: block;
+	margin-bottom: 0.3125rem;
+}
+
+.rhm-booking .ff-el-input--label label {
+	color: var(--color-dark);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+/* Dấu * sau nhãn trường bắt buộc (trình đọc màn hình bỏ qua: content … / ""). */
+.rhm-booking .ff-el-is-required.asterisk-right label::after {
+	content: " *";
+	content: " *" / "";
+	margin-left: 0.1875rem;
+	color: var(--rhm-ff-danger);
+}
+
+.rhm-booking .ff-el-form-control {
+	display: block;
+	width: 100%;
+	min-height: 3rem;
+	padding: 0.75rem 1rem;
+	border: 1px solid var(--color-line);
+	border-radius: 0.75rem;
+	background-color: #fbfdfc;
+	color: var(--color-body);
+	font-size: 0.9375rem;
+	line-height: 1.25;
+	transition:
+		border-color 0.15s,
+		box-shadow 0.15s;
+}
+
+.rhm-booking .ff-el-form-control::placeholder {
+	color: #9aa3a8;
+	opacity: 1;
+}
+
+.rhm-booking .ff-el-form-control:focus {
+	border-color: var(--color-teal-dark);
+	outline: none;
+	background-color: #fff;
+	box-shadow: 0 0 0 3px rgb(16 102 92 / 0.12);
+}
+
+.rhm-booking textarea.ff-el-form-control {
+	min-height: 7.5rem;
+	resize: vertical;
+}
+
+/* Lỗi từng trường: Fluent gắn .ff-el-is-error cho nhóm và chèn <div class="error text-danger"> dưới ô nhập. */
+.rhm-booking .ff-el-is-error .ff-el-form-control {
+	border-color: #e5484d;
+}
+
+.rhm-booking .text-danger {
+	margin-top: 0.25rem;
+	color: var(--rhm-ff-danger);
+	font-size: 0.8125rem;
+}
+
+/* Nút gửi: Fluent in <style> nội tuyến "form.fluent_form_N .ff-btn-submit:not(.ff_btn_no_style)" → cần selector mạnh hơn. */
+.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 3.25rem;
+	padding: 0.75rem 2rem;
+	border: 0;
+	border-radius: 9999px;
+	background-color: var(--color-teal-dark);
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 700;
+	white-space: nowrap;
+	cursor: pointer;
+	user-select: none;
+	transition: background-color 0.15s;
+}
+
+.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style):hover,
+.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style):focus-visible {
+	background-color: var(--color-primary);
+}
+
+/* Đang gửi (Fluent gắn .disabled / .ff-working cho nút, .ff_submitting cho form). */
+.rhm-booking .ff-btn.disabled,
+.rhm-booking .ff-btn.ff-working {
+	opacity: 0.65;
+	cursor: progress;
+}
+
+.rhm-booking .ff_submitting {
+	pointer-events: none;
+}
+
+@media (width >= 40rem) {
+	.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
+		width: auto;
+	}
+}
+
+/* Thông báo gửi thành công (Fluent thay form bằng khối này). */
+.rhm-booking .ff-message-success {
+	padding: 1.25rem 1.5rem;
+	border: 1px solid var(--color-mint-dark);
+	border-radius: 1rem;
+	background-color: var(--color-mint);
+	color: var(--color-teal-dark);
+}

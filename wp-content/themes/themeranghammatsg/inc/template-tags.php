@@ -21,10 +21,10 @@ function rhm_get_option( string $key, string $default = '' ): string {
 function rhm_get_booking_url(): string {
 	$page_id = absint( get_theme_mod( 'rhm_booking_page', 0 ) );
 	if ( $page_id && 'publish' === get_post_status( $page_id ) ) {
-		return (string) get_permalink( $page_id );
+		return (string) apply_filters( 'rhm_booking_url', get_permalink( $page_id ) );
 	}
 	$page = get_page_by_path( 'lien-he' );
-	return $page ? (string) get_permalink( $page ) : home_url( '/' );
+	return (string) apply_filters( 'rhm_booking_url', $page ? get_permalink( $page ) : home_url( '/' ) );
 }
 
 /**
@@ -67,6 +67,28 @@ function rhm_posted_on(): void {
 function rhm_get_reading_minutes(): int {
 	$words = preg_split( '/\s+/u', trim( wp_strip_all_tags( strip_shortcodes( (string) get_post_field( 'post_content' ) ) ) ), -1, PREG_SPLIT_NO_EMPTY );
 	return max( 1, (int) round( count( (array) $words ) / 220 ) );
+}
+
+/**
+ * Số ảnh card đầu tiên KHÔNG lazy ở trang danh sách không có bài nổi bật: mobile (< 640px) card dạng hàng, ~4 thẻ nằm trong
+ * màn hình đầu; desktop hàng đầu 2–3 thẻ.
+ */
+const RHM_LIST_EAGER_IMAGES = 4;
+
+/**
+ * Cách tải ảnh card của bài hiện tại trong vòng lặp (chỉ đếm bài có ảnh đại diện) ở trang danh sách không có bài nổi bật
+ * (Tin tức, tìm kiếm, lưu trữ, danh mục trang 2+) → truyền vào card-post ( 'loading' => rhm_list_image_loading() ):
+ * 'lcp' = ảnh đầu (eager + fetchpriority=high) | 'eager' = ảnh 2…RHM_LIST_EAGER_IMAGES | 'lazy' = còn lại.
+ * Ảnh trong màn hình đầu cùng cỡ nhau (mobile) → Chrome có thể chọn bất kỳ ảnh nào làm LCP (chênh nhau vài phần pixel)
+ * nên cả nhóm phải tải ngay, chỉ 1 ảnh được ưu tiên cao.
+ */
+function rhm_list_image_loading(): string {
+	static $count = 0;
+	if ( ! has_post_thumbnail() ) {
+		return 'lazy';
+	}
+	++$count;
+	return 1 === $count ? 'lcp' : ( $count <= RHM_LIST_EAGER_IMAGES ? 'eager' : 'lazy' );
 }
 
 /**
@@ -128,6 +150,8 @@ function rhm_breadcrumb(): void {
 		} elseif ( (int) get_option( 'page_for_posts' ) ) {
 			$items[] = array( get_the_title( (int) get_option( 'page_for_posts' ) ), get_permalink( (int) get_option( 'page_for_posts' ) ) );
 		}
+	} elseif ( is_singular( 'bac-si' ) ) {
+		$items[] = array( __( 'Bác sĩ', 'themeranghammatsg' ), get_post_type_archive_link( 'bac-si' ) );
 	} elseif ( is_page() ) {
 		foreach ( array_reverse( get_post_ancestors( get_queried_object_id() ) ) as $ancestor ) {
 			$items[] = array( get_the_title( $ancestor ), get_permalink( $ancestor ) );

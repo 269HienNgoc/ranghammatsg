@@ -37,7 +37,7 @@ if ( $rhm_has_slider && file_exists( RHM_THEME_DIR . '/dist/js/home.js' ) ) {
 		</div>
 
 		<?php if ( $rhm_has_slider ) : ?>
-			<div class="hero-pagination absolute inset-x-0 bottom-3 z-10 flex justify-center gap-2 lg:bottom-5"></div>
+			<div class="hero-pagination absolute inset-x-0 bottom-1.5 z-10 flex justify-center lg:bottom-3.5"></div>
 			<button class="hero-prev absolute top-1/2 left-4 z-10 hidden size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/85 text-dark shadow-card transition-colors hover:bg-white hover:text-primary lg:flex" type="button">
 				<?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 			</button>

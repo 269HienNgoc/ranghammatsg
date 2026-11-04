@@ -15,9 +15,9 @@ $rhm_thumbnail_id = (int) get_post_thumbnail_id();
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'grid grid-cols-[56fr_44fr] overflow-hidden rounded-2xl border border-line bg-soft sm:rounded-3xl lg:min-h-96' ); ?>>
 	<div class="relative z-10 flex flex-col items-start justify-center py-4 pr-1 pl-4 sm:p-8 lg:py-10 lg:pr-6 lg:pl-12">
-		<p class="mb-2.5 inline-flex items-center gap-1.5 rounded-full bg-mint-dark px-2.5 py-1 text-[10px] font-bold text-teal-dark uppercase sm:mb-4 sm:gap-2 sm:bg-primary/10 sm:px-3.5 sm:py-1.5 sm:text-[13px] sm:text-primary">
+		<p class="mb-2.5 inline-flex items-center gap-1.5 rounded-full bg-mint-dark px-2.5 py-1 text-[10px] font-bold text-teal-dark uppercase sm:mb-4 sm:gap-2 sm:bg-primary/10 sm:px-3.5 sm:py-1.5 sm:text-[13px] sm:text-primary-dark">
 			<?php echo rhm_get_icon( 'document', 'size-3.5 shrink-0 sm:size-5' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
-			<?php echo esc_html( single_cat_title( '', false ) ); ?>
+			<?php echo esc_html( $args['label'] ?? single_cat_title( '', false ) ); ?>
 		</p>
 		<h2 class="mb-2.5 text-xl leading-tight font-bold text-teal-dark max-sm:line-clamp-4 sm:mb-4 sm:text-2xl sm:text-primary lg:text-4xl"><a class="hover:text-primary-dark" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 		<p class="mb-4 line-clamp-5 text-[13px] leading-snug text-muted sm:mb-6 sm:line-clamp-4 sm:text-base sm:leading-relaxed lg:text-lg"><?php echo esc_html( get_the_excerpt() ); ?></p>
@@ -40,7 +40,7 @@ $rhm_thumbnail_id = (int) get_post_thumbnail_id();
 					'sizes'         => '(min-width: 1440px) 620px, (min-width: 1024px) 670px, (min-width: 640px) 600px, 480px',
 					'loading'       => 'eager',
 					'fetchpriority' => 'high',
-					'decoding'      => 'async',
+					'decoding'      => 'auto', // Ảnh LCP: không async (WordPress tự gắn async nếu bỏ trống).
 				)
 			);
 			?>

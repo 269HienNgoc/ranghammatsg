@@ -35,8 +35,10 @@ export default defineConfig( {
 			},
 			output: {
 				entryFileNames: 'js/[name].js',
-				// Chunk dùng chung chứa Swiper (hero + slider .js-carousel) → js/swiper.js, trình duyệt tải 1 lần dùng cho cả hai.
-				chunkFileNames: ( chunk ) => ( chunk.moduleIds.some( ( id ) => id.includes( '/node_modules/swiper/' ) ) && ! chunk.facadeModuleId ? 'js/swiper.js' : 'js/[name].js' ),
+				// Chunk dùng chung chứa Swiper (hero + slider .js-carousel) → js/swiper-<hash>.js, trình duyệt tải 1 lần dùng cho cả hai.
+				// Chunk có hash trong tên: entry import chunk bằng đường dẫn tương đối KHÔNG có ?ver, mà file tĩnh được cache 1 năm
+				// (immutable, .htaccess) → nội dung đổi thì tên phải đổi. Entry giữ tên cố định (PHP nạp kèm ?ver=filemtime).
+				chunkFileNames: ( chunk ) => ( chunk.moduleIds.some( ( id ) => id.includes( '/node_modules/swiper/' ) ) && ! chunk.facadeModuleId ? 'js/swiper-[hash].js' : 'js/[name]-[hash].js' ),
 				assetFileNames: ( asset ) => {
 					const name = asset.names?.[ 0 ] ?? '';
 					if ( name.endsWith( '.css' ) ) {

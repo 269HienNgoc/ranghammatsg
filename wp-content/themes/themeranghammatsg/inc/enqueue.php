@@ -29,6 +29,7 @@ function rhm_page_style_bundle(): string {
 		is_page_template( 'page-templates/tpl-gioi-thieu.php' ) => 'page-about',
 		is_page_template( 'page-templates/tpl-lien-he.php' )    => 'page-contact',
 		is_singular( 'post' )                                   => 'single-post',
+		is_singular( 'bac-si' )                                 => 'single-doctor',
 		is_page()                                               => 'page',
 		is_404()                                                => '404',
 		is_home(), is_archive(), is_search()                    => 'archive',

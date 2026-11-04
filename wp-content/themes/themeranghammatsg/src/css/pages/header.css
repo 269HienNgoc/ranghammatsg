@@ -116,9 +116,10 @@
 		@apply lg:sr-only;
 	}
 
-	/* Nút mũi tên mở menu con. Trạng thái xoay theo aria-expanded (đổi ngay khi bấm). */
+	/* Nút mũi tên mở menu con. Trạng thái xoay theo aria-expanded (đổi ngay khi bấm).
+	 * Desktop: ô bấm 24px (PageSpeed target-size ≥ 24×24), lề âm 2 bên giữ icon đúng vị trí của ô 20px cũ. */
 	.submenu-toggle {
-		@apply inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-dark hover:text-primary lg:-ml-0.5 lg:size-5;
+		@apply inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-dark hover:text-primary lg:-mr-0.5 lg:-ml-1 lg:size-6;
 	}
 
 	.submenu-toggle .icon {
@@ -143,7 +144,7 @@
 	}
 
 	.main-nav .sub-menu .submenu-toggle {
-		@apply size-10 lg:mr-3 lg:size-5;
+		@apply size-10 lg:mr-2.5 lg:ml-0 lg:size-6;
 	}
 
 	/* ---- Mobile: ngăn kéo + lớp phủ + kiểu mục menu ---- */

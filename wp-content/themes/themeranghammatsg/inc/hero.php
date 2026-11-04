@@ -73,13 +73,14 @@ function rhm_hero_picture( array $slide, bool $is_first ): string {
 		'alt'        => '' !== $alt ? $alt : get_the_title( $slide['desktop'] ),
 		$srcset_attr => wp_get_attachment_image_srcset( $slide['desktop'], 'full' ) ?: $desktop[0],
 		'sizes'      => '(min-width: 2048px) 2048px, 100vw',
-		'decoding'   => 'async',
 	);
 
 	if ( $is_first ) {
+		// Ảnh LCP: tải ngay, ưu tiên cao, decoding mặc định (không async — tránh trễ khung hình vẽ ảnh LCP).
 		$img['src']           = $desktop[0];
 		$img['fetchpriority'] = 'high';
-		$img['decoding']      = 'sync';
+	} else {
+		$img['decoding'] = 'async';
 	}
 
 	return '<picture>' . $source . '<img' . rhm_html_attrs( $img ) . '></picture>';

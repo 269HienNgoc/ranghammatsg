@@ -23,6 +23,7 @@ require_once RHM_THEME_DIR . '/inc/quick-services.php';
 require_once RHM_THEME_DIR . '/inc/about.php';
 require_once RHM_THEME_DIR . '/inc/news.php';
 require_once RHM_THEME_DIR . '/inc/category.php';
+require_once RHM_THEME_DIR . '/inc/doctors.php';
 require_once RHM_THEME_DIR . '/inc/post-meta.php';
 require_once RHM_THEME_DIR . '/inc/toc.php';
 require_once RHM_THEME_DIR . '/inc/content.php';

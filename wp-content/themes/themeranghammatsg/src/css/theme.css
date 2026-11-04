@@ -22,7 +22,7 @@
 	--color-mint: #ecf7f3;           /* thanh lọc chuyên mục: nền nút */
 	--color-mint-dark: #dcefe8;      /* thanh lọc chuyên mục: nền nút khi rê chuột */
 	--color-body: #1f2d36;           /* chữ nội dung */
-	--color-muted: #74767e;
+	--color-muted: #696b73;          /* ≥ 4,85:1 trên trắng / soft / mint (PageSpeed color-contrast) */
 	--color-line: #e3e8ee;
 	--color-soft: #f0fafa;           /* nền thanh menu */
 	--color-deep: #003442;           /* xanh đậm thương hiệu: H1 bài viết (tương phản 12:1 trên nền mint) */

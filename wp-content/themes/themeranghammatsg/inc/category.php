@@ -1,6 +1,6 @@
 <?php
 /**
- * Trang danh mục (category.php): trang 1 có 1 bài nổi bật + lưới, các trang sau chỉ có lưới.
+ * Danh mục và danh sách bác sĩ: trang 1 có 1 mục nổi bật + lưới, các trang sau chỉ có lưới.
  * Kèm dữ liệu thanh lọc chuyên mục con: rhm_get_category_filter() (cuối file).
  *
  * Lưới luôn đủ hàng (12 chia hết cho 2, 3 và 4 cột): trang 1 lấy RHM_CATEGORY_GRID + 1 bài (bài đầu làm nổi bật),
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 const RHM_CATEGORY_GRID = 12;
 
 function rhm_category_is_main( WP_Query $query ): bool {
-	return ! is_admin() && $query->is_main_query() && $query->is_category();
+	return ! is_admin() && $query->is_main_query() && ( $query->is_category() || $query->is_post_type_archive( 'bac-si' ) );
 }
 
 function rhm_category_query( WP_Query $query ): void {

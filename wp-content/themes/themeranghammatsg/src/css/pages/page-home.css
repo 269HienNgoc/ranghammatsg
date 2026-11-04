@@ -20,12 +20,19 @@
 @source "../../../inc/news.php";
 
 @layer components {
-	/* Chấm phân trang hero (Swiper Pagination tự sinh span .swiper-pagination-bullet). */
+	/* Chấm phân trang hero (Swiper Pagination tự sinh span .swiper-pagination-bullet).
+	 * Mỗi bullet là ô bấm cố định 28×24px (PageSpeed target-size ≥ 24×24) và KHÔNG đổi kích thước khi đổi slide
+	 * → các bullet không xê dịch khi autoplay (không phát sinh layout shift). Phần nhìn thấy (chấm 10px / viên 28px khi đang chọn)
+	 * là ::before định vị tuyệt đối giữa ô: đổi độ rộng của nó không đẩy phần tử nào khác. */
 	.hero-pagination .swiper-pagination-bullet {
-		@apply h-2.5 w-2.5 cursor-pointer rounded-full bg-white/70 shadow-[0_0_0_1px_rgb(16_33_45/0.15)] transition-[width,background-color] duration-300;
+		@apply relative h-6 w-7 cursor-pointer;
 	}
 
-	.hero-pagination .swiper-pagination-bullet-active {
+	.hero-pagination .swiper-pagination-bullet::before {
+		@apply absolute top-1/2 left-1/2 h-2.5 w-2.5 -translate-1/2 rounded-full bg-white/70 shadow-[0_0_0_1px_rgb(16_33_45/0.15)] transition-[width,background-color] duration-300 content-[''];
+	}
+
+	.hero-pagination .swiper-pagination-bullet-active::before {
 		@apply w-7 bg-primary;
 	}
 

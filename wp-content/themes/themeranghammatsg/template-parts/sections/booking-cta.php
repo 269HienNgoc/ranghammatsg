@@ -15,7 +15,7 @@ $rhm_hotline = rhm_get_option( 'rhm_hotline' );
 	<div class="site-container flex flex-wrap items-center justify-between gap-6">
 		<div>
 			<h2 class="mb-2 text-2xl font-bold lg:text-3xl"><?php esc_html_e( 'Đặt lịch khám ngay hôm nay', 'themeranghammatsg' ); ?></h2>
-			<p class="text-white/85"><?php esc_html_e( 'Đội ngũ bác sĩ sẽ liên hệ xác nhận lịch hẹn của bạn trong thời gian sớm nhất.', 'themeranghammatsg' ); ?></p>
+			<p class="text-white/90"><?php esc_html_e( 'Đội ngũ bác sĩ sẽ liên hệ xác nhận lịch hẹn của bạn trong thời gian sớm nhất.', 'themeranghammatsg' ); ?></p>
 		</div>
 		<div class="flex flex-wrap gap-3">
 			<?php rhm_booking_button( 'border-white bg-white text-primary hover:border-white hover:bg-soft hover:text-primary' ); ?>

@@ -24,7 +24,7 @@ get_template_part( 'template-parts/components/page-title' );
 			<?php
 			while ( have_posts() ) :
 				the_post();
-				get_template_part( 'template-parts/content/card', 'post' );
+				get_template_part( 'template-parts/content/card', 'post', array( 'loading' => rhm_list_image_loading() ) );
 			endwhile;
 			?>
 		</div>
