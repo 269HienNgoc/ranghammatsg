@@ -15,6 +15,8 @@
 @source "../../../single.php";
 @source "../../../template-parts/sections/booking-cta.php";
 @source "../../../template-parts/components/page-banner.php";
+@source "../../../template-parts/components/post-faq.php";
+@source "../../../template-parts/components/post-references.php";
 @source "../../../inc/template-tags.php";
 
 @layer components {
@@ -61,12 +63,10 @@
 }
 
 /*
- * Sao đánh giá (plugin kk-star-ratings) trong banner bài viết: chữ "4.5/5 - (n bình chọn)" của plugin có font-size nội tuyến
- * (19.2px) và CSS plugin không nằm trong @layer → ghi đè NGOÀI layer + !important, chỉ trong .post-banner.
- * Cỡ ngôi sao giữ theo cài đặt plugin (độ rộng phần sao "đã chấm" được plugin tính theo px).
+ * Sao đánh giá (plugin kk-star-ratings) trong banner bài viết: ẩn chữ "4.5/5 - (n bình chọn)" / "Rate this post" của plugin
+ * (người dùng yêu cầu — chỉ hiện ngôi sao, cạnh "Cập nhật"). CSS plugin không nằm trong @layer → ghi đè NGOÀI layer.
+ * Ẩn bằng CSS (không gỡ khỏi HTML) vì JS plugin in lại cả khối sau khi bấm sao. Cỡ sao giữ theo RHM_STAR_RATING_ATTS.
  */
 .post-banner .kk-star-ratings .kksr-legend {
-	margin-inline: 0.625rem 0;
-	color: var(--color-muted);
-	font-size: 0.875rem !important;
+	display: none;
 }

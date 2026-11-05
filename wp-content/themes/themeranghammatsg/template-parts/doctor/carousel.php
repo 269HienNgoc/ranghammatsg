@@ -16,12 +16,6 @@ $rhm_sizes = in_array( $rhm_variant, array( 'documents', 'doctors' ), true )
 	: '(min-width: 1440px) 453px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc(50vw - 32px), calc(85vw - 43px)';
 ?>
 <div class="doctor-carousel doctor-carousel--<?php echo esc_attr( $rhm_variant ); ?><?php echo $rhm_count > 1 ? ' js-carousel' : ''; ?>" data-count="<?php echo esc_attr( $rhm_count ); ?>">
-	<?php if ( $rhm_count > 1 ) : ?>
-		<div class="doctor-carousel__controls">
-			<button class="carousel-prev" type="button" aria-label="<?php esc_attr_e( 'Xem mục trước', 'themeranghammatsg' ); ?>" disabled><?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); ?></button>
-			<button class="carousel-next" type="button" aria-label="<?php esc_attr_e( 'Xem mục tiếp theo', 'themeranghammatsg' ); ?>"><?php echo rhm_get_icon( 'chevron', 'size-5 -rotate-90' ); ?></button>
-		</div>
-	<?php endif; ?>
 	<div class="swiper">
 		<div class="swiper-wrapper">
 			<?php foreach ( $rhm_items as $rhm_item ) : ?>
@@ -46,4 +40,10 @@ $rhm_sizes = in_array( $rhm_variant, array( 'documents', 'doctors' ), true )
 			<?php endforeach; ?>
 		</div>
 	</div>
+	<?php if ( $rhm_count > 1 ) : // Nút ‹ › nằm dưới danh sách ảnh; JS tìm nút trong .js-carousel nên thứ tự không ảnh hưởng. ?>
+		<div class="doctor-carousel__controls">
+			<button class="carousel-prev" type="button" aria-label="<?php esc_attr_e( 'Xem mục trước', 'themeranghammatsg' ); ?>" disabled><?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); ?></button>
+			<button class="carousel-next" type="button" aria-label="<?php esc_attr_e( 'Xem mục tiếp theo', 'themeranghammatsg' ); ?>"><?php echo rhm_get_icon( 'chevron', 'size-5 -rotate-90' ); ?></button>
+		</div>
+	<?php endif; ?>
 </div>

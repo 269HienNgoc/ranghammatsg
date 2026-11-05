@@ -20,7 +20,7 @@ get_template_part( 'template-parts/components/page-title' );
 			echo esc_html( sprintf( _n( 'Tìm thấy %d kết quả', 'Tìm thấy %d kết quả', (int) $wp_query->found_posts, 'themeranghammatsg' ), (int) $wp_query->found_posts ) );
 			?>
 		</p>
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			<?php
 			while ( have_posts() ) :
 				the_post();

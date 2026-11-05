@@ -27,6 +27,12 @@ while ( have_posts() ) :
 				?>
 			</div>
 
+			<?php
+			// ACF "Thông tin chuyên môn bài viết" (inc/post-extras.php) — cũng là nguồn schema FAQPage / citation (inc/schema.php).
+			get_template_part( 'template-parts/components/post-faq' );
+			get_template_part( 'template-parts/components/post-references' );
+			?>
+
 			<?php if ( has_tag() ) : ?>
 				<p class="mt-8 text-sm text-muted"><?php the_tags( esc_html__( 'Từ khóa: ', 'themeranghammatsg' ), ', ' ); ?></p>
 			<?php endif; ?>

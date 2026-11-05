@@ -24,6 +24,7 @@ require_once RHM_THEME_DIR . '/inc/about.php';
 require_once RHM_THEME_DIR . '/inc/news.php';
 require_once RHM_THEME_DIR . '/inc/category.php';
 require_once RHM_THEME_DIR . '/inc/doctors.php';
+require_once RHM_THEME_DIR . '/inc/post-extras.php';
 require_once RHM_THEME_DIR . '/inc/post-meta.php';
 require_once RHM_THEME_DIR . '/inc/toc.php';
 require_once RHM_THEME_DIR . '/inc/content.php';
@@ -34,6 +35,7 @@ require_once RHM_THEME_DIR . '/inc/svg-upload.php';
 require_once RHM_THEME_DIR . '/inc/disable-comments.php';
 require_once RHM_THEME_DIR . '/inc/customize-list.php';
 require_once RHM_THEME_DIR . '/inc/customizer.php';
+require_once RHM_THEME_DIR . '/inc/schema.php';
 
 add_filter('use_block_editor_for_post', '__return_false', 10);
 add_filter('use_block_editor_for_post_type', '__return_false', 10);

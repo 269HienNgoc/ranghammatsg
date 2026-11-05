@@ -43,7 +43,7 @@
 	.doctor-identity__name { color: var(--color-deep); font-size: 1.125rem; font-weight: 700; }
 	.doctor-identity__position { margin-top: .25rem; color: var(--color-muted); font-size: .875rem; }
 	.doctor-carousel { min-width: 0; }
-	.doctor-carousel__controls { display: flex; justify-content: flex-end; gap: .5rem; margin-block: 1rem; }
+	.doctor-carousel__controls { display: flex; justify-content: flex-end; gap: .5rem; margin-top: 1rem; }
 	.doctor-carousel__controls button { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border: 1px solid var(--color-line); border-radius: 50%; background: white; color: var(--color-teal-dark); cursor: pointer; }
 	.doctor-carousel__controls button:hover { background: var(--color-primary); color: white; }
 	.doctor-carousel__controls button:disabled { opacity: .4; cursor: default; }
