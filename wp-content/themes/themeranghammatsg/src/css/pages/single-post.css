@@ -4,6 +4,7 @@
 @import "../_tailwind.css";
 @import "../components/_entry-content.css";
 @import "../components/_toc.css";
+@import "../components/_doctor-box.css";
 
 /* Utility chỉ áp dụng trong .site-main (vùng <main>). */
 @layer utilities {
@@ -17,6 +18,7 @@
 @source "../../../template-parts/components/page-banner.php";
 @source "../../../template-parts/components/post-faq.php";
 @source "../../../template-parts/components/post-references.php";
+@source "../../../template-parts/components/doctor-box.php";
 @source "../../../inc/template-tags.php";
 
 @layer components {

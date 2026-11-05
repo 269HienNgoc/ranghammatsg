@@ -39,6 +39,8 @@ function rhm_register_doctor_fields(): void {
 		$image( 'banner_desktop', __( 'Banner desktop — 2048 × 768', 'themeranghammatsg' ), array( 'instructions' => __( 'Ảnh tĩnh, giữ tỷ lệ gốc. Để trống để bỏ banner.', 'themeranghammatsg' ) ) ),
 		$image( 'banner_mobile', __( 'Banner mobile — 828 × 1000', 'themeranghammatsg' ), array( 'instructions' => __( 'Dùng dưới 768px; để trống sẽ dùng banner desktop.', 'themeranghammatsg' ) ) ),
 		$field( 'position', __( 'Chức danh', 'themeranghammatsg' ), 'text', array( 'instructions' => __( 'Tên, giới thiệu, mô tả ngắn và chân dung dùng các ô Tiêu đề, Nội dung, Tóm tắt và Ảnh đại diện của hồ sơ.', 'themeranghammatsg' ) ) ),
+		$field( 'box_label', __( 'Nhãn box bài viết', 'themeranghammatsg' ), 'text', array( 'placeholder' => rhm_doctor_box_default_label(), 'instructions' => __( 'Dòng trên tên bác sĩ trong box [bac_si_tham_van] ở bài viết, vd "Cố vấn và đào tạo chuyên môn:". Để trống dùng chữ mặc định.', 'themeranghammatsg' ) ) ),
+		$field( 'highlights', __( 'Điểm nổi bật (box bài viết)', 'themeranghammatsg' ), 'textarea', array( 'rows' => 4, 'new_lines' => '', 'instructions' => sprintf( /* translators: %d: max lines */ __( 'Mỗi dòng 1 ý ngắn (nên ≤ 60 ký tự), hiện tối đa %d dòng có dấu tích. Để trống: tự lấy chức danh + dòng đầu Học vấn + dòng đầu Kinh nghiệm.', 'themeranghammatsg' ), RHM_DOCTOR_BOX_MAX ) ) ),
 		$gallery( 'gallery', __( 'Ảnh hoạt động chuyên môn', 'themeranghammatsg' ) ),
 		$field( 'tab_qualifications', __( 'Chuyên môn & văn bằng', 'themeranghammatsg' ), 'tab' ),
 	);

@@ -1,0 +1,98 @@
+/*
+ * Box thông tin bác sĩ (shortcode [bac_si_tham_van] → template-parts/components/doctor-box.php). Dùng được cả TRONG
+ * .entry-content (shortcode trong nội dung) lẫn NGOÀI (do_shortcode trong single.php) → selector KHÔNG phụ thuộc .entry-content.
+ * Import SAU _entry-content.css; độ ưu tiên vẫn thắng rule của nội dung khi nằm trong bài:
+ *   .rhm-doctor-box (0,1,0) = .entry-content > * + * (khai báo sau thắng) | phần tử con ".rhm-doctor-box .x" (0,2,0) > .entry-content ul/a/img (0,1,1)
+ *   | li (0,2,1) > .entry-content li + li (0,1,2) | nút :hover (0,3,0) > .entry-content a:hover (0,2,1).
+ * Bố cục: < 640px [ảnh 88 | nhãn + tên] → danh sách → 2 nút xếp dọc; ≥ 640px [ảnh 144 | nhãn, tên, danh sách] → 2 nút 1 hàng.
+ */
+@layer components {
+	.rhm-doctor-box {
+		@apply my-8 grid grid-cols-[5.5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 rounded-3xl border border-mint-dark bg-mint p-4 text-base leading-normal text-body sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-x-6 sm:p-6;
+		grid-template-areas: "photo head" "list list" "actions actions";
+	}
+
+	/* Đứng đầu khối cha (vd ngay đầu <article> trong single.php) → không cộng thêm lề trên. */
+	.rhm-doctor-box:first-child {
+		@apply mt-0;
+	}
+
+	.rhm-doctor-box.rhm-doctor-box--no-photo {
+		@apply grid-cols-1;
+		grid-template-areas: "head" "list" "actions";
+	}
+
+	.rhm-doctor-box > picture {
+		@apply block self-start;
+		grid-area: photo;
+	}
+
+	/* Ảnh chân dung 4:5 cắt tròn, giữ phần mặt (object-top). Kích thước khớp rhm_get_picture() trong doctor-box.php. */
+	.rhm-doctor-box .rhm-doctor-box__photo {
+		@apply size-22 max-w-none rounded-full border-4 border-white bg-white object-cover object-top shadow-card sm:size-36;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__head {
+		@apply min-w-0;
+		grid-area: head;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__label {
+		@apply text-[15px] sm:text-base;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__name {
+		@apply mt-1 text-xl leading-tight font-bold text-pretty text-primary sm:text-2xl;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__list {
+		@apply m-0 grid list-none gap-2 p-0 text-[15px] sm:text-base;
+		grid-area: list;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__list li {
+		@apply m-0 flex items-start gap-2.5;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__check {
+		@apply mt-px size-5 shrink-0 text-primary;
+	}
+
+	/* ≥ 640px: danh sách nằm cột phải dưới tên, ảnh chiếm 2 hàng đầu. */
+	@media (width >= 40rem) {
+		.rhm-doctor-box:not(.rhm-doctor-box--no-photo) {
+			grid-template-areas: "photo head" "photo list" "actions actions";
+			grid-template-rows: auto 1fr;
+		}
+
+		.rhm-doctor-box:not(.rhm-doctor-box--no-photo) .rhm-doctor-box__head {
+			@apply self-end;
+		}
+
+		.rhm-doctor-box:not(.rhm-doctor-box--no-photo) .rhm-doctor-box__list {
+			@apply self-start;
+		}
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__actions {
+		@apply grid gap-3 sm:grid-cols-2;
+		grid-area: actions;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__btn {
+		@apply min-h-12 rounded-full text-base no-underline;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__btn.btn-outline {
+		@apply bg-white;
+	}
+
+	/* .entry-content a:hover đổi màu chữ link → giữ màu chữ của nút; nút viền: nền trắng ở trên phải đổi lại khi hover. */
+	.rhm-doctor-box .rhm-doctor-box__btn:hover {
+		@apply text-white;
+	}
+
+	.rhm-doctor-box .rhm-doctor-box__btn.btn-outline:hover {
+		@apply bg-primary;
+	}
+}

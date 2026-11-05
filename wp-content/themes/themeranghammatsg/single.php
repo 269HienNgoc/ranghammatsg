@@ -15,6 +15,9 @@ while ( have_posts() ) :
 	?>
 	<div class="site-container max-w-[868px] py-5 lg:py-6">
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+			<?php echo do_shortcode('[bac_si_tham_van]') ?>
+
 			<?php if ( has_excerpt() ) : ?>
 				<?php // Mô tả bài viết (sapo). Mục lục tự chèn ngay dưới (đầu the_content, inc/toc.php). ?>
 				<p class="mb-6 text-lg leading-relaxed font-medium text-dark lg:text-xl"><?php echo esc_html( get_the_excerpt() ); ?></p>

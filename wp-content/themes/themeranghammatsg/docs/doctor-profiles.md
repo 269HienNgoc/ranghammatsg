@@ -15,6 +15,20 @@ Nhóm **Thông tin hồ sơ bác sĩ** của ACF PRO có các tab:
 4. **Video về bác sĩ:** tối đa hai video, mỗi video cần URL YouTube, tiêu đề và ảnh bìa trong thư viện media.
 5. **Ca điều trị:** danh sách ca và tối đa hai video ca điều trị. Mỗi ca cần tên khách hàng và đủ ba ảnh; địa phương, phương án và loại điều trị có thể bỏ trống. Kéo thả để đổi thứ tự các mục.
 
+## Box bác sĩ trong bài viết
+
+Trong tab **Banner & giới thiệu** có 2 ô dùng cho box giới thiệu bác sĩ ở bài viết:
+
+- **Nhãn box bài viết:** dòng trên tên, vd "Cố vấn và đào tạo chuyên môn:". Để trống thì dùng "Tham vấn chuyên môn:".
+- **Điểm nổi bật (box bài viết):** mỗi dòng 1 ý ngắn (nên ≤ 60 ký tự), hiện tối đa 4 dòng có dấu tích. Để trống thì tự lấy chức danh + dòng đầu Học vấn + dòng đầu Kinh nghiệm.
+
+Ở bài viết: chọn **Bác sĩ tham vấn chuyên môn** (nhóm "Thông tin chuyên môn bài viết"), rồi gõ `[bac_si_tham_van]` vào nội dung ở vị trí muốn hiện box. Có thể chèn nhiều chỗ.
+
+- `[bac_si_tham_van id="526"]`: hiện bác sĩ khác. ID xem ở URL khi sửa hồ sơ.
+- `[bac_si_tham_van label="Bác sĩ điều trị:"]`: ghi đè nhãn cho riêng chỗ đó.
+
+Bài chưa chọn bác sĩ tham vấn và không có `id` thì shortcode không hiện gì. Shortcode chỉ hoạt động trong bài viết, không dùng ở trang.
+
 Ảnh trong thư viện có thể kéo thả để sắp xếp. Dùng ảnh đủ độ phân giải; alt lấy từ Media, fallback về tiêu đề ảnh. Section/dòng thiếu dữ liệu hợp lệ được bỏ qua. Slider không tự chạy; video chỉ kết nối YouTube sau khi bấm phát.
 
 Form sau nhóm ca điều trị lấy ID ở **Giao diện → Tùy biến → Thông tin phòng khám**, hiện là 3. Các nút đặt lịch dùng helper của theme trên hồ sơ dẫn về `#dat-lich`. Form dùng chung kiểu hiển thị và cơ chế chạm mới tải với trang Liên hệ.

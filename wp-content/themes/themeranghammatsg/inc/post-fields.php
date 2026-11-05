@@ -31,7 +31,7 @@ function rhm_register_post_fields(): void {
 						'return_format' => 'id',
 						'allow_null'    => 1,
 						'ui'            => 1,
-						'instructions'  => __( 'Bác sĩ đã đọc và duyệt nội dung chuyên môn. Hiện dưới tiêu đề bài (link tới hồ sơ) và khai báo reviewedBy trong schema. Để trống nếu chưa có bác sĩ duyệt.', 'themeranghammatsg' ),
+						'instructions'  => __( 'Bác sĩ đã đọc và duyệt nội dung chuyên môn. Hiện ở vị trí tác giả dưới tiêu đề bài (link tới hồ sơ) và khai báo trong schema. Chèn [bac_si_tham_van] vào nội dung để hiện box thông tin bác sĩ tại vị trí đó. Để trống nếu chưa có bác sĩ duyệt.', 'themeranghammatsg' ),
 					)
 				),
 				$field( 'tab_faq', __( 'Câu hỏi thường gặp', 'themeranghammatsg' ), 'tab' ),

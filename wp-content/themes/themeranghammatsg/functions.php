@@ -25,6 +25,7 @@ require_once RHM_THEME_DIR . '/inc/news.php';
 require_once RHM_THEME_DIR . '/inc/category.php';
 require_once RHM_THEME_DIR . '/inc/doctors.php';
 require_once RHM_THEME_DIR . '/inc/post-extras.php';
+require_once RHM_THEME_DIR . '/inc/doctor-box.php';
 require_once RHM_THEME_DIR . '/inc/post-meta.php';
 require_once RHM_THEME_DIR . '/inc/toc.php';
 require_once RHM_THEME_DIR . '/inc/content.php';
