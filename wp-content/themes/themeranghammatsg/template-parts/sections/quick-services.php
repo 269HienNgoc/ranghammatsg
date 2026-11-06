@@ -20,7 +20,7 @@ if ( ! $rhm_items ) {
 			<?php foreach ( $rhm_items as $rhm_item ) : ?>
 				<?php
 				$rhm_tag  = $rhm_item['link'] ? 'a' : 'div';
-				$rhm_href = $rhm_item['link'] ? ' href="' . esc_url( $rhm_item['link'] ) . '"' : '';
+				$rhm_href = $rhm_item['link'] ? ' href="' . esc_url( $rhm_item['link'] ) . '"' . rhm_external_link_attrs( $rhm_item['link'] ) : '';
 				?>
 				<li class="basis-1/3 sm:basis-1/4 lg:flex-1">
 					<<?php echo esc_html( $rhm_tag ); ?> class="group flex h-full flex-col items-center gap-3 px-1 text-center"<?php echo $rhm_href; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above. ?>>

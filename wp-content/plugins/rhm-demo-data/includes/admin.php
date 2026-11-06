@@ -1,0 +1,182 @@
+<?php
+/**
+ * Trang quản trị: Công cụ → Dữ liệu mẫu RHM.
+ *
+ * @package rhm-demo-data
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+const RHM_DEMO_MAX = 500;
+
+function rhm_demo_admin_menu(): void {
+	add_management_page( 'Dữ liệu mẫu RHM', 'Dữ liệu mẫu RHM', 'manage_options', 'rhm-demo-data', 'rhm_demo_admin_page' );
+}
+add_action( 'admin_menu', 'rhm_demo_admin_menu' );
+
+function rhm_demo_admin_page(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$counts = RHM_Demo_Generator::counts();
+	$notice = get_transient( 'rhm_demo_notice_' . get_current_user_id() );
+	delete_transient( 'rhm_demo_notice_' . get_current_user_id() );
+	?>
+	<div class="wrap">
+		<h1>Dữ liệu mẫu RHM</h1>
+
+		<?php if ( $notice ) : ?>
+			<div class="notice notice-<?php echo esc_attr( $notice['type'] ); ?> is-dismissible"><p><?php echo esc_html( $notice['message'] ); ?></p></div>
+		<?php endif; ?>
+
+		<?php if ( ! RHM_Demo_Images::available() ) : ?>
+			<div class="notice notice-error"><p>PHP chưa bật extension <code>gd</code> – không sinh được ảnh mẫu. Laragon: Menu → PHP → Extensions → gd.</p></div>
+		<?php endif; ?>
+		<?php if ( ! post_type_exists( 'bac-si' ) ) : ?>
+			<div class="notice notice-warning"><p>Chưa có post type <code>bac-si</code>: hãy kích hoạt theme <strong>Răng Hàm Mặt SG</strong> để tạo hồ sơ bác sĩ.</p></div>
+		<?php endif; ?>
+		<?php if ( ! function_exists( 'get_field' ) ) : ?>
+			<div class="notice notice-info"><p>ACF PRO chưa bật. Dữ liệu vẫn được lưu đúng định dạng ACF, nhưng banner, chuyên môn, video, ca điều trị, FAQ… chỉ hiển thị khi ACF PRO được kích hoạt.</p></div>
+		<?php endif; ?>
+
+		<p>Tạo <strong>1 bài viết</strong> và <strong>1 hồ sơ bác sĩ</strong> đầy đủ thông tin (ảnh đại diện, nội dung có mục lục/bảng/ảnh, FAQ, tài liệu tham khảo, bác sĩ tham vấn; banner, chuyên môn, văn bằng, chứng chỉ, video, ca điều trị), rồi nhân bản đến đủ số lượng bên dưới. Ảnh được sinh tự động và dùng chung.</p>
+
+		<table class="widefat striped" style="max-width:480px;margin:16px 0">
+			<tbody>
+				<tr><td>Bài viết mẫu hiện có</td><td><strong><?php echo (int) $counts['posts']; ?></strong></td></tr>
+				<tr><td>Hồ sơ bác sĩ mẫu hiện có</td><td><strong><?php echo (int) $counts['doctors']; ?></strong></td></tr>
+				<tr><td>Ảnh mẫu trong Media</td><td><strong><?php echo (int) $counts['images']; ?></strong></td></tr>
+			</tbody>
+		</table>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="rhm_demo_generate">
+			<?php wp_nonce_field( 'rhm_demo_generate' ); ?>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><label for="rhm-demo-posts">Số bài viết</label></th>
+					<td><input id="rhm-demo-posts" name="posts" type="number" min="0" max="<?php echo (int) RHM_DEMO_MAX; ?>" value="100" class="small-text"> <span class="description">1 bản gốc + bản sao. 0 = không tạo.</span></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="rhm-demo-doctors">Số hồ sơ bác sĩ</label></th>
+					<td><input id="rhm-demo-doctors" name="doctors" type="number" min="0" max="<?php echo (int) RHM_DEMO_MAX; ?>" value="100" class="small-text"></td>
+				</tr>
+				<tr>
+					<th scope="row">Tùy chọn</th>
+					<td><label><input name="fresh" type="checkbox" value="1" checked> Xóa dữ liệu mẫu cũ trước khi tạo (giữ lại ảnh)</label></td>
+				</tr>
+			</table>
+			<?php submit_button( 'Tạo dữ liệu mẫu' ); ?>
+		</form>
+
+		<hr>
+		<h2>Banner trang chủ</h2>
+		<p>Sinh <strong>2 banner desktop (2048×800)</strong> và <strong>2 banner mobile (828×1000)</strong>, gán vào <em>Giao diện → Tùy biến → Hero banner (Trang chủ)</em> slide 1 và 2.</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="rhm_demo_hero">
+			<?php wp_nonce_field( 'rhm_demo_hero' ); ?>
+			<label><input name="overwrite" type="checkbox" value="1"> Ghi đè slide 1–2 nếu đã có banner</label>
+			<?php submit_button( 'Tạo banner trang chủ', 'secondary' ); ?>
+		</form>
+
+		<hr>
+		<h2>Chuyên mục mẫu</h2>
+		<p>Khi tạo dữ liệu, plugin tự tạo <strong><?php echo count( RHM_Demo_Content::CATEGORIES ); ?> chuyên mục</strong> (<?php echo esc_html( implode( ', ', RHM_Demo_Content::CATEGORIES ) ); ?>) và rải đều bài viết mẫu vào đó. Bấm nút dưới để tạo chuyên mục còn thiếu và rải lại các bài mẫu đang có.</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="rhm_demo_distribute">
+			<?php wp_nonce_field( 'rhm_demo_distribute' ); ?>
+			<?php submit_button( 'Rải lại bài viết mẫu vào chuyên mục', 'secondary' ); ?>
+		</form>
+
+		<hr>
+		<h2>Xóa dữ liệu mẫu</h2>
+		<p>Chỉ xóa nội dung do plugin này tạo (đánh dấu bằng meta <code><?php echo esc_html( RHM_DEMO_META ); ?></code>), kể cả ảnh mẫu và danh mục/thẻ mẫu không còn bài nào dùng.</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Xóa toàn bộ dữ liệu mẫu?');">
+			<input type="hidden" name="action" value="rhm_demo_delete">
+			<?php wp_nonce_field( 'rhm_demo_delete' ); ?>
+			<?php submit_button( 'Xóa toàn bộ dữ liệu mẫu', 'delete' ); ?>
+		</form>
+
+		<p class="description">WP-CLI: <code>wp rhm-demo generate --posts=100 --doctors=100 --fresh</code> · <code>wp rhm-demo hero [--overwrite]</code> · <code>wp rhm-demo distribute</code> · <code>wp rhm-demo delete</code></p>
+	</div>
+	<?php
+}
+
+function rhm_demo_redirect( string $type, string $message ): never {
+	set_transient( 'rhm_demo_notice_' . get_current_user_id(), array( 'type' => $type, 'message' => $message ), MINUTE_IN_SECONDS );
+	wp_safe_redirect( admin_url( 'tools.php?page=rhm-demo-data' ) );
+	exit;
+}
+
+function rhm_demo_handle_hero(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Không có quyền.' );
+	}
+	check_admin_referer( 'rhm_demo_hero' );
+
+	try {
+		$result = ( new RHM_Demo_Generator() )->hero( ! empty( $_POST['overwrite'] ) );
+	} catch ( Throwable $e ) {
+		rhm_demo_redirect( 'error', 'Lỗi: ' . $e->getMessage() );
+	}
+
+	$message = sprintf( 'Đã tạo %d banner (%d desktop + %d mobile).', 2 * count( $result['slides'] ), count( $result['slides'] ), count( $result['slides'] ) );
+	$message .= $result['assigned']
+		? ' Đã gán vào slide ' . implode( ', ', $result['assigned'] ) . ' của Hero banner.'
+		: ' Slide 1–2 đã có banner nên chưa gán — tick "Ghi đè" để thay.';
+	rhm_demo_redirect( 'success', $message );
+}
+add_action( 'admin_post_rhm_demo_hero', 'rhm_demo_handle_hero' );
+
+function rhm_demo_handle_distribute(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Không có quyền.' );
+	}
+	check_admin_referer( 'rhm_demo_distribute' );
+
+	$result = ( new RHM_Demo_Generator() )->distribute();
+	$parts  = array();
+	foreach ( $result as $name => $count ) {
+		$parts[] = $name . ': ' . $count;
+	}
+	rhm_demo_redirect( 'success', 'Đã rải bài viết mẫu vào ' . count( $result ) . ' chuyên mục — ' . implode( ' · ', $parts ) . '.' );
+}
+add_action( 'admin_post_rhm_demo_distribute', 'rhm_demo_handle_distribute' );
+
+function rhm_demo_handle_generate(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Không có quyền.' );
+	}
+	check_admin_referer( 'rhm_demo_generate' );
+
+	$posts   = min( RHM_DEMO_MAX, absint( $_POST['posts'] ?? 0 ) );
+	$doctors = min( RHM_DEMO_MAX, absint( $_POST['doctors'] ?? 0 ) );
+	$fresh   = ! empty( $_POST['fresh'] );
+
+	try {
+		$generator = new RHM_Demo_Generator();
+		if ( $fresh ) {
+			$generator->delete_content();
+		}
+		$result = $generator->generate( $posts, $doctors );
+	} catch ( Throwable $e ) {
+		rhm_demo_redirect( 'error', 'Lỗi: ' . $e->getMessage() );
+	}
+
+	rhm_demo_redirect(
+		'success',
+		sprintf( 'Đã tạo %d bài viết và %d hồ sơ bác sĩ (dùng %d ảnh mẫu) trong %s giây.', $result['posts'], $result['doctors'], $result['images'], $result['seconds'] )
+	);
+}
+add_action( 'admin_post_rhm_demo_generate', 'rhm_demo_handle_generate' );
+
+function rhm_demo_handle_delete(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Không có quyền.' );
+	}
+	check_admin_referer( 'rhm_demo_delete' );
+
+	$result = ( new RHM_Demo_Generator() )->delete();
+	rhm_demo_redirect( 'success', sprintf( 'Đã xóa %d bài viết/hồ sơ, %d ảnh và %d danh mục/thẻ mẫu.', $result['posts'], $result['images'], $result['terms'] ) );
+}
+add_action( 'admin_post_rhm_demo_delete', 'rhm_demo_handle_delete' );

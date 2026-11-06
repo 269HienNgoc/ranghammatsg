@@ -41,9 +41,10 @@ function rhm_flag_links(): void {
 		echo '<li class="leading-none">';
 		if ( $flag['url'] ) {
 			printf(
-				'<a class="block transition hover:-translate-y-px hover:opacity-85" href="%1$s">%2$s</a>',
+				'<a class="block transition hover:-translate-y-px hover:opacity-85" href="%1$s"%3$s>%2$s</a>',
 				esc_url( $flag['url'] ),
-				$img // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.
+				$img, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.
+				rhm_external_link_attrs( $flag['url'] ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes.
 			);
 		} else {
 			echo '<span class="block">' . $img . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above.

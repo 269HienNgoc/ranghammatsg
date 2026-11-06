@@ -89,7 +89,7 @@ while ( have_posts() ) :
 							<p class="text-sm text-muted sm:mt-4"><?php echo esc_html( $rhm_label ); ?></p>
 							<p class="mt-0.5 leading-snug font-semibold wrap-anywhere text-teal-dark sm:mt-1 <?php echo 'phone' === $rhm_icon ? 'text-xl' : ''; ?>"><?php echo nl2br( esc_html( $rhm_value ) ); ?></p>
 							<?php if ( $rhm_href ) : ?>
-								<a class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-primary hover:text-teal-dark sm:pt-4" href="<?php echo esc_url( $rhm_href ); ?>"<?php echo 'map-pin' === $rhm_icon ? ' target="_blank" rel="noopener"' : ''; ?>>
+								<a class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-primary hover:text-teal-dark sm:pt-4" href="<?php echo esc_url( $rhm_href ); ?>"<?php echo rhm_external_link_attrs( $rhm_href ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
 									<?php echo esc_html( $rhm_action ); ?>
 									<?php echo rhm_get_icon( 'arrow-right', 'size-4' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 								</a>
@@ -154,7 +154,7 @@ while ( have_posts() ) :
 								<li class="flex items-center gap-2.5">
 									<?php echo rhm_get_icon( 'map-pin', 'size-5 shrink-0 text-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 									<?php if ( $rhm_item['link'] ) : ?>
-										<a class="text-body hover:text-primary" href="<?php echo esc_url( $rhm_item['link'] ); ?>"><?php echo esc_html( $rhm_item['name'] ); ?></a>
+										<a class="text-body hover:text-primary" href="<?php echo esc_url( $rhm_item['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_item['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_item['name'] ); ?></a>
 									<?php else : ?>
 										<span class="text-body"><?php echo esc_html( $rhm_item['name'] ); ?></span>
 									<?php endif; ?>
@@ -168,7 +168,7 @@ while ( have_posts() ) :
 						<ul class="mt-4 flex flex-wrap gap-3">
 							<?php foreach ( $rhm_social as $rhm_item ) : ?>
 								<li>
-									<a class="block rounded-lg transition-transform hover:-translate-y-0.5" href="<?php echo esc_url( $rhm_item['link'] ); ?>" target="_blank" rel="noopener">
+									<a class="block rounded-lg transition-transform hover:-translate-y-0.5" href="<?php echo esc_url( $rhm_item['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_item['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
 										<img class="size-11" src="<?php echo esc_url( $rhm_item['icon'] ); ?>" alt="<?php echo esc_attr( $rhm_item['name'] ); ?>" width="44" height="44" loading="lazy" decoding="async">
 									</a>
 								</li>

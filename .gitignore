@@ -4,7 +4,6 @@ php.ini
 /wp-content/advanced-cache.php
 /wp-content/upgrade/*
 /wp-content/uploads/*
-/wp-content/plugins/*
 /wp-content/cache/*
 /wp-content/themes/themeranghammatsg/node_modules/*
 /wp-content/wp-rocket-config/*

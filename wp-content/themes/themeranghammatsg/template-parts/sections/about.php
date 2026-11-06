@@ -91,7 +91,7 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 			<?php endif; ?>
 
 			<?php if ( $rhm_about['button_text'] && $rhm_about['button_link'] ) : ?>
-				<a class="btn mt-7 h-13 gap-4 rounded-full border-0 bg-linear-to-b from-primary-light to-primary pr-2 pl-7 text-[15px] font-bold text-white uppercase shadow-[0_6px_16px_rgb(11_122_85/0.3)] hover:from-primary-dark hover:to-primary-dark hover:text-white" href="<?php echo esc_url( $rhm_about['button_link'] ); ?>">
+				<a class="btn mt-7 h-13 gap-4 rounded-full border-0 bg-linear-to-b from-primary-light to-primary pr-2 pl-7 text-[15px] font-bold text-white uppercase shadow-[0_6px_16px_rgb(11_122_85/0.3)] hover:from-primary-dark hover:to-primary-dark hover:text-white" href="<?php echo esc_url( $rhm_about['button_link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_about['button_link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
 					<?php echo esc_html( $rhm_about['button_text'] ); ?>
 					<span class="flex size-9 items-center justify-center rounded-full bg-white/20">
 						<?php echo rhm_get_icon( 'arrow-right', 'size-5' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>

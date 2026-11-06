@@ -81,7 +81,7 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 						<li class="flex items-center gap-2.5">
 							<?php echo rhm_get_icon( 'map-pin', 'size-5 shrink-0 text-footer-accent' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 							<?php if ( $rhm_branch['link'] ) : ?>
-								<a class="text-footer-text hover:text-footer-accent" href="<?php echo esc_url( $rhm_branch['link'] ); ?>"><?php echo esc_html( $rhm_branch['name'] ); ?></a>
+								<a class="text-footer-text hover:text-footer-accent" href="<?php echo esc_url( $rhm_branch['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_branch['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_branch['name'] ); ?></a>
 							<?php else : ?>
 								<span><?php echo esc_html( $rhm_branch['name'] ); ?></span>
 							<?php endif; ?>
@@ -120,7 +120,7 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 					<ul class="flex flex-wrap gap-3 lg:gap-2 xl:gap-3">
 						<?php foreach ( $rhm_socials as $rhm_social ) : ?>
 							<li>
-								<a class="block rounded-lg transition-transform hover:-translate-y-0.5" href="<?php echo esc_url( $rhm_social['link'] ); ?>" target="_blank" rel="noopener">
+								<a class="block rounded-lg transition-transform hover:-translate-y-0.5" href="<?php echo esc_url( $rhm_social['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_social['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
 									<img class="size-10 lg:size-9 xl:size-10" src="<?php echo esc_url( $rhm_social['icon'] ); ?>" alt="<?php echo esc_attr( $rhm_social['name'] ); ?>" width="40" height="40" loading="lazy" decoding="async">
 								</a>
 							</li>
@@ -140,7 +140,7 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 						<?php $rhm_img = rhm_footer_image( $rhm_badge['image'], 40, 'h-10 w-auto', $rhm_badge['name'] ); ?>
 						<li>
 							<?php if ( $rhm_badge['link'] ) : ?>
-								<a class="block" href="<?php echo esc_url( $rhm_badge['link'] ); ?>" target="_blank" rel="noopener"><?php echo $rhm_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image(). ?></a>
+								<a class="block" href="<?php echo esc_url( $rhm_badge['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_badge['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo $rhm_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image(). ?></a>
 							<?php else : ?>
 								<?php echo $rhm_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image(). ?>
 							<?php endif; ?>

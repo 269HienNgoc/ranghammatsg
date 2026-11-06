@@ -28,7 +28,7 @@ if ( $rhm_has_slider && file_exists( RHM_THEME_DIR . '/dist/js/home.js' ) ) {
 					<?php
 					$rhm_picture = rhm_hero_picture( $rhm_slide, 0 === $rhm_index );
 					if ( $rhm_slide['link'] ) {
-						$rhm_picture = '<a class="block" href="' . esc_url( $rhm_slide['link'] ) . '">' . $rhm_picture . '</a>';
+						$rhm_picture = '<a class="block" href="' . esc_url( $rhm_slide['link'] ) . '"' . rhm_external_link_attrs( $rhm_slide['link'] ) . '>' . $rhm_picture . '</a>';
 					}
 					echo $rhm_picture; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes escaped in rhm_html_attrs().
 					?>

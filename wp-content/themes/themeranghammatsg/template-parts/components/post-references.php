@@ -18,7 +18,7 @@ if ( ! $rhm_references ) {
 		<?php foreach ( $rhm_references as $rhm_item ) : ?>
 			<li>
 				<?php if ( $rhm_item['url'] ) : ?>
-					<a class="text-teal-dark underline underline-offset-2 hover:text-primary" href="<?php echo esc_url( $rhm_item['url'] ); ?>" rel="nofollow"><?php echo esc_html( $rhm_item['title'] ); ?></a>
+					<a class="text-teal-dark underline underline-offset-2 hover:text-primary" href="<?php echo esc_url( $rhm_item['url'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_item['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_item['title'] ); ?></a>
 				<?php else : ?>
 					<?php echo esc_html( $rhm_item['title'] ); ?>
 				<?php endif; ?>

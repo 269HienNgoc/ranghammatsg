@@ -16,6 +16,7 @@ require_once RHM_THEME_DIR . '/inc/cleanup.php';
 require_once RHM_THEME_DIR . '/inc/plugins.php';
 require_once RHM_THEME_DIR . '/inc/icons.php';
 require_once RHM_THEME_DIR . '/inc/template-tags.php';
+require_once RHM_THEME_DIR . '/inc/external-links.php';
 require_once RHM_THEME_DIR . '/inc/menus.php';
 require_once RHM_THEME_DIR . '/inc/flag-links.php';
 require_once RHM_THEME_DIR . '/inc/hero.php';

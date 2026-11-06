@@ -22,7 +22,7 @@ if ( ! $rhm_faq ) {
 					<span class="min-w-0 [overflow-wrap:anywhere]"><?php echo esc_html( $rhm_item['question'] ); ?></span>
 					<?php echo rhm_get_icon( 'chevron', 'size-5 shrink-0 text-primary transition-transform group-open:rotate-180' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 				</summary>
-				<div class="entry-content px-4 pb-5 sm:px-5"><?php echo wp_kses( $rhm_item['answer'], RHM_FAQ_ALLOWED_HTML ); ?></div>
+				<div class="entry-content px-4 pb-5 sm:px-5"><?php echo rhm_external_links( wp_kses( $rhm_item['answer'], RHM_FAQ_ALLOWED_HTML ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses trước, chỉ thêm target/rel cho link external. ?></div>
 			</details>
 		<?php endforeach; ?>
 	</div>
