@@ -1,0 +1,25 @@
+CREATE DATABASE vaolahup_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'vaolahup_user'@'localhost'
+IDENTIFIED BY 'vaolahup@A2';
+
+GRANT ALL PRIVILEGES ON vaolahup_db.*
+TO 'vaolahup_user'@'localhost';
+
+FLUSH PRIVILEGES;
+
+------------------------
+
+CREATE DATABASE thucphamtuoisong_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'thucphamtuoisong_user'@'localhost'
+IDENTIFIED BY 'thucphamtuoisong@A2';
+
+GRANT ALL PRIVILEGES ON thucphamtuoisong_db.*
+TO 'thucphamtuoisong_user'@'localhost';
+
+FLUSH PRIVILEGES;
