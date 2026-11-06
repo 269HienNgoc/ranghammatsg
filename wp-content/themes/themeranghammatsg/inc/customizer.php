@@ -34,7 +34,7 @@ function rhm_customizer_fields(): array {
  * Thêm setting + control cho danh sách field. Control 'image' = chọn ảnh từ thư viện (lưu ID).
  * Phần tử thứ 4 (tùy chọn): 'default' → giá trị mặc định của setting; các khóa khác (vd 'choices') → control.
  *
- * @param array<string, array{0:string, 1:string, 2:callable-string, 3?:array}> $fields id => [nhãn, 'text'|'textarea'|'url'|'email'|'number'|'checkbox'|'select'|'dropdown-pages'|'image', sanitize, extra].
+ * @param array<string, array{0:string, 1:string, 2:callable-string, 3?:array}> $fields id => [nhãn, 'text'|'textarea'|'url'|'email'|'number'|'checkbox'|'select'|'dropdown-pages'|'image'|'rhm-icon', sanitize, extra].
  */
 function rhm_customize_fields( WP_Customize_Manager $wp_customize, string $section, array $fields ): void {
 	foreach ( $fields as $id => $field ) {
@@ -58,6 +58,10 @@ function rhm_customize_fields( WP_Customize_Manager $wp_customize, string $secti
 
 		if ( 'image' === $type ) {
 			$wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, $id, $args + array( 'mime_type' => 'image' ) ) );
+		} elseif ( 'rhm-icon' === $type ) {
+			// Chọn icon từ thư viện assets/icons/<icon_set>/ (extra: 'icon_set').
+			require_once RHM_THEME_DIR . '/inc/class-rhm-customize-icon-control.php';
+			$wp_customize->add_control( new RHM_Customize_Icon_Control( $wp_customize, $id, $args ) );
 		} else {
 			$wp_customize->add_control( $id, $args + array( 'type' => $type ) );
 		}
@@ -67,14 +71,15 @@ function rhm_customize_fields( WP_Customize_Manager $wp_customize, string $secti
 /**
  * Nhóm field lặp lại N lần (slide, mục…). Setting: "{$prefix}_{$i}_{$field}" (vd rhm_hero_1_desktop).
  *
- * @param array<string, array{0:string, 1:string, 2:callable-string}> $fields field => [nhãn, kiểu, sanitize] như rhm_customize_fields().
+ * @param array<string, array{0:string, 1:string, 2:callable-string, 3?:array}> $fields field => [nhãn, kiểu, sanitize, extra] như rhm_customize_fields().
  */
 function rhm_customize_repeater( WP_Customize_Manager $wp_customize, string $section, string $prefix, int $max, string $item_label, array $fields ): void {
 	for ( $i = 1; $i <= $max; $i++ ) {
 		$group = array();
-		foreach ( $fields as $field => [ $label, $type, $sanitize ] ) {
+		foreach ( $fields as $field => $def ) {
 			/* translators: 1: item label (Slide, Mục), 2: item number, 3: field label */
-			$group[ "{$prefix}_{$i}_{$field}" ] = array( sprintf( __( '%1$s %2$d – %3$s', 'themeranghammatsg' ), $item_label, $i, $label ), $type, $sanitize );
+			$def[0]                             = sprintf( __( '%1$s %2$d – %3$s', 'themeranghammatsg' ), $item_label, $i, $def[0] );
+			$group[ "{$prefix}_{$i}_{$field}" ] = $def; // Giữ phần tử thứ 4 (extra) nếu có.
 		}
 		rhm_customize_fields( $wp_customize, $section, $group );
 	}
@@ -129,7 +134,7 @@ function rhm_customize_quick_services( WP_Customize_Manager $wp_customize ): voi
 		'rhm_quick_services',
 		array(
 			'title'       => __( 'Dịch vụ nổi bật (Trang chủ)', 'themeranghammatsg' ),
-			'description' => __( 'Hàng icon dưới banner. Icon: file .svg vuông (vd 40×40), màu vẽ sẵn trong file.', 'themeranghammatsg' ),
+			'description' => __( 'Hàng icon dưới banner. Mỗi mục: chọn icon trong bộ icon của theme, hoặc tải lên file .svg riêng (vuông, vd 40×40, màu vẽ sẵn) — icon chọn trong bộ được ưu tiên.', 'themeranghammatsg' ),
 			'priority'    => 32,
 		)
 	);
@@ -141,13 +146,55 @@ function rhm_customize_quick_services( WP_Customize_Manager $wp_customize ): voi
 		RHM_QUICK_SERVICES_MAX,
 		__( 'Mục', 'themeranghammatsg' ),
 		array(
-			'title' => array( __( 'Tiêu đề (Enter để xuống dòng)', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
-			'link'  => array( __( 'Link', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-			'icon'  => array( __( 'Icon (.svg)', 'themeranghammatsg' ), 'image', 'absint' ),
+			'title'     => array( __( 'Tiêu đề (Enter để xuống dòng)', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
+			'link'      => array( __( 'Link', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
+			'icon_name' => array( __( 'Icon (bộ icon của theme)', 'themeranghammatsg' ), 'rhm-icon', 'rhm_sanitize_service_icon', array( 'icon_set' => 'services' ) ),
+			'icon'      => array( __( 'Hoặc tải lên icon riêng (.svg)', 'themeranghammatsg' ), 'image', 'absint' ),
 		)
 	);
 }
 add_action( 'customize_register', 'rhm_customize_quick_services' );
+
+function rhm_sanitize_service_icon( $value ): string {
+	return rhm_sanitize_icon_name( 'services', $value );
+}
+
+/**
+ * Thư viện icon (inc/icon-library.php): URL CDN của thư mục assets/icons/.
+ */
+function rhm_customize_icons( WP_Customize_Manager $wp_customize ): void {
+	$wp_customize->add_section(
+		'rhm_icons',
+		array(
+			'title'       => __( 'Thư viện icon', 'themeranghammatsg' ),
+			'description' => sprintf(
+				/* translators: 1: theme icon folder, 2: number of menu icons, 3: number of service icons */
+				__( 'Bộ icon nằm trong thư mục theme %1$s (menu: %2$d icon, dịch vụ nổi bật: %3$d icon). Thêm icon: chép file .svg vào thư mục menu/ hoặc services/. Icon menu chọn ở Giao diện → Menu; icon dịch vụ chọn ở mục "Dịch vụ nổi bật (Trang chủ)".', 'themeranghammatsg' ),
+				'<code>assets/icons/</code>',
+				count( rhm_icon_list( 'menu' ) ),
+				count( rhm_icon_list( 'services' ) )
+			),
+			'priority'    => 33,
+		)
+	);
+
+	rhm_customize_fields(
+		$wp_customize,
+		'rhm_icons',
+		array(
+			'rhm_icon_base_url' => array(
+				__( 'URL thư mục icon trên CDN (tùy chọn)', 'themeranghammatsg' ),
+				'url',
+				'esc_url_raw',
+				array(
+					'description' => __( 'Đồng bộ NGUYÊN thư mục assets/icons/ (giữ menu/, services/) lên Cloudflare rồi nhập URL thư mục đó, vd https://cdn.example.com/icons. Để trống: tải icon từ theme. Icon menu luôn in trực tiếp trong HTML nên không phụ thuộc CDN.', 'themeranghammatsg' ),
+					'input_attrs' => array( 'placeholder' => RHM_THEME_URI . '/assets/icons' ),
+				),
+			),
+		)
+	);
+}
+add_action( 'customize_register', 'rhm_customize_icons' );
 
 /**
  * Giới thiệu trang chủ (inc/about.php): ảnh/video, thẻ nổi trên ảnh, chữ, nút, số liệu.

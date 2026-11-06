@@ -43,6 +43,7 @@ src/css/
   components/          partial (_booking-form, _doctor-box, _entry-content, _fonts, _pagination, _toc)
 src/js/                main.js (header sticky, menu mobile/submenu), carousel, home, dropdown, embed, fluent-lazy
 assets/admin/          CSS/JS cho control "list" (repeater) trong Customizer
+assets/icons/          thư viện icon .svg của theme (menu/ 24px inline, services/ 48px <img>) — đồng bộ nguyên thư mục lên CDN
 docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bác sĩ cho admin
 ```
 
@@ -56,8 +57,9 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 | `template-tags.php` | helper chung: `rhm_get_option`, `rhm_get_booking_url`, `rhm_booking_button`, `rhm_breadcrumb`, `rhm_pagination`, `rhm_get_picture`, `rhm_list_image_loading`… |
 | `external-links.php` | link external tự có `target="_blank" rel="nofollow"`: `rhm_external_link_attrs()`, `rhm_external_links()`, filter `the_content` + menu, filter `rhm_internal_hosts` |
 | `hero.php` | slide hero, `rhm_hero_picture`, `rhm_html_attrs` |
-| `icons.php` | SVG icon: `rhm_get_icon()`, icon menu |
-| `menus.php` | icon menu + nút `.submenu-toggle` |
+| `icons.php` | SVG icon UI inline dùng trong template: `rhm_get_icon()` (không có thì tìm trong thư viện icon menu) |
+| `icon-library.php` | thư viện `assets/icons/<bộ>/`: `rhm_icon_list()`, `rhm_icon_url()` (CDN qua theme mod `rhm_icon_base_url`), `rhm_icon_svg()` |
+| `menus.php` | icon menu (ô chọn icon ở Giao diện → Menu, meta `_rhm_menu_icon`; class `icon-<tên>` vẫn dùng được) + nút `.submenu-toggle` |
 | `doctors.php` / `doctor-fields.php` | CPT `bac-si`, field ACF, `rhm_get_doctor()`, ảnh bác sĩ |
 | `doctor-box.php` | shortcode `[bac_si_tham_van id="" label=""]` trong bài viết |
 | `post-extras.php` / `post-fields.php` | ACF bài viết: người tham vấn, FAQ, tài liệu tham khảo |
@@ -66,7 +68,7 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 | `content.php` | bọc `<table>` để cuộn ngang |
 | `category.php` | query/lưới danh mục (`RHM_CATEGORY_GRID = 12`), bộ lọc chuyên mục |
 | `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
-| `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php` | panel Customizer + control repeater dạng list (JSON) |
+| `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
 | `svg-upload.php` | cho upload SVG, chặn SVG không an toàn |
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
@@ -94,6 +96,12 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
   - Thẻ `<a>` trong template với URL có thể ra ngoài (nhập ở Customizer/ACF) → thêm `<?php echo rhm_external_link_attrs( $url ); ?>`.
   - Chuỗi HTML tự in (không qua `the_content`) → `rhm_external_links( $html )` (sau `wp_kses` nếu có).
   - `the_content` và menu đã tự xử lý. Domain khác muốn coi là nội bộ → filter `rhm_internal_hosts`.
+
+### Icon
+- Icon menu / dịch vụ nổi bật là FILE trong `assets/icons/menu/` và `assets/icons/services/`; tên file `a-z0-9-`, `<title>` tiếng Việt = nhãn trong ô chọn. Thêm icon = chép file, không sửa PHP.
+- `menu/`: 24×24, `fill="currentColor"`, in inline bằng `rhm_icon_svg()` (đổi màu theo CSS, không request). `services/`: 48×48, màu thương hiệu vẽ sẵn, in `<img src="rhm_icon_url()">`.
+- CDN: đồng bộ nguyên `assets/icons/` lên Cloudflare, nhập URL thư mục ở Tùy biến → Thư viện icon (`rhm_icon_base_url`). URL luôn kèm `?ver=filemtime`.
+- Icon UI trong template (home, phone, chevron…) vẫn là chuỗi SVG trong `inc/icons.php`.
 
 ### Hiệu năng (xem thêm `.claude/rules/` ở gốc repo)
 - Ảnh: dùng `rhm_get_picture()` / `wp_get_attachment_image()` với `sizes` chính xác; ảnh LCP `loading="eager"` + `fetchpriority="high"`, còn lại lazy. Không dùng `the_custom_logo()`.

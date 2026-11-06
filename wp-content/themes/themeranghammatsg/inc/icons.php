@@ -1,30 +1,12 @@
 <?php
 /**
- * Bộ icon SVG inline (màu theo currentColor).
+ * Bộ icon SVG inline (màu theo currentColor) dùng trong template.
+ * Icon menu / dịch vụ nổi bật nằm ở thư viện file assets/icons/ (inc/icon-library.php).
  *
  * @package themeranghammatsg
  */
 
 defined( 'ABSPATH' ) || exit;
-
-/**
- * Icon gắn được vào mục menu chính qua lớp CSS "icon-<tên>" (Giao diện → Menu → Lớp CSS).
- * Kiểu tô đặc, đồng bộ với nhau.
- */
-function rhm_menu_icons(): array {
-	$tooth = 'M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8z';
-
-	return array(
-		'implant' => '<path fill="currentColor" d="M7.2 2.3c1.6-.4 3.2.1 4.8 1 1.6-.9 3.2-1.4 4.8-1 2.2.6 3.1 2.8 2.5 5-.3 1.3-1.1 2.1-2.5 2.4H7.2C5.8 9.4 5 8.6 4.7 7.3c-.6-2.2.3-4.4 2.5-5zM9.8 10.6h4.4v2.2H9.8zM9 13.8h6l-.6 1.8H9.6zM9.6 16.6h4.8l-.6 1.8h-3.6zM10.2 19.4h3.6L12 22.2z"/>',
-		'braces'  => '<path fill="currentColor" fill-rule="evenodd" d="' . $tooth . 'M2 9h20v1.8H2z"/><path fill="currentColor" d="M9.6 7.2h4.8v5.4H9.6z"/>',
-		'crown'   => '<path fill="currentColor" d="M3.5 3.5 7.6 7 12 2l4.4 5 4.1-3.5-1.4 6.5H4.9zM5.4 12h13.2c-.2 1.5-.9 2.6-1.3 4.2-.5 2.4-.8 5.3-2.3 5.3-1.4 0-1.5-3-2.2-4.6-.2-.6-.5-.9-.8-.9s-.6.3-.8.9c-.7 1.6-.8 4.6-2.2 4.6-1.5 0-1.8-2.9-2.3-5.3-.4-1.6-1.1-2.7-1.3-4.2z"/>',
-		'tooth'   => '<path fill="currentColor" d="' . $tooth . '"/>',
-		'price'   => '<path fill="currentColor" d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm2 8v2h8v-2zm0 4v2h8v-2zm0-8v2h5V6z"/>',
-		'consult' => '<path fill="currentColor" d="M9 2h6a1 1 0 0 1 1 1v1h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zm1 2v2h4V4zM8 10v2h8v-2zm0 4v2h6v-2z"/>',
-		'user'    => '<circle cx="12" cy="7.5" r="4.5" fill="currentColor"/><path fill="currentColor" d="M3 21c0-4.4 4-7.5 9-7.5s9 3.1 9 7.5z"/>',
-		'contact' => '<path fill="currentColor" d="M6.6 2.5h3.1l1.7 4.4-2.3 1.6a11.6 11.6 0 0 0 6.4 6.4l1.6-2.3 4.4 1.7v3.1a2.6 2.6 0 0 1-2.8 2.6C10 19.4 4.6 14 4 6.9 3.8 5.4 5 2.5 6.6 2.5z"/>',
-	);
-}
 
 /**
  * Icon giao diện dùng trực tiếp trong template (header, tìm kiếm, nút…).
@@ -47,6 +29,8 @@ function rhm_ui_icons(): array {
 		'check'       => '<circle cx="12" cy="12" r="10" fill="currentColor"/><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="m7.5 12.3 3 3 6-6.3"/>',
 		'list'        => '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r=".6" fill="currentColor"/><circle cx="4.5" cy="12" r=".6" fill="currentColor"/><circle cx="4.5" cy="18" r=".6" fill="currentColor"/></g>',
 		'more'        => '<circle cx="5.5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="18.5" cy="12" r="2" fill="currentColor"/>',
+		'tooth'       => '<path fill="currentColor" d="M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8z"/>',
+		'user'        => '<circle cx="12" cy="7.5" r="4.5" fill="currentColor"/><path fill="currentColor" d="M3 21c0-4.4 4-7.5 9-7.5s9 3.1 9 7.5z"/>',
 		'document'    => '<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5M8.5 12.5h7m-7 4h7m-7-8h2"/></g>',
 	);
 }
@@ -55,10 +39,11 @@ function rhm_ui_icons(): array {
  * Trả về SVG của icon (chuỗi hằng trong theme, an toàn để echo). Tên không tồn tại → chuỗi rỗng.
  */
 function rhm_get_icon( string $name, string $class = '' ): string {
-	$icons = rhm_ui_icons() + rhm_menu_icons();
+	$icons = rhm_ui_icons();
 
 	if ( ! isset( $icons[ $name ] ) ) {
-		return '';
+		// Không có trong bộ UI → thử thư viện icon menu (assets/icons/menu, inc/icon-library.php).
+		return rhm_icon_svg( 'menu', $name, $class );
 	}
 
 	return sprintf(
