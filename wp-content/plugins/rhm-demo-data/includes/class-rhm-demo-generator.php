@@ -21,6 +21,9 @@ final class RHM_Demo_Generator {
 	/** Option lưu ID các term do plugin tạo (để chỉ xóa đúng term của mình). */
 	private const TERMS_OPTION = 'rhm_demo_terms';
 
+	/** Option lưu banner hero thật bị banner mẫu ghi đè (trả lại khi xóa dữ liệu mẫu). */
+	private const HERO_BACKUP_OPTION = 'rhm_demo_hero_backup';
+
 	/** @var callable|null */
 	private $log;
 
@@ -114,7 +117,9 @@ final class RHM_Demo_Generator {
 	/**
 	 * Xóa mọi bài viết / bác sĩ / ảnh do plugin tạo, và term do plugin tạo nếu không còn bài nào dùng.
 	 *
-	 * @return array{posts:int, images:int, terms:int}
+	 * Banner thật bị banner mẫu ghi đè được trả lại như cũ.
+	 *
+	 * @return array{posts:int, images:int, terms:int, kept_terms:string[]}
 	 */
 	public function delete(): array {
 		global $wpdb;
@@ -131,7 +136,7 @@ final class RHM_Demo_Generator {
 
 		$this->unset_demo_hero();
 
-		$result = array( 'posts' => 0, 'images' => 0, 'terms' => 0 );
+		$result = array( 'posts' => 0, 'images' => 0, 'terms' => 0, 'kept_terms' => array() );
 		wp_defer_term_counting( true );
 		foreach ( $rows as $row ) {
 			if ( 'attachment' === $row->post_type ) {
@@ -142,19 +147,44 @@ final class RHM_Demo_Generator {
 		}
 		wp_defer_term_counting( false );
 
+		// Term do plugin tạo: xóa khi không còn bài nào dùng. Term đang nằm trong menu thì GIỮ (xóa term thì
+		// WordPress tự xóa luôn mục menu trỏ tới nó → mất menu thật) — vẫn ghi nhớ để lần xóa sau dọn tiếp.
 		$terms = (array) get_option( self::TERMS_OPTION, array() );
+		$kept  = array();
 		foreach ( $terms as $taxonomy => $ids ) {
 			foreach ( (array) $ids as $term_id ) {
-				wp_update_term_count_now( array( (int) $term_id ), $taxonomy );
-				$term = get_term( (int) $term_id, $taxonomy );
-				if ( $term instanceof WP_Term && 0 === (int) $term->count && (int) get_option( 'default_category' ) !== $term->term_id ) {
-					$result['terms'] += wp_delete_term( $term->term_id, $taxonomy ) ? 1 : 0;
+				$term_id = (int) $term_id;
+				wp_update_term_count_now( array( $term_id ), $taxonomy );
+				$term = get_term( $term_id, $taxonomy );
+				if ( ! $term instanceof WP_Term ) {
+					continue; // Đã bị xóa tay.
 				}
+				if ( 0 !== (int) $term->count || (int) get_option( 'default_category' ) === $term->term_id || $this->term_in_menu( $term ) ) {
+					$kept[ $taxonomy ][]    = $term_id;
+					$result['kept_terms'][] = $term->name;
+					continue;
+				}
+				$result['terms'] += wp_delete_term( $term->term_id, $taxonomy ) ? 1 : 0;
 			}
 		}
-		delete_option( self::TERMS_OPTION );
+		$kept ? update_option( self::TERMS_OPTION, $kept, false ) : delete_option( self::TERMS_OPTION );
 
 		return $result;
+	}
+
+	/** Term có đang là mục của 1 menu nào không. */
+	private function term_in_menu( WP_Term $term ): bool {
+		global $wpdb;
+		return (bool) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT 1 FROM {$wpdb->postmeta} o
+				INNER JOIN {$wpdb->postmeta} t ON t.post_id = o.post_id AND t.meta_key = '_menu_item_object' AND t.meta_value = %s
+				INNER JOIN {$wpdb->posts} p ON p.ID = o.post_id AND p.post_type = 'nav_menu_item'
+				WHERE o.meta_key = '_menu_item_object_id' AND o.meta_value = %s LIMIT 1",
+				$term->taxonomy,
+				(string) $term->term_id
+			)
+		);
 	}
 
 	/**
@@ -192,6 +222,15 @@ final class RHM_Demo_Generator {
 				continue; // Slide đã có banner thật.
 			}
 
+			// Slide đang có banner thật (bị --overwrite đè) → lưu lại để xóa dữ liệu mẫu thì trả về.
+			$backup = (array) get_option( self::HERO_BACKUP_OPTION, array() );
+			if ( $current && ! get_post_meta( $current, RHM_DEMO_META, true ) && ! isset( $backup[ $n ] ) ) {
+				foreach ( array( 'desktop', 'mobile', 'link' ) as $field ) {
+					$backup[ $n ][ $field ] = get_theme_mod( "rhm_hero_{$n}_{$field}" );
+				}
+				update_option( self::HERO_BACKUP_OPTION, $backup, false );
+			}
+
 			$term = get_term_by( 'name', $slide['link'], 'category' );
 			set_theme_mod( "rhm_hero_{$n}_desktop", $ids['desktop'] );
 			set_theme_mod( "rhm_hero_{$n}_mobile", $ids['mobile'] );
@@ -202,16 +241,20 @@ final class RHM_Demo_Generator {
 		return $result;
 	}
 
-	/** Gỡ banner mẫu khỏi Customizer (slide đang dùng ảnh do plugin tạo). */
+	/** Gỡ banner mẫu khỏi Customizer (slide đang dùng ảnh do plugin tạo); slide từng có banner thật thì trả lại. */
 	private function unset_demo_hero(): void {
+		$backup = (array) get_option( self::HERO_BACKUP_OPTION, array() );
 		for ( $n = 1; $n <= 5; $n++ ) {
 			$id = absint( get_theme_mod( "rhm_hero_{$n}_desktop" ) );
-			if ( $id && get_post_meta( $id, RHM_DEMO_META, true ) ) {
-				remove_theme_mod( "rhm_hero_{$n}_desktop" );
-				remove_theme_mod( "rhm_hero_{$n}_mobile" );
-				remove_theme_mod( "rhm_hero_{$n}_link" );
+			if ( ! $id || ! get_post_meta( $id, RHM_DEMO_META, true ) ) {
+				continue;
+			}
+			foreach ( array( 'desktop', 'mobile', 'link' ) as $field ) {
+				$old = $backup[ $n ][ $field ] ?? false;
+				false === $old ? remove_theme_mod( "rhm_hero_{$n}_{$field}" ) : set_theme_mod( "rhm_hero_{$n}_{$field}", $old );
 			}
 		}
+		delete_option( self::HERO_BACKUP_OPTION );
 	}
 
 	/**

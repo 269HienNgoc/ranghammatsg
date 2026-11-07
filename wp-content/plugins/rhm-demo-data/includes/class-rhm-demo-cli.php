@@ -50,6 +50,9 @@ final class RHM_Demo_CLI {
 		WP_CLI::confirm( 'Xóa toàn bộ dữ liệu mẫu?', $assoc );
 		$r = ( new RHM_Demo_Generator() )->delete();
 		WP_CLI::success( sprintf( 'Đã xóa %d bài/hồ sơ, %d ảnh, %d term.', $r['posts'], $r['images'], $r['terms'] ) );
+		if ( $r['kept_terms'] ) {
+			WP_CLI::warning( 'Giữ lại term đang dùng trong menu/bài thật: ' . implode( ', ', $r['kept_terms'] ) . '. Gỡ khỏi menu rồi chạy lại để dọn hết.' );
+		}
 	}
 
 	/**

@@ -90,7 +90,7 @@ function rhm_demo_admin_page(): void {
 
 		<hr>
 		<h2>Xóa dữ liệu mẫu</h2>
-		<p>Chỉ xóa nội dung do plugin này tạo (đánh dấu bằng meta <code><?php echo esc_html( RHM_DEMO_META ); ?></code>), kể cả ảnh mẫu và danh mục/thẻ mẫu không còn bài nào dùng.</p>
+		<p>Chỉ xóa nội dung do plugin này tạo (đánh dấu bằng meta <code><?php echo esc_html( RHM_DEMO_META ); ?></code>), kể cả ảnh mẫu và danh mục/thẻ mẫu không còn bài nào dùng. Danh mục đang nằm trong menu được giữ lại để không mất menu; banner thật từng bị banner mẫu ghi đè được trả lại. Xóa plugin (Plugin → Xóa) cũng tự dọn như nút này.</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Xóa toàn bộ dữ liệu mẫu?');">
 			<input type="hidden" name="action" value="rhm_demo_delete">
 			<?php wp_nonce_field( 'rhm_demo_delete' ); ?>
@@ -177,6 +177,10 @@ function rhm_demo_handle_delete(): void {
 	check_admin_referer( 'rhm_demo_delete' );
 
 	$result = ( new RHM_Demo_Generator() )->delete();
-	rhm_demo_redirect( 'success', sprintf( 'Đã xóa %d bài viết/hồ sơ, %d ảnh và %d danh mục/thẻ mẫu.', $result['posts'], $result['images'], $result['terms'] ) );
+	$message = sprintf( 'Đã xóa %d bài viết/hồ sơ, %d ảnh và %d danh mục/thẻ mẫu.', $result['posts'], $result['images'], $result['terms'] );
+	if ( $result['kept_terms'] ) {
+		$message .= ' Giữ lại (đang dùng trong menu hoặc còn bài thật): ' . implode( ', ', $result['kept_terms'] ) . '. Gỡ khỏi menu rồi bấm xóa lần nữa để dọn hết.';
+	}
+	rhm_demo_redirect( 'success', $message );
 }
 add_action( 'admin_post_rhm_demo_delete', 'rhm_demo_handle_delete' );

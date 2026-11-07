@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Không tìm thấy trang – Nha Khoa Răng Hàm Mặt Sài Gòn</title>
+<meta name="description" content="Trang bạn tìm không tồn tại hoặc đã đổi địa chỉ. Quay về trang chủ hoặc tìm kiếm dịch vụ nha khoa.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0b7a55">
+
+<style>
+@font-face {
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: local("Roboto"), url("/wp-content/themes/themeranghammatsg/dist/fonts/roboto-vietnamese.woff2") format("woff2");
+	unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: local("Roboto"), url("/wp-content/themes/themeranghammatsg/dist/fonts/roboto-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Token màu = src/css/theme.css của theme */
+:root {
+	--primary: #0b7a55;
+	--primary-dark: #075c40;
+	--primary-light: #11a06c;
+	--green: #13b54b;
+	--icon: #12a14a;
+	--dark: #10212d;
+	--teal: #1d5c5a;
+	--mint: #ecf7f3;
+	--mint-dark: #dcefe8;
+	--body: #1f2d36;
+	--muted: #696b73;
+	--line: #e3e8ee;
+	--soft: #f0fafa;
+	--deep: #003442;
+	--footer-accent: #d3d867;
+	--footer-text: #c5dbe2;
+	--footer-muted: #a3bdc8;
+	--shadow-card: 0 10px 30px rgb(0 52 66 / 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	color: var(--body);
+	font: 400 16px/1.6 "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+a { color: inherit; text-decoration: none; }
+svg { display: block; }
+h1, p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+.sr-only {
+	position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+	overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.skip-link:focus {
+	position: fixed; top: 8px; left: 8px; z-index: 10; width: auto; height: auto; clip: auto; margin: 0;
+	padding: 10px 16px; border-radius: 8px; background: #fff; color: var(--primary); font-weight: 700; box-shadow: var(--shadow-card);
+}
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.container { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 1024px) { .container { padding: 0 24px; } }
+
+/* ---------- Header (như header.php: logo | hotline | Đặt lịch hẹn) ---------- */
+.site-header { background: #fff; border-bottom: 1px solid #edf4f4; box-shadow: 0 1px 0 #e6efef; }
+.header-bar { display: flex; align-items: center; gap: 12px; min-height: 72px; }
+@media (min-width: 1024px) { .header-bar { min-height: 96px; gap: 24px; } }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; }
+.brand-mark {
+	display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px;
+	background: linear-gradient(to bottom, var(--primary-light), var(--primary)); color: #fff;
+	box-shadow: 0 4px 12px rgb(11 122 85 / 0.25);
+}
+.brand-name { display: block; font-size: 14px; line-height: 1.2; font-weight: 700; color: var(--deep); text-transform: uppercase; }
+.brand-sub { display: block; font-size: 11px; letter-spacing: 2px; color: var(--teal); font-weight: 500; }
+@media (max-width: 559px) { .site-header .brand-name { font-size: 13px; } .site-header .brand-sub { display: none; } .brand-mark { width: 40px; height: 40px; } }
+@media (min-width: 560px) { .brand-name { font-size: 17px; } }
+@media (min-width: 1280px) { .brand-mark { width: 52px; height: 52px; } .brand-name { font-size: 22px; } .brand-sub { font-size: 12px; } }
+
+.hotline { display: none; align-items: center; gap: 10px; color: var(--dark); flex: none; }
+.hotline:hover { color: var(--primary); }
+.hotline svg { width: 30px; height: 30px; color: var(--primary); }
+.hotline b { display: block; font-size: 18px; line-height: 1.2; white-space: nowrap; }
+.hotline small { display: none; font-size: 13px; color: var(--muted); }
+@media (min-width: 560px) { .hotline { display: flex; } }
+@media (min-width: 1024px) { .hotline b { font-size: 22px; } .hotline small { display: block; } }
+
+.btn {
+	display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none;
+	min-height: 44px; padding: 0 18px; border-radius: 12px; border: 2px solid transparent;
+	font-size: 15px; font-weight: 600; white-space: nowrap; cursor: pointer;
+	transition: background-color .2s, color .2s, border-color .2s, transform .2s;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn-primary {
+	background: linear-gradient(to bottom, var(--primary-light), var(--primary)); color: #fff;
+	box-shadow: 0 4px 12px rgb(11 122 85 / 0.25);
+}
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { border-color: var(--primary); color: var(--primary); background: transparent; }
+.btn-outline:hover { background: var(--primary); color: #fff; }
+@media (min-width: 1024px) { .site-header .btn { min-height: 52px; border-radius: 8px; font-size: 16px; font-weight: 500; padding: 0 24px; } }
+@media (max-width: 374px) { .site-header .btn svg { display: none; } }
+
+/* ---------- Nội dung 404 (như 404.php) ---------- */
+.site-main { flex: 1; background: linear-gradient(180deg, var(--soft) 0%, #fff 70%); }
+.error { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 48px; padding-bottom: 64px; }
+@media (min-width: 1024px) { .error { padding-top: 80px; padding-bottom: 96px; } }
+
+.code {
+	display: flex; align-items: center; justify-content: center; gap: clamp(4px, 1.5vw, 16px);
+	font-size: clamp(5rem, 3.5rem + 8vw, 10rem); line-height: 1; font-weight: 800; color: var(--primary);
+	letter-spacing: -0.02em;
+}
+.code-tooth { width: 0.86em; height: 0.86em; flex: none; }
+
+.error h1 { margin-top: 20px; font-size: 24px; line-height: 1.3; font-weight: 700; color: var(--dark); }
+@media (min-width: 1024px) { .error h1 { font-size: 32px; } }
+.error .lead { margin-top: 12px; max-width: 36rem; color: var(--muted); }
+
+/* Ô tìm kiếm: form GET ?s= của WordPress → chạy được không cần JS */
+.search { display: flex; width: 100%; max-width: 36rem; margin-top: 28px; border: 1px solid var(--line); border-radius: 999px; background: #fff; box-shadow: var(--shadow-card); overflow: hidden; }
+.search:focus-within { border-color: var(--primary); }
+.search input {
+	flex: 1; min-width: 0; height: 52px; padding: 0 8px 0 22px; border: 0; outline: 0; background: transparent;
+	font: inherit; color: var(--dark);
+}
+.search input::placeholder { color: var(--muted); }
+.search button {
+	display: grid; place-items: center; flex: none; width: 56px; margin: 4px; border: 0; border-radius: 999px;
+	background: var(--green); color: #fff; cursor: pointer; transition: background-color .2s;
+}
+.search button:hover { background: #0f9a3f; }
+.search button svg { width: 22px; height: 22px; }
+
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
+.actions .btn { min-height: 48px; padding: 0 26px; border-radius: 999px; font-size: 16px; }
+
+/* Dịch vụ gợi ý */
+.suggest { width: 100%; max-width: 960px; margin-top: 56px; }
+.suggest-title { font-size: 15px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; }
+.services { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 16px; }
+@media (min-width: 400px) { .services { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 768px) { .services { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } }
+.services a {
+	display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 16px; border: 1px solid var(--line);
+	border-radius: 14px; background: #fff; text-align: left; font-size: 15px; font-weight: 500; color: var(--dark);
+	transition: border-color .2s, color .2s, transform .2s;
+}
+.services a:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+.services .ico { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 10px; background: var(--mint); color: var(--icon); }
+.services .ico svg { width: 22px; height: 22px; }
+
+/* ---------- Footer (như footer.php, rút gọn) ---------- */
+.site-footer { background: var(--deep); color: var(--footer-text); font-size: 15px; line-height: 1.65; }
+.footer-grid { display: grid; gap: 32px; padding-top: 48px; padding-bottom: 40px; }
+@media (min-width: 640px) { .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1.2fr 1fr; padding-top: 56px; } }
+.footer-brand .brand-name { color: #fff; }
+.footer-brand .brand-sub { color: var(--footer-accent); }
+.slogan { margin-top: 12px; font-size: 20px; font-weight: 300; font-style: italic; color: #fff; }
+.footer-heading { margin-bottom: 16px; font-size: 15px; line-height: 1.4; font-weight: 700; color: var(--footer-accent); text-transform: uppercase; }
+@media (min-width: 1024px) { .footer-heading { font-size: 16px; } }
+.contact li { display: flex; align-items: flex-start; gap: 12px; }
+.contact li + li { margin-top: 12px; }
+.contact svg { width: 20px; height: 20px; flex: none; margin-top: 2px; color: #fff; }
+.contact a:hover, .footer-links a:hover { color: var(--footer-accent); }
+.contact .tel { font-weight: 700; color: #fff; }
+.footer-links li + li { margin-top: 8px; }
+.footer-links a { display: flex; gap: 8px; }
+.footer-links a::before { content: "·"; }
+@media (min-width: 1024px) { .footer-col + .footer-col { border-left: 1px solid rgb(255 255 255 / 0.1); padding-left: 40px; } }
+.footer-bottom { border-top: 1px solid rgb(255 255 255 / 0.1); }
+.footer-bottom p { padding: 20px 0; font-size: 14px; color: var(--footer-muted); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip-link sr-only" href="#main">Chuyển đến nội dung</a>
+
+<header class="site-header">
+	<div class="container header-bar">
+		<a class="brand" href="/" rel="home" aria-label="Nha Khoa Răng Hàm Mặt Sài Gòn – Trang chủ">
+			<span class="brand-mark" aria-hidden="true">
+				<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 2.3c1.6-.4 3.2.1 4.8 1 1.6-.9 3.2-1.4 4.8-1 2.2.6 3.1 2.8 2.5 5-.4 1.6-1 2.6-1.3 4.4-.4 2.6-.8 5.6-2 8.6-.4 1-1.6 1-2 0-.5-1.4-.6-4.4-2-4.4s-1.5 3-2 4.4c-.4 1-1.6 1-2 0-1.2-3-1.6-6-2-8.6-.3-1.8-.9-2.8-1.3-4.4-.6-2.2.3-4.4 2.5-5z"/></svg>
+			</span>
+			<span>
+				<span class="brand-name">Nha Khoa Răng Hàm Mặt Sài Gòn</span>
+				<span class="brand-sub">VÌ NỤ CƯỜI VIỆT NAM</span>
+			</span>
+		</a>
+
+		<a class="hotline" href="tel:1800XXXX">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3.5h3.2l1.6 4.2-2.1 1.5a12 12 0 0 0 5.6 5.6l1.5-2.1 4.2 1.6V17a2.5 2.5 0 0 1-2.7 2.5C9.6 19 3.8 13.2 3.5 6.2A2.5 2.5 0 0 1 5 3.5z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M14.5 3.5a6 6 0 0 1 6 6M14.5 7a2.6 2.6 0 0 1 2.5 2.5"/></svg>
+			<span><b>1800 XXXX</b><small>Tư vấn miễn phí 24/7</small></span>
+		</a>
+
+		<a class="btn btn-primary" href="/lien-he/">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/></g></svg>
+			Đặt lịch hẹn
+		</a>
+	</div>
+</header>
+
+<main id="main" class="site-main">
+	<section class="container error">
+		<p class="code" aria-hidden="true">
+			<span>4</span>
+			<svg class="code-tooth" viewBox="0 0 120 120">
+				<circle cx="60" cy="60" r="58" fill="#ecf7f3"/>
+				<path fill="#fff" stroke="#0b7a55" stroke-width="5" stroke-linejoin="round" d="M40 24c8-3 15 0 20 4 5-4 12-7 20-4 11 4 14 16 11 28-2 8-5 12-6 21-2 11-4 23-10 23-7 0-6-21-15-21s-8 21-15 21c-6 0-8-12-10-23-1-9-4-13-6-21-3-12 0-24 11-28z"/>
+				<circle cx="50" cy="52" r="4" fill="#10212d"/>
+				<circle cx="70" cy="52" r="4" fill="#10212d"/>
+				<path fill="none" stroke="#10212d" stroke-width="4" stroke-linecap="round" d="M51 68c5-4 13-4 18 0"/>
+				<path fill="#13b54b" d="M98 14l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>
+			</svg>
+			<span>4</span>
+		</p>
+		<h1>Không tìm thấy trang</h1>
+		<p class="lead">Trang bạn tìm có thể đã bị xóa hoặc đổi địa chỉ. Hãy thử tìm kiếm hoặc quay về trang chủ.</p>
+
+		<form class="search" role="search" method="get" action="/">
+			<label class="sr-only" for="s404">Tìm kiếm</label>
+			<input id="s404" type="search" name="s" placeholder="Tìm dịch vụ, bài viết…" autocomplete="off">
+			<button type="submit">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="m16.5 16.5 5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+				<span class="sr-only">Tìm kiếm</span>
+			</button>
+		</form>
+
+		<div class="actions">
+			<a class="btn btn-primary" href="/">Về trang chủ</a>
+			<a class="btn btn-outline" href="/lien-he/">Đặt lịch hẹn</a>
+		</div>
+
+		<nav class="suggest" aria-labelledby="suggest-title">
+			<p class="suggest-title" id="suggest-title">Có thể bạn đang tìm</p>
+			<ul class="services">
+				<li><a href="/category/nieng-rang/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8zM2 9h20v1.8H2z"/><path d="M9.6 7.2h4.8v5.4H9.6z"/></svg></span>Niềng răng</a></li>
+				<li><a href="/category/trong-rang-implant/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.2 2.3c1.6-.4 3.2.1 4.8 1 1.6-.9 3.2-1.4 4.8-1 2.2.6 3.1 2.8 2.5 5-.3 1.3-1.1 2.1-2.5 2.4H7.2C5.8 9.4 5 8.6 4.7 7.3c-.6-2.2.3-4.4 2.5-5zM9.8 10.6h4.4v2.2H9.8zM9 13.8h6l-.6 1.8H9.6zM9.6 16.6h4.8l-.6 1.8h-3.6zM10.2 19.4h3.6L12 22.2z"/></svg></span>Trồng răng Implant</a></li>
+				<li><a href="/category/rang-su-tham-my/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 3.5 7.6 7 12 2l4.4 5 4.1-3.5-1.4 6.5H4.9zM5.4 12h13.2c-.2 1.5-.9 2.6-1.3 4.2-.5 2.4-.8 5.3-2.3 5.3-1.4 0-1.5-3-2.2-4.6-.2-.6-.5-.9-.8-.9s-.6.3-.8.9c-.7 1.6-.8 4.6-2.2 4.6-1.5 0-1.8-2.9-2.3-5.3-.4-1.6-1.1-2.7-1.3-4.2z"/></svg></span>Răng sứ thẩm mỹ</a></li>
+				<li><a href="/category/tay-trang-rang/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path transform="translate(-1.2 1.6) scale(.92)" d="M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8z"/><path d="M19.5 .5l.95 2.05L22.5 3.5l-2.05.95L19.5 6.5l-.95-2.05L16.5 3.5l2.05-.95z"/></svg></span>Tẩy trắng răng</a></li>
+				<li><a href="/category/nho-rang-khon/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path transform="translate(1.8 3.4) scale(.85)" d="M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8z"/><path d="M12 .5 15.2 4h-2.1v2.6h-2.2V4H8.8z"/></svg></span>Nhổ răng khôn</a></li>
+				<li><a href="/category/nha-khoa-tre-em/"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM8.5 7.8a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2zm7 0a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2zM7 13.4h10a5 5 0 0 1-10 0z"/></svg></span>Nha khoa trẻ em</a></li>
+			</ul>
+		</nav>
+	</section>
+</main>
+
+<footer class="site-footer">
+	<div class="container footer-grid">
+		<div class="footer-col footer-brand">
+			<a class="brand" href="/" rel="home">
+				<span class="brand-mark" aria-hidden="true">
+					<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 2.3c1.6-.4 3.2.1 4.8 1 1.6-.9 3.2-1.4 4.8-1 2.2.6 3.1 2.8 2.5 5-.4 1.6-1 2.6-1.3 4.4-.4 2.6-.8 5.6-2 8.6-.4 1-1.6 1-2 0-.5-1.4-.6-4.4-2-4.4s-1.5 3-2 4.4c-.4 1-1.6 1-2 0-1.2-3-1.6-6-2-8.6-.3-1.8-.9-2.8-1.3-4.4-.6-2.2.3-4.4 2.5-5z"/></svg>
+				</span>
+				<span><span class="brand-name">Nha Khoa Răng Hàm Mặt Sài Gòn</span></span>
+			</a>
+			<p class="slogan">Vì nụ cười Việt Nam</p>
+		</div>
+
+		<div class="footer-col">
+			<p class="footer-heading">Thông tin liên hệ</p>
+			<ul class="contact">
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.3 6.2 11.6 6.9 12.3a.9.9 0 0 0 1.2 0c.7-.7 6.9-7 6.9-12.3A7.5 7.5 0 0 0 12 2zm0 4.6a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z"/></svg><span>Linh Xuân, Thủ Đức</span></li>
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3.5h3.2l1.6 4.2-2.1 1.5a12 12 0 0 0 5.6 5.6l1.5-2.1 4.2 1.6V17a2.5 2.5 0 0 1-2.7 2.5C9.6 19 3.8 13.2 3.5 6.2A2.5 2.5 0 0 1 5 3.5z"/></svg><a class="tel" href="tel:1800XXXX">1800 XXXX</a></li>
+				<li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg><span>8h → 12h<br>13h → 20h</span></li>
+			</ul>
+		</div>
+
+		<div class="footer-col">
+			<p class="footer-heading">Liên kết nhanh</p>
+			<ul class="footer-links">
+				<li><a href="/">Trang chủ</a></li>
+				<li><a href="/gioi-thieu/">Giới thiệu</a></li>
+				<li><a href="/bac-si/">Đội ngũ bác sĩ</a></li>
+				<li><a href="/lien-he/">Liên hệ – Đặt lịch</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer-bottom">
+		<div class="container">
+			<p>© 2026 Nha Khoa Răng Hàm Mặt Sài Gòn. Giữ bản quyền nội dung trên website này.</p>
+		</div>
+	</div>
+</footer>
+</body>
+</html>
