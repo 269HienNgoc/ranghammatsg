@@ -76,6 +76,25 @@ function rhm_get_footer_logo_id(): int {
 }
 
 /**
+ * Dòng liên hệ (địa chỉ, hotline, email, giờ làm việc) dạng tên icon => HTML đã escape; dòng trống bị bỏ.
+ *
+ * @return array<string, string>
+ */
+function rhm_get_footer_contacts(): array {
+	$hotline = rhm_get_option( 'rhm_hotline' );
+	$email   = rhm_get_option( 'rhm_email' );
+
+	return array_filter(
+		array(
+			'map-pin' => nl2br( esc_html( rhm_get_option( 'rhm_address' ) ) ),
+			'phone'   => $hotline ? sprintf( '<a class="font-bold text-white hover:text-footer-accent" href="%s">%s</a>', esc_url( rhm_get_tel_href( $hotline ) ), esc_html( $hotline ) ) : '',
+			'mail'    => $email ? sprintf( '<a class="wrap-anywhere text-footer-text hover:text-footer-accent" href="%s">%s</a>', esc_url( 'mailto:' . $email ), esc_html( $email ) ) : '',
+			'clock'   => nl2br( esc_html( rhm_get_option( 'rhm_working_hours' ) ) ),
+		)
+	);
+}
+
+/**
  * Chi nhánh có tên.
  *
  * @return array<int, array{name:string, link:string}>

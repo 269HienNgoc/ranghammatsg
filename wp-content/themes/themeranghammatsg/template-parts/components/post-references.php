@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rhm_references = rhm_get_post_references( get_the_ID() );
+$rhm_references = rhm_post_section_visible( 'references', get_the_ID() ) ? rhm_get_post_references( get_the_ID() ) : array();
 if ( ! $rhm_references ) {
 	return;
 }

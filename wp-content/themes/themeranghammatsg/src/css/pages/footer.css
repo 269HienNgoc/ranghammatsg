@@ -11,6 +11,7 @@
 }
 
 @source "../../../footer.php";
+@source "../../../inc/footer.php";
 
 @layer components {
 	/* Vùng scope của utility footer: style của chính thẻ <footer> đặt ở đây. */

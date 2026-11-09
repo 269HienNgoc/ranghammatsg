@@ -12,6 +12,19 @@ function rhm_register_post_fields(): void {
 		$field( $group . '_' . $name, $label, $type, $extra ),
 		array( 'name' => $name )
 	);
+	// Công tắc hiện khối cuối bài (rhm_post_{nhóm}_show, đọc bằng rhm_post_section_visible()). Chỉ ẩn phần hiển thị, schema giữ nguyên.
+	$visibility = static fn( string $group, string $label ): array => $field(
+		$group . '_show',
+		$label,
+		'true_false',
+		array(
+			'ui'            => 1,
+			'ui_on_text'    => __( 'Hiện', 'themeranghammatsg' ),
+			'ui_off_text'   => __( 'Ẩn', 'themeranghammatsg' ),
+			'default_value' => 1,
+			'instructions'  => __( 'Tắt: ẩn khối này trên trang bài viết. Dữ liệu và schema vẫn giữ nguyên.', 'themeranghammatsg' ),
+		)
+	);
 
 	acf_add_local_field_group(
 		array(
@@ -35,6 +48,7 @@ function rhm_register_post_fields(): void {
 					)
 				),
 				$field( 'tab_faq', __( 'Câu hỏi thường gặp', 'themeranghammatsg' ), 'tab' ),
+				$visibility( 'faq', __( 'Hiện "Câu hỏi thường gặp" cuối bài', 'themeranghammatsg' ) ),
 				$field(
 					'faq',
 					__( 'Câu hỏi thường gặp', 'themeranghammatsg' ),
@@ -51,6 +65,7 @@ function rhm_register_post_fields(): void {
 					)
 				),
 				$field( 'tab_references', __( 'Tài liệu tham khảo', 'themeranghammatsg' ), 'tab' ),
+				$visibility( 'references', __( 'Hiện "Tài liệu tham khảo" cuối bài', 'themeranghammatsg' ) ),
 				$field(
 					'references',
 					__( 'Tài liệu tham khảo', 'themeranghammatsg' ),

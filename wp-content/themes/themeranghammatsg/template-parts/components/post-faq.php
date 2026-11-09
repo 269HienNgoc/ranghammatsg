@@ -8,7 +8,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rhm_faq = rhm_get_post_faq( get_the_ID() );
+$rhm_faq = rhm_post_section_visible( 'faq', get_the_ID() ) ? rhm_get_post_faq( get_the_ID() ) : array();
 if ( ! $rhm_faq ) {
 	return;
 }

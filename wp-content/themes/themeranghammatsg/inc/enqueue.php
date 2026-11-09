@@ -54,12 +54,15 @@ function rhm_enqueue_assets(): void {
 			continue;
 		}
 
+		$handle = 'rhm-' . $bundle;
 		wp_enqueue_style(
-			'rhm-' . $bundle,
+			$handle,
 			RHM_THEME_URI . '/' . $relative,
 			( 'base' !== $bundle && $has_base ) ? array( 'rhm-base' ) : array(),
 			rhm_asset_version( $relative )
 		);
+		// Có 'path' → WP core in nội dung file thành <style> inline (xem rhm_styles_inline_size_limit()).
+		wp_style_add_data( $handle, 'path', RHM_THEME_DIR . '/' . $relative );
 
 		if ( 'base' === $bundle ) {
 			$has_base = true;
@@ -80,6 +83,19 @@ function rhm_enqueue_assets(): void {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'rhm_enqueue_assets' );
+
+/**
+ * Inline toàn bộ CSS của theme vào <head> → không còn request CSS chặn render (PSI "Render-blocking requests").
+ *
+ * WP core (wp_maybe_inline_styles) inline các style có 'path', file nhỏ trước, đến khi tổng kích thước (raw) chạm giới hạn;
+ * file vượt giới hạn tự quay về <link>. url(../fonts/…) được core đổi sang đường dẫn tuyệt đối.
+ * 120 kB raw ≈ 24 kB gzip: đủ cho trang nặng nhất (trang chủ ≈ 85 kB raw, ≈ 17 kB gzip) và vẫn giữ ngân sách CSS ≤ 20 kB gzip.
+ * Đổi lại: CSS nằm trong HTML (không cache riêng) → sau mỗi lần build phải xóa page cache.
+ */
+function rhm_styles_inline_size_limit(): int {
+	return 120000;
+}
+add_filter( 'styles_inline_size_limit', 'rhm_styles_inline_size_limit' );
 
 /**
  * Preload font Roboto (2 subset dùng cho tiếng Việt) để chữ hiển thị sớm.

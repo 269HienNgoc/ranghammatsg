@@ -22,7 +22,8 @@ Nguồn: web.dev/articles/fcp · developer.chrome.com/docs/lighthouse/performanc
 - Utility scoped theo vùng (`.site-main`, `.site-header`, `.site-footer`) + `@source` đúng file → Tailwind chỉ sinh class đang dùng. Xóa CSS/component không còn dùng (quy tắc code sạch).
 - Không `@import` URL ngoài hay file không được Vite gộp (mỗi `@import` lúc chạy = thêm 1 vòng request nối tiếp). Không nạp CSS của thư viện nguyên gói (Swiper: chỉ CSS lõi + module dùng).
 - CSS của plugin không cần ở trang đó → dequeue (mẫu `inc/plugin/kk-star-ratings.php`, `inc/cleanup.php`). CSS mà WordPress tự in (global styles, block library, emoji) đã gỡ trong `inc/cleanup.php`; thứ mới phát hiện cũng gỡ ở đó.
-- Không tự ý tách "critical CSS inline + nạp phần còn lại bất đồng bộ": bundle đã nhỏ, nạp bất đồng bộ dễ gây FOUC/CLS. Chỉ làm khi insight "Render-blocking requests" báo tiết kiệm đáng kể (> ~150 ms) và đã đo trước/sau.
+- **Toàn bộ CSS của trang được inline vào `<head>`** (từ 2026-11-09, `rhm_styles_inline_size_limit()` trong `inc/enqueue.php`, dùng cơ chế `path` của WP core) → 0 request CSS chặn render. Ngân sách ≤ 20 kB gzip ở trên giờ là ngân sách cho tổng CSS inline trong HTML. Production nén Brotli nên phần inline chỉ thêm khoảng 17 kB. Local Laragon mặc định KHÔNG nén HTML (`mod_deflate` bị tắt trong `httpd.conf`), nên FCP/LCP đo ở local bị thiệt cho cách này.
+- Không tách "critical CSS inline + nạp phần còn lại bất đồng bộ": bundle đã nhỏ, nạp bất đồng bộ dễ gây FOUC/CLS.
 
 ## 2. `<head>` sạch
 

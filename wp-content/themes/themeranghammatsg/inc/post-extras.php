@@ -39,6 +39,15 @@ function rhm_get_post_reviewer( int $post_id ): int {
 	return $id && 'bac-si' === get_post_type( $id ) && 'publish' === get_post_status( $id ) ? $id : 0;
 }
 
+/**
+ * Khối cuối bài ('faq' | 'references') có được hiện trên trang không (công tắc rhm_post_{section}_show).
+ * Chỉ dùng cho phần hiển thị: schema (inc/schema.php) KHÔNG đọc hàm này. Chưa lưu / không có ACF → hiện.
+ */
+function rhm_post_section_visible( string $section, int $post_id ): bool {
+	$show = rhm_get_post_field( $section . '_show', $post_id );
+	return null === $show || (bool) $show;
+}
+
 /** @return array<int, array{question:string, answer:string}> answer là HTML đã lọc + wpautop. */
 function rhm_get_post_faq( int $post_id ): array {
 	$items = array();
