@@ -10,3 +10,4 @@ php.ini
 /wp-content/uploads-webpc/*
 /wp-content/upgrade-temp-backup/*
 /wp-content/upgrade/*
+/wp-content/swift-ai

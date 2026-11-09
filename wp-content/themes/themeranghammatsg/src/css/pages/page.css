@@ -15,3 +15,11 @@
 @source "../../../page.php";
 @source "../../../template-parts/components/page-title.php";
 @source "../../../inc/template-tags.php";
+
+@layer components {
+	/* Cỡ chữ nội dung trang: 18px, dòng 1.75 — giống bài viết (single-post.css). */
+	.entry-content {
+		--entry-font-size: 1.125rem;
+		--entry-line-height: 1.75;
+	}
+}
