@@ -1,0 +1,5 @@
+<ifModule mod_headers.c>
+Header add X-Powered-By "PHP/8.4.12"
+Header add Cache-control "no-cache, no-store"
+Header add Link "<https://bactrung.test/>; rel=shortlink"
+</iFmodule>

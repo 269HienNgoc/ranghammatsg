@@ -1,0 +1,1 @@
+let _bgl=function(){s3watch("[style*=background]:not(.swift-in-viewport)",iv,function(t){t.classList.add("swift-in-viewport")})};document.addEventListener("swift/beforejs",_bgl,{once:!0});
