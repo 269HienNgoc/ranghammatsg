@@ -15,6 +15,17 @@ Nhóm **Thông tin hồ sơ bác sĩ** của ACF PRO có các tab:
 4. **Video về bác sĩ:** tối đa hai video, mỗi video cần URL YouTube, tiêu đề và ảnh bìa trong thư viện media.
 5. **Ca điều trị:** danh sách ca và tối đa hai video ca điều trị. Mỗi ca cần tên khách hàng và đủ ba ảnh; địa phương, phương án và loại điều trị có thể bỏ trống. Kéo thả để đổi thứ tự các mục.
 
+## Section "Đội ngũ bác sĩ" trên trang chủ
+
+Slider nằm trên section Tin tức, mỗi slide 1 bác sĩ. Nhập trong hồ sơ bác sĩ, tab **Trang chủ**:
+
+- **Hiện ở section Đội ngũ bác sĩ**: bật để đưa bác sĩ lên trang chủ (tối đa 8). Chưa bật hồ sơ nào thì trang chủ tự hiện 6 hồ sơ mới nhất.
+- **Học hàm / học vị**: dòng nhỏ trên tên, vd "Bác sĩ CKI".
+- **Kinh nghiệm lâm sàng** và **Hồ sơ điều trị**: hiện thành 2 ô số liệu, vd "15+ năm", "6.000+ ca".
+- **Chứng chỉ chuyên môn**: mỗi dòng 1 mục, hiện tối đa 5 dòng. Để trống thì lấy danh sách Học vấn.
+
+Dòng "Chức vụ" lấy từ ô **Chức danh** (tab Banner & giới thiệu); tên là tiêu đề hồ sơ; ảnh là **Ảnh đại diện** (bắt buộc, hồ sơ không có ảnh sẽ không hiện). Thứ tự: ô **Thứ tự** trong khung **Thuộc tính** bên phải (số nhỏ đứng trước). Tiêu đề section và link "Xem tất cả bác sĩ": **Giao diện → Tùy biến → Đội ngũ bác sĩ (Trang chủ)**.
+
 ## Box bác sĩ trong bài viết
 
 Trong tab **Banner & giới thiệu** có 2 ô dùng cho box giới thiệu bác sĩ ở bài viết:

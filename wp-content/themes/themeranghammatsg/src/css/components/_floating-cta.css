@@ -153,11 +153,21 @@
 
 	/* ---- Desktop: cột nổi bên phải ---- */
 	@media (width >= 64rem) {
+		/* Khung bọc: viên nang dọc bo tròn, nền trắng → xanh nhạt, viền mảnh + bóng đổ mềm để cột nút nổi khỏi nội dung. */
 		.floating-cta {
 			position: fixed;
 			top: 50%;
 			right: 1rem;
 			z-index: 40;
+			padding: 0.625rem;
+			border: 1px solid rgb(11 122 85 / 0.12);
+			border-radius: 9999px;
+			background: linear-gradient(180deg, rgb(255 255 255 / 0.96), rgb(240 250 250 / 0.96));
+			box-shadow:
+				0 18px 40px rgb(16 33 45 / 0.14),
+				0 2px 6px rgb(16 33 45 / 0.06),
+				inset 0 1px 0 #fff;
+			backdrop-filter: blur(8px);
 			transform: translateY(-50%);
 		}
 
@@ -170,9 +180,7 @@
 		.floating-cta__icon {
 			width: 3.25rem;
 			height: 3.25rem;
-			box-shadow:
-				0 0 0 3px #fff,
-				0 8px 20px rgb(16 33 45 / 0.22);
+			box-shadow: 0 6px 14px color-mix(in srgb, var(--cta) 35%, transparent);
 		}
 
 		.floating-cta__icon svg {
@@ -184,7 +192,7 @@
 		.floating-cta__label {
 			position: absolute;
 			top: 50%;
-			right: calc(100% + 0.75rem);
+			right: calc(100% + 1.375rem); /* Ra ngoài khung bọc: padding 0.625rem + khoảng cách 0.75rem. */
 			padding: 0.4375rem 0.875rem;
 			border-radius: 9999px;
 			background: var(--cta);

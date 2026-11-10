@@ -31,7 +31,7 @@ function rhm_register_doctors(): void {
 			'has_archive'  => 'bac-si',
 			'rewrite'      => array( 'slug' => 'bac-si', 'with_front' => false ),
 			'menu_icon'    => 'dashicons-businessperson',
-			'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions' ),
+			'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes' ), // page-attributes: ô "Thứ tự" (section bác sĩ trang chủ).
 		)
 	);
 }

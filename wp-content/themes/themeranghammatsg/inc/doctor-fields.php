@@ -58,6 +58,13 @@ function rhm_register_doctor_fields(): void {
 			$field( 'tab_cases', __( 'Ca điều trị', 'themeranghammatsg' ), 'tab' ),
 			$field( 'cases', __( 'Những ca điều trị', 'themeranghammatsg' ), 'repeater', array( 'layout' => 'block', 'collapsed' => 'field_rhm_doctor_case_name', 'button_label' => __( 'Thêm ca điều trị', 'themeranghammatsg' ), 'instructions' => __( 'Mỗi ca cần tên khách hàng và đủ ba ảnh. Các dòng nhập dở không hiển thị.', 'themeranghammatsg' ), 'sub_fields' => $case_fields ) ),
 			$videos( 'case_videos', __( 'Video ca điều trị', 'themeranghammatsg' ) ),
+			// Section "Đội ngũ bác sĩ" trang chủ (inc/home-doctors.php, template-parts/sections/doctors.php).
+			$field( 'tab_home', __( 'Trang chủ', 'themeranghammatsg' ), 'tab' ),
+			$field( 'home', __( 'Hiện ở section Đội ngũ bác sĩ (trang chủ)', 'themeranghammatsg' ), 'true_false', array( 'ui' => 1, 'instructions' => __( 'Thứ tự hiển thị: ô "Thứ tự" ở khung Thuộc tính bên phải (số nhỏ đứng trước). Chưa bác sĩ nào được chọn thì trang chủ hiện các hồ sơ mới nhất. Cần có Ảnh đại diện.', 'themeranghammatsg' ) ) ),
+			$field( 'degree', __( 'Học hàm / học vị', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( 'Bác sĩ CKI', 'themeranghammatsg' ), 'instructions' => __( 'Dòng nhỏ phía trên tên bác sĩ.', 'themeranghammatsg' ) ) ),
+			$field( 'years', __( 'Kinh nghiệm lâm sàng', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( '15+ năm', 'themeranghammatsg' ) ) ),
+			$field( 'case_count', __( 'Hồ sơ điều trị', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( '6.000+ ca', 'themeranghammatsg' ) ) ),
+			$field( 'credentials', __( 'Chứng chỉ chuyên môn', 'themeranghammatsg' ), 'textarea', array( 'rows' => 5, 'new_lines' => '', 'instructions' => sprintf( /* translators: %d: max lines */ __( 'Mỗi dòng 1 mục, hiện tối đa %d dòng. Để trống: dùng danh sách Học vấn.', 'themeranghammatsg' ), 5 ) ) ),
 		)
 	);
 	acf_add_local_field_group(

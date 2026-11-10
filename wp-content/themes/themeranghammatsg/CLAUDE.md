@@ -23,30 +23,54 @@ npm run dev     # watch (khởi động lại khi thêm entry mới — danh sá
 ## Cấu trúc thư mục
 
 ```
-functions.php          chỉ require các module trong inc/
-style.css              chỉ khai báo theme (CSS thật ở src/)
-front-page.php         trang chủ = mảng section → template-parts/sections/<tên>.php
-single-bac-si.php      hồ sơ bác sĩ = mảng section → template-parts/doctor/<tên>.php (truyền $args['doctor'])
-single.php, page.php, archive.php, archive-bac-si.php, category.php, search.php, 404.php, index.php
-header.php, footer.php, searchform.php
-page-templates/        tpl-gioi-thieu.php (Giới thiệu), tpl-lien-he.php (Liên hệ)
-inc/                   logic PHP, 1 file = 1 tính năng
-inc/plugin/            tích hợp plugin, đặt tên theo thư mục plugin (fluentform.php, kk-star-ratings.php)
-template-parts/
-  sections/            section trang chủ: hero, quick-services, about, news, certificates, booking-cta
-  doctor/              section hồ sơ bác sĩ: hero, intro, qualifications, certificates, videos, cases, case-videos, booking, related, news (+ partial card/carousel/grid)
-  components/          doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq, post-references, booking-popup, floating-cta
-  content/             card-post, featured-post, content-none
-src/css/
-  _tailwind.css        thứ tự layer + import tokens (import ở đầu MỌI entry pages/)
-  theme.css            design tokens @theme
-  pages/               entry CSS theo trang
-  components/          partial (_booking-form, _booking-popup, _floating-cta, _doctor-box, _entry-content, _fonts, _pagination, _toc)
-src/js/                main.js (header sticky, menu mobile/submenu), carousel, home, dropdown, embed, fluent-lazy
-assets/admin/          CSS/JS cho control "list" (repeater) trong Customizer
-assets/icons/          thư viện icon .svg của theme (menu/ + cta/ 24px inline, services/ 48px <img>) — đồng bộ nguyên thư mục lên CDN
-docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bác sĩ cho admin
+themeranghammatsg/
+├── style.css                 chỉ khai báo theme (Version — tăng khi đóng gói zip); CSS thật ở src/
+├── functions.php             chỉ require các module trong inc/
+├── header.php                <head>, hàng logo/tìm kiếm/cờ/đặt lịch/hotline, menu chính + ngăn kéo mobile
+├── footer.php                chân trang 3 cột; sau </footer>: nút liên hệ nhanh + popup đặt lịch, rồi wp_footer()
+├── searchform.php            ô tìm kiếm (biến thể header / ngăn kéo)
+├── front-page.php            trang chủ = mảng section → template-parts/sections/<tên>.php
+├── single.php                bài viết (mục lục, người tham vấn, FAQ, tài liệu tham khảo)
+├── single-bac-si.php         hồ sơ bác sĩ = mảng section → template-parts/doctor/<tên>.php (truyền $args['doctor'])
+├── page.php                  trang thường: tiêu đề + cột 868px (ảnh đại diện = LCP) + .entry-content
+├── archive.php, archive-bac-si.php, category.php, search.php, 404.php, index.php
+├── page-templates/
+│   ├── tpl-gioi-thieu.php    Template "Giới thiệu"
+│   └── tpl-lien-he.php       Template "Liên hệ – Đặt lịch" (form Fluent ngay trên trang, không có popup)
+├── inc/                      logic PHP, 1 file = 1 tính năng (bảng bên dưới)
+│   └── plugin/               tích hợp plugin, tên = thư mục plugin: fluentform.php, kk-star-ratings.php (nạp qua inc/plugins.php)
+├── template-parts/
+│   ├── sections/             trang chủ (thứ tự trong front-page.php): hero, quick-services, about, doctors, news, certificates, booking-cta
+│   ├── doctor/               hồ sơ bác sĩ: hero, intro, qualifications, certificates, videos, cases, case-videos,
+│   │                         booking, related, news + partial carousel, profile-card, case-card, video-grid
+│   ├── components/           doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq,
+│   │                         post-references, booking-popup (popup đặt lịch), floating-cta (nút liên hệ nhanh)
+│   └── content/              card-post, featured-post, content-none
+├── src/                      mã nguồn asset (KHÔNG có trong zip theme)
+│   ├── css/
+│   │   ├── _tailwind.css     thứ tự layer + import tokens (import ở đầu MỌI entry pages/)
+│   │   ├── theme.css         design tokens @theme
+│   │   ├── pages/            entry CSS: base, header, footer (+ popup, nút liên hệ nhanh, form đặt lịch), page-home,
+│   │   │                     page-about, page-contact, page, single-post, single-doctor, archive, 404
+│   │   └── components/       partial: _booking-form, _booking-popup, _floating-cta, _doctor-box, _entry-content,
+│   │                         _fonts, _pagination, _toc
+│   └── js/                   main.js (header sticky, menu mobile/submenu, mở popup đặt lịch), home (hero), carousel
+│                             (+ _carousel nạp động), dropdown, embed (facade video/bản đồ), fluent-lazy
+├── dist/                     kết quả build — ĐƯỢC COMMIT (server không build): css/, js/, fonts/ (Roboto latin + vietnamese)
+├── assets/
+│   ├── admin/                customize-list.css/js: control "list" (repeater) trong Customizer
+│   ├── icons/                thư viện icon .svg (README.md) — đồng bộ nguyên thư mục lên CDN
+│   │   ├── menu/             24px currentColor, inline — icon mục menu
+│   │   ├── services/         48px màu vẽ sẵn, <img> — Dịch vụ nổi bật
+│   │   └── cta/              24px currentColor, inline — nút liên hệ nhanh
+│   └── images/flags/         vn.svg, gb.svg (cờ ngôn ngữ ở header)
+├── languages/                (trống) file dịch
+├── docs/                     doctor-profiles.md (hướng dẫn nhập hồ sơ bác sĩ), doctor-profiles-verification.md (kết quả đo)
+├── AGENTS.md                 bản hướng dẫn cho agent khác (nội dung gốc giống file này)
+└── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
+
+Đóng gói: zip thư mục theme, bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md` (build trước khi zip). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
 
 ### Các module trong `inc/`
 
@@ -63,19 +87,22 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 | `menus.php` | icon menu (ô chọn icon ở Giao diện → Menu, meta `_rhm_menu_icon`; class `icon-<tên>` vẫn dùng được) + nút `.submenu-toggle` |
 | `doctors.php` / `doctor-fields.php` | CPT `bac-si`, field ACF, `rhm_get_doctor()`, ảnh bác sĩ |
 | `doctor-box.php` | shortcode `[bac_si_tham_van id="" label=""]` trong bài viết |
-| `post-extras.php` / `post-fields.php` | ACF bài viết: người tham vấn, FAQ, tài liệu tham khảo |
+| `post-extras.php` / `post-fields.php` | ACF bài viết: người tham vấn, FAQ, tài liệu tham khảo; nút Hiện/Ẩn FAQ và tài liệu tham khảo từng bài (`rhm_post_section_visible()`) |
 | `post-meta.php` | bật/tắt meta bài viết |
 | `toc.php` | mục lục tự động (marker `<!--rhm-toc-->`, shortcode) |
 | `content.php` | bọc `<table>` để cuộn ngang |
 | `category.php` | query/lưới danh mục (`RHM_CATEGORY_GRID = 12`), bộ lọc chuyên mục |
 | `booking-popup.php` | popup đặt lịch (`<dialog>` + form Fluent, in cuối trang qua `template-parts/components/booking-popup.php`): `rhm_booking_popup_enabled()`, `rhm_booking_popup_form_id()`, Customizer "Popup đặt lịch". Không in ở trang Liên hệ (nút đặt lịch ở đó trỏ `#dat-lich`) |
 | `floating-cta.php` | nút liên hệ nhanh (desktop cột phải, mobile thanh đáy): `rhm_get_floating_cta_items()`, Customizer "Nút liên hệ nhanh" (5 nút: nhãn, icon bộ `cta/`, hành động popup/link, link, màu) |
+| `home-doctors.php` | section "Đội ngũ bác sĩ" trang chủ (`template-parts/sections/doctors.php`, slider 1 bác sĩ/slide): `rhm_get_home_doctors()` (hồ sơ bật field `rhm_doctor_home`, sắp theo `menu_order`; chưa bật hồ sơ nào → 6 hồ sơ mới nhất), Customizer "Đội ngũ bác sĩ (Trang chủ)". Field tab "Trang chủ" của hồ sơ: `degree`, `years`, `case_count`, `credentials` |
 | `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
 | `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
 | `svg-upload.php` | cho upload SVG, chặn SVG không an toàn |
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
 | `plugins.php` | require các file `inc/plugin/*` |
+| `plugin/fluentform.php` | Fluent Forms: jQuery + JS "chạm mới tải", `rhm_render_fluent_form()` (form của theme), gỡ CSS Fluent khi trang chỉ có form của theme |
+| `plugin/kk-star-ratings.php` | kk Star Ratings: `rhm_get_star_rating()` (luôn tồn tại, trả rỗng khi plugin tắt), chỉ giữ CSS/JS của plugin ở bài viết có sao |
 
 ## Quy ước quan trọng
 
@@ -117,5 +144,6 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 
 ## CPT Bác sĩ
 - Post type `bac-si`, archive `/bac-si/`, single `/bac-si/<slug>/`, không có taxonomy.
+- Có `page-attributes` (ô "Thứ tự" = `menu_order`): dùng để sắp bác sĩ trong section trang chủ.
 - Rewrite flush 1 lần theo option `rhm_doctor_rewrite_version` — đổi cấu trúc URL thì tăng giá trị này.
 - Chi tiết nhập liệu: `docs/doctor-profiles.md`.
