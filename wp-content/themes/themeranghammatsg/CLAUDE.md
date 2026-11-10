@@ -35,16 +35,16 @@ inc/plugin/            tích hợp plugin, đặt tên theo thư mục plugin (f
 template-parts/
   sections/            section trang chủ: hero, quick-services, about, news, certificates, booking-cta
   doctor/              section hồ sơ bác sĩ: hero, intro, qualifications, certificates, videos, cases, case-videos, booking, related, news (+ partial card/carousel/grid)
-  components/          doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq, post-references
+  components/          doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq, post-references, booking-popup, floating-cta
   content/             card-post, featured-post, content-none
 src/css/
   _tailwind.css        thứ tự layer + import tokens (import ở đầu MỌI entry pages/)
   theme.css            design tokens @theme
   pages/               entry CSS theo trang
-  components/          partial (_booking-form, _doctor-box, _entry-content, _fonts, _pagination, _toc)
+  components/          partial (_booking-form, _booking-popup, _floating-cta, _doctor-box, _entry-content, _fonts, _pagination, _toc)
 src/js/                main.js (header sticky, menu mobile/submenu), carousel, home, dropdown, embed, fluent-lazy
 assets/admin/          CSS/JS cho control "list" (repeater) trong Customizer
-assets/icons/          thư viện icon .svg của theme (menu/ 24px inline, services/ 48px <img>) — đồng bộ nguyên thư mục lên CDN
+assets/icons/          thư viện icon .svg của theme (menu/ + cta/ 24px inline, services/ 48px <img>) — đồng bộ nguyên thư mục lên CDN
 docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bác sĩ cho admin
 ```
 
@@ -68,6 +68,8 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 | `toc.php` | mục lục tự động (marker `<!--rhm-toc-->`, shortcode) |
 | `content.php` | bọc `<table>` để cuộn ngang |
 | `category.php` | query/lưới danh mục (`RHM_CATEGORY_GRID = 12`), bộ lọc chuyên mục |
+| `booking-popup.php` | popup đặt lịch (`<dialog>` + form Fluent, in cuối trang qua `template-parts/components/booking-popup.php`): `rhm_booking_popup_enabled()`, `rhm_booking_popup_form_id()`, Customizer "Popup đặt lịch". Không in ở trang Liên hệ (nút đặt lịch ở đó trỏ `#dat-lich`) |
+| `floating-cta.php` | nút liên hệ nhanh (desktop cột phải, mobile thanh đáy): `rhm_get_floating_cta_items()`, Customizer "Nút liên hệ nhanh" (5 nút: nhãn, icon bộ `cta/`, hành động popup/link, link, màu) |
 | `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
 | `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
@@ -78,6 +80,7 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 ## Quy ước quan trọng
 
 ### CSS
+- `footer.css` còn chứa form đặt lịch, popup đặt lịch và nút liên hệ nhanh (in sau `</footer>`, ngoài mọi vùng utility → viết bằng class component, không dùng utility Tailwind trong 2 template đó).
 - Mọi trang nạp `base` + `header` + `footer` + **đúng 1** file theo loại trang do `rhm_page_style_bundle()` (`inc/enqueue.php`) chọn:
   `page-home`, `page-about`, `page-contact`, `single-post`, `single-doctor`, `page`, `404`, `archive`.
   Thêm loại trang mới: tạo `src/css/pages/<tên>.css` + thêm nhánh `match` trong `rhm_page_style_bundle()`.
@@ -90,7 +93,8 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
 - Tính năng mới → file mới trong `inc/` + `require_once` trong `functions.php`. Tích hợp plugin mới → `inc/plugin/<tên-thư-mục-plugin>.php` + require trong `inc/plugins.php`; tự kiểm tra plugin bật (`function_exists`, `shortcode_exists`…).
 - Section mới cho trang chủ → `template-parts/sections/<tên>.php` + thêm vào mảng trong `front-page.php`.
 - Escape đầu ra (`esc_html`, `esc_url`, `esc_attr`); chuỗi hiển thị bọc `__()` với text domain `themeranghammatsg`.
-- Nút đặt lịch luôn dùng `rhm_get_booking_url()` / `rhm_booking_button()` (filter `rhm_booking_url`; trên hồ sơ bác sĩ trỏ `#dat-lich`).
+- Nút đặt lịch luôn dùng `rhm_get_booking_url()` / `rhm_booking_button()` (filter `rhm_booking_url`; trên hồ sơ bác sĩ và trang Liên hệ trỏ `#dat-lich`). Có popup → nút có `data-rhm-popup="booking"`, `main.js` mở popup thay vì chuyển trang (href vẫn là link thật). Phần tử nào có thuộc tính này cũng mở popup.
+- Form Fluent do theme in luôn qua `rhm_render_fluent_form( $id )` (`inc/plugin/fluentform.php`), đặt trong khối `.rhm-booking`: trang chỉ có form của theme thì CSS Fluent bị gỡ (style ở `_booking-form.css`, nạp mọi trang qua `footer.css`); form chèn bằng shortcode trong nội dung vẫn giữ CSS của plugin.
 - Field ACF bác sĩ có tiền tố `rhm_doctor_`; đọc qua `rhm_get_doctor_field()` (fallback `get_post_meta` khi không có ACF). ACF trả **ID ảnh**, không trả mảng.
 - Section/dòng thiếu dữ liệu hợp lệ thì bỏ qua (không render khung rỗng).
 - **Link external luôn có `target="_blank" rel="nofollow"`** (`inc/external-links.php`). Không viết `target`/`rel` cứng trong template:
@@ -99,7 +103,7 @@ docs/                  doctor-profiles.md — hướng dẫn nhập hồ sơ bá
   - `the_content` và menu đã tự xử lý. Domain khác muốn coi là nội bộ → filter `rhm_internal_hosts`.
 
 ### Icon
-- Icon menu / dịch vụ nổi bật là FILE trong `assets/icons/menu/` và `assets/icons/services/`; tên file `a-z0-9-`, `<title>` tiếng Việt = nhãn trong ô chọn. Thêm icon = chép file, không sửa PHP.
+- Icon menu / dịch vụ nổi bật / nút liên hệ nhanh là FILE trong `assets/icons/menu/`, `assets/icons/services/`, `assets/icons/cta/` (24×24 `currentColor`, inline như `menu/`); tên file `a-z0-9-`, `<title>` tiếng Việt = nhãn trong ô chọn. Thêm icon = chép file, không sửa PHP.
 - `menu/`: 24×24, `fill="currentColor"`, in inline bằng `rhm_icon_svg()` (đổi màu theo CSS, không request). `services/`: 48×48, màu thương hiệu vẽ sẵn, in `<img src="rhm_icon_url()">`.
 - CDN: đồng bộ nguyên `assets/icons/` lên Cloudflare, nhập URL thư mục ở Tùy biến → Thư viện icon (`rhm_icon_base_url`). URL luôn kèm `?ver=filemtime`.
 - Icon UI trong template (home, phone, chevron…) vẫn là chuỗi SVG trong `inc/icons.php`.

@@ -70,8 +70,8 @@ add_action( 'after_setup_theme', 'rhm_content_width', 0 );
 const RHM_LOGO_HEIGHTS = array(
 	'(min-width: 1280px)' => 84,
 	'(min-width: 1024px)' => 64,
-	'(min-width: 560px)'  => 56,
-	''                    => 46,
+	'(min-width: 360px)'  => 60,
+	''                    => 50, // < 360px (máy rất hẹp): 60px làm logo đè lên nút Đặt lịch hẹn.
 );
 
 /**

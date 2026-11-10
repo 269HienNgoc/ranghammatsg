@@ -42,9 +42,9 @@
 	}
 
 	/* Logo: chiều cao CỐ ĐỊNH (không dùng max-h → kích thước trước/sau khi ảnh tải giống nhau, CLS 0).
-	 * Header phải khớp RHM_LOGO_HEIGHTS (inc/setup.php): 46 / 56 / 64 / 84px. Ngăn kéo 44px (dùng chung file với header). */
+	 * Header phải khớp RHM_LOGO_HEIGHTS (inc/setup.php): 50 (< 360px) / 60 / 64 / 84px. Ngăn kéo 44px (dùng chung file với header). */
 	.site-branding .custom-logo {
-		@apply h-[46px] w-auto xs:h-14 lg:h-16 xl:h-[84px];
+		@apply h-[50px] w-auto min-[360px]:h-[60px] lg:h-16 xl:h-[84px];
 	}
 
 	.drawer-logo .custom-logo {

@@ -1,0 +1,243 @@
+/*
+ * Nút liên hệ nhanh (template-parts/components/floating-cta.php, inc/floating-cta.php) — import trong footer.css (mọi trang).
+ * Nằm ngoài .site-footer → không dùng utility, style bằng class ở đây.
+ * - < 1024px: thanh cố định dưới đáy, các nút chia đều; nút chính giữa (khi số nút lẻ) nổi lên. body có padding-bottom bằng
+ *   chiều cao thanh (CSS tĩnh → không che chân trang, không layout shift).
+ * - ≥ 1024px: cột nút tròn nổi giữa mép phải; nhãn trượt ra bên trái khi rê chuột / focus.
+ * Màu: --cta theo lựa chọn trong Customizer (đủ tương phản 4,5:1 với chữ trắng trên nhãn desktop).
+ * Hoạt ảnh chỉ dùng transform + opacity; tắt khi người dùng chọn giảm chuyển động.
+ */
+@layer components {
+	/* Màu mặc định đặt ở khối cha → class màu của từng nút (cùng độ ưu tiên) luôn thắng. */
+	.floating-cta { --cta: var(--color-primary); }
+	.floating-cta__item--green { --cta: #0b7a55; }
+	.floating-cta__item--teal { --cta: #10665c; }
+	.floating-cta__item--blue { --cta: #0866ff; }
+	.floating-cta__item--zalo { --cta: #0068ff; }
+	.floating-cta__item--orange { --cta: #c2410c; }
+	.floating-cta__item--red { --cta: #c62828; }
+
+	.floating-cta__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.floating-cta__item {
+		position: relative;
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	/* Vòng tròn màu chứa icon (dùng chung 2 bố cục). */
+	.floating-cta__icon {
+		position: relative;
+		isolation: isolate;
+		display: inline-flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		background: var(--cta);
+		color: #fff;
+		transition: transform 0.2s ease;
+	}
+
+	.floating-cta__icon svg {
+		width: 1.375rem;
+		height: 1.375rem;
+	}
+
+	/* Nút điện thoại: sóng lan ra quanh vòng tròn. */
+	.floating-cta__item--ring .floating-cta__icon::before {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
+		background: var(--cta);
+		content: "";
+		animation: rhm-cta-ring 2s ease-out infinite;
+	}
+
+	@keyframes rhm-cta-ring {
+		0% {
+			opacity: 0.55;
+			transform: scale(1);
+		}
+
+		70%,
+		100% {
+			opacity: 0;
+			transform: scale(1.7);
+		}
+	}
+
+	/* ---- Mobile / tablet: thanh dưới đáy ---- */
+	@media (width < 64rem) {
+		body:has(.floating-cta) {
+			padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+		}
+
+		.floating-cta {
+			position: fixed;
+			inset: auto 0 0;
+			z-index: 40;
+			padding: 0.25rem 0.25rem env(safe-area-inset-bottom);
+			border-top: 1px solid var(--color-line);
+			background: #fff;
+			box-shadow: 0 -6px 20px rgb(16 33 45 / 0.08);
+		}
+
+		.floating-cta__list {
+			display: grid;
+			grid-template-columns: repeat(var(--cta-count, 5), minmax(0, 1fr));
+			max-width: 40rem;
+			margin-inline: auto;
+		}
+
+		.floating-cta__item {
+			flex-direction: column;
+			justify-content: center;
+			gap: 0.1875rem;
+			min-height: 3.75rem;
+			padding: 0.25rem 0.125rem;
+			border-radius: 0.75rem;
+			color: var(--color-dark);
+		}
+
+		.floating-cta__icon {
+			width: 2.25rem;
+			height: 2.25rem;
+		}
+
+		.floating-cta__label {
+			max-width: 100%;
+			overflow: hidden;
+			font-size: 0.6875rem;
+			font-weight: 600;
+			line-height: 1.2;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.floating-cta__item:active .floating-cta__icon {
+			transform: scale(0.92);
+		}
+
+		/* Nút chính giữa (số nút lẻ ≥ 3, class do PHP gắn): vòng tròn lớn hơn, nổi lên khỏi thanh, viền trắng. */
+		.floating-cta__item--main .floating-cta__icon {
+			width: 3.25rem;
+			height: 3.25rem;
+			margin-top: -1.375rem;
+			box-shadow:
+				0 0 0 4px #fff,
+				0 6px 16px rgb(16 33 45 / 0.22);
+		}
+
+		.floating-cta__item--main .floating-cta__icon svg {
+			width: 1.625rem;
+			height: 1.625rem;
+		}
+
+		.floating-cta__item--main .floating-cta__label {
+			color: var(--cta);
+		}
+
+		/* Ngăn kéo menu mở → thanh lùi xuống (lớp phủ đã che, tránh nổi lên trên lớp phủ). */
+		.nav-open .floating-cta {
+			transform: translateY(100%);
+		}
+	}
+
+	/* ---- Desktop: cột nổi bên phải ---- */
+	@media (width >= 64rem) {
+		.floating-cta {
+			position: fixed;
+			top: 50%;
+			right: 1rem;
+			z-index: 40;
+			transform: translateY(-50%);
+		}
+
+		.floating-cta__list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.floating-cta__icon {
+			width: 3.25rem;
+			height: 3.25rem;
+			box-shadow:
+				0 0 0 3px #fff,
+				0 8px 20px rgb(16 33 45 / 0.22);
+		}
+
+		.floating-cta__icon svg {
+			width: 1.625rem;
+			height: 1.625rem;
+		}
+
+		/* Nhãn: viên thuốc cùng màu bên trái nút, ẩn (vẫn đọc được bằng trình đọc màn hình) đến khi rê chuột / focus. */
+		.floating-cta__label {
+			position: absolute;
+			top: 50%;
+			right: calc(100% + 0.75rem);
+			padding: 0.4375rem 0.875rem;
+			border-radius: 9999px;
+			background: var(--cta);
+			box-shadow: 0 6px 16px rgb(16 33 45 / 0.18);
+			color: #fff;
+			font-size: 0.875rem;
+			font-weight: 600;
+			line-height: 1.3;
+			white-space: nowrap;
+			opacity: 0;
+			pointer-events: none;
+			transform: translate(0.5rem, -50%);
+			transition:
+				opacity 0.18s ease,
+				transform 0.18s ease;
+		}
+
+		.floating-cta__item:hover .floating-cta__icon,
+		.floating-cta__item:focus-visible .floating-cta__icon {
+			transform: scale(1.08);
+		}
+
+		.floating-cta__item:hover .floating-cta__label,
+		.floating-cta__item:focus-visible .floating-cta__label {
+			opacity: 1;
+			transform: translate(0, -50%);
+		}
+
+		.floating-cta__item:focus-visible {
+			outline: none;
+		}
+
+		.floating-cta__item:focus-visible .floating-cta__icon {
+			outline: 2px solid var(--cta);
+			outline-offset: 5px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.floating-cta__item--ring .floating-cta__icon::before {
+			animation: none;
+			opacity: 0;
+		}
+
+		.floating-cta__icon,
+		.floating-cta__label {
+			transition: none;
+		}
+	}
+
+	@media print {
+		.floating-cta {
+			display: none;
+		}
+	}
+}

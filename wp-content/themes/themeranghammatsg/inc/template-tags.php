@@ -37,16 +37,19 @@ function rhm_get_tel_href( string $phone ): string {
 /**
  * Nút Đặt lịch. $class: utility bổ sung/ghi đè (utility luôn thắng .btn vì nằm ở layer sau).
  * $icon_class: khác rỗng → thêm icon lịch phía trước (class của icon). $arrow: thêm mũi tên → phía sau.
+ * Có popup đặt lịch (inc/booking-popup.php) → thêm data-rhm-popup: main.js mở popup thay vì chuyển trang
+ * (href vẫn là trang Liên hệ: không có JS vẫn dùng được, Google vẫn bò được).
  * Lưu ý: chuỗi class phải viết nguyên văn trong template để Tailwind quét được.
  */
 function rhm_booking_button( string $class = '', string $icon_class = '', bool $arrow = false ): void {
 	printf(
-		'<a class="%1$s" href="%2$s">%3$s<span>%4$s</span>%5$s</a>',
+		'<a class="%1$s" href="%2$s"%6$s>%3$s<span>%4$s</span>%5$s</a>',
 		esc_attr( trim( 'btn btn-primary ' . $class ) ),
 		esc_url( rhm_get_booking_url() ),
 		$icon_class ? rhm_get_icon( 'calendar', $icon_class ) : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
 		esc_html__( 'Đặt lịch hẹn', 'themeranghammatsg' ),
-		$arrow ? rhm_get_icon( 'arrow-right', 'size-5 shrink-0' ) : '' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		$arrow ? rhm_get_icon( 'arrow-right', 'size-5 shrink-0' ) : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		rhm_booking_popup_enabled() ? ' data-rhm-popup="booking"' : ''
 	);
 }
 

@@ -9,8 +9,8 @@
  * Fluent tự khởi tạo khi được nạp muộn (document đã tải xong → setTimeout(init, 100)); cấu hình từng form là
  * script thuần (window.fluent_form_*) nên chạy ngay không cần jQuery.
  * An toàn: nếu trang có script KHÁC (không phải của Fluent) phụ thuộc jQuery → không hoãn gì (in bình thường).
- * Liên quan: inc/cleanup.php đưa jQuery xuống footer + bỏ jquery-migrate. Liên hệ/hồ sơ bác sĩ dùng partial
- * src/css/components/_booking-form.css thay cho CSS của Fluent (gỡ ở cuối file).
+ * Liên quan: inc/cleanup.php đưa jQuery xuống footer + bỏ jquery-migrate. Form do theme in (rhm_render_fluent_form():
+ * Liên hệ, hồ sơ bác sĩ, popup đặt lịch) dùng partial src/css/components/_booking-form.css thay cho CSS của Fluent (gỡ ở cuối file).
  *
  * @package themeranghammatsg
  */
@@ -118,13 +118,63 @@ function rhm_fluent_lazy_tag( string $tag, string $handle ): string {
 add_filter( 'script_loader_tag', 'rhm_fluent_lazy_tag', 10, 2 );
 
 /**
- * Liên hệ và hồ sơ bác sĩ: bỏ 2 file CSS của Fluent (~9 kB gzip, chặn hiển thị) — form đã có đủ style
- * trong partial _booking-form.css (khối .rhm-booking). Trang khác có form Fluent vẫn dùng CSS của plugin.
- * Fluent enqueue CSS lúc render shortcode (giữa trang) → gỡ cả ở wp_enqueue_scripts lẫn đầu wp_footer (trước khi WordPress in
- * style nạp muộn rồi đẩy lên <head>).
+ * Đang render form bằng rhm_render_fluent_form() (form của theme, có style riêng trong khối .rhm-booking)?
+ */
+function rhm_fluent_theme_rendering( ?bool $set = null ): bool {
+	static $rendering = false;
+	if ( null !== $set ) {
+		$rendering = $set;
+	}
+	return $rendering;
+}
+
+/**
+ * Có form Fluent nào trên trang KHÔNG do theme render (shortcode trong nội dung, widget…)? Form đó cần CSS gốc của Fluent.
+ */
+function rhm_fluent_has_foreign_form( ?bool $set = null ): bool {
+	static $foreign = false;
+	if ( null !== $set ) {
+		$foreign = $set;
+	}
+	return $foreign;
+}
+
+/**
+ * In form Fluent của theme (đặt trong khối .rhm-booking). '' nếu không có ID hoặc Fluent không bật.
+ */
+function rhm_render_fluent_form( int $form_id ): string {
+	if ( $form_id <= 0 || ! shortcode_exists( 'fluentform' ) ) {
+		return '';
+	}
+	rhm_fluent_theme_rendering( true );
+	$html = do_shortcode( sprintf( '[fluentform id="%d"]', $form_id ) );
+	rhm_fluent_theme_rendering( false );
+	return $html;
+}
+
+/**
+ * Ghi nhận form Fluent render ngoài rhm_render_fluent_form().
+ */
+function rhm_fluent_track_render( $output, string $tag ) {
+	if ( 'fluentform' === $tag && ! rhm_fluent_theme_rendering() ) {
+		rhm_fluent_has_foreign_form( true );
+	}
+	return $output;
+}
+add_filter( 'do_shortcode_tag', 'rhm_fluent_track_render', 10, 2 );
+
+/**
+ * Bỏ 2 file CSS của Fluent (~9 kB gzip, chặn hiển thị) khi mọi form trên trang đều do theme in — form của theme đã có đủ
+ * style trong partial _booking-form.css (nạp mọi trang qua footer.css, vì popup đặt lịch có ở mọi trang).
+ * Trang có form Fluent khác (shortcode trong nội dung, widget…) vẫn giữ CSS của plugin.
+ * Fluent enqueue CSS lúc render shortcode (giữa trang) → gỡ cả ở wp_enqueue_scripts (khi nội dung không có shortcode) lẫn đầu
+ * wp_footer (đã render hết form, kể cả popup trong footer.php; trước khi WordPress in style nạp muộn).
  */
 function rhm_fluent_dequeue_styles(): void {
-	if ( ! is_page_template( 'page-templates/tpl-lien-he.php' ) && ! is_singular( 'bac-si' ) ) {
+	if ( doing_action( 'wp_enqueue_scripts' ) && is_singular() && has_shortcode( (string) get_post_field( 'post_content' ), 'fluentform' ) ) {
+		return;
+	}
+	if ( rhm_fluent_has_foreign_form() ) {
 		return;
 	}
 	wp_dequeue_style( 'fluent-form-styles' );

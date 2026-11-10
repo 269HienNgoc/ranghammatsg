@@ -4,6 +4,7 @@
  *
  * - menu/      24×24, fill="currentColor" → in INLINE (đổi màu theo CSS, 0 request). Chọn ở Giao diện → Menu.
  * - services/  48×48, màu vẽ sẵn → in bằng <img src> (tải được qua CDN). Chọn ở Tùy biến → Dịch vụ nổi bật.
+ * - cta/       24×24, fill="currentColor" → in INLINE. Chọn ở Tùy biến → Nút liên hệ nhanh (inc/floating-cta.php).
  *
  * Thêm icon: chép file .svg vào đúng thư mục (tên file a-z, 0-9, "-"), đặt <title> tiếng Việt = nhãn hiển thị
  * trong ô chọn. Không cần sửa PHP.
@@ -20,6 +21,7 @@ defined( 'ABSPATH' ) || exit;
 const RHM_ICON_SETS = array(
 	'menu'     => 'Icon menu',
 	'services' => 'Icon dịch vụ nổi bật',
+	'cta'      => 'Icon nút liên hệ nhanh',
 );
 
 function rhm_icon_dir( string $set ): string {

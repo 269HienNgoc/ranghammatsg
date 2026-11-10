@@ -2,7 +2,6 @@
 @import "../_tailwind.css";
 @import "swiper/css" layer(components);
 @import "../components/_entry-content.css";
-@import "../components/_booking-form.css";
 
 @layer utilities {
 	.site-main { @tailwind utilities source(none); }

@@ -1,7 +1,10 @@
 /*
- * footer.css — nạp ở MỌI trang.
+ * footer.css — nạp ở MỌI trang. Kèm form đặt lịch (_booking-form), popup đặt lịch, nút liên hệ nhanh (in sau </footer>).
  */
 @import "../_tailwind.css";
+@import "../components/_booking-form.css";
+@import "../components/_booking-popup.css";
+@import "../components/_floating-cta.css";
 
 /* Utility chỉ áp dụng trong .site-footer (footer). */
 @layer utilities {

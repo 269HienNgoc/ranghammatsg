@@ -1,0 +1,229 @@
+/*
+ * Popup đặt lịch (template-parts/components/booking-popup.php, inc/booking-popup.php) — import trong footer.css (mọi trang).
+ * <dialog> native nằm ngoài .site-footer → không dùng utility, style bằng class ở đây. Form bên trong: _booking-form.css.
+ * Desktop: hộp giữa màn hình, rộng tối đa 560px. < 640px: trượt lên từ đáy (bottom sheet), cao tối đa 92dvh, phần thân cuộn riêng.
+ * Hoạt ảnh chỉ dùng opacity + transform (@starting-style); tắt khi người dùng chọn giảm chuyển động.
+ */
+@layer components {
+	.booking-popup {
+		width: 100%;
+		max-width: min(35rem, calc(100vw - 2rem));
+		max-height: calc(100dvh - 3rem);
+		margin: auto; /* Preflight của Tailwind đặt margin: 0 → dialog lệch góc trên trái. */
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--color-body);
+		overflow: visible;
+		opacity: 0;
+		transform: translateY(1rem) scale(0.98);
+		transition:
+			opacity 0.2s ease,
+			transform 0.25s ease,
+			overlay 0.25s allow-discrete,
+			display 0.25s allow-discrete;
+	}
+
+	.booking-popup[open] {
+		opacity: 1;
+		transform: none;
+		transition-duration: 0.25s, 0.35s, 0.35s, 0.35s;
+		transition-timing-function: ease, cubic-bezier(0.32, 0.72, 0, 1);
+
+		@starting-style {
+			opacity: 0;
+			transform: translateY(1rem) scale(0.98);
+		}
+	}
+
+	.booking-popup::backdrop {
+		background: rgb(16 33 45 / 0);
+		backdrop-filter: blur(0);
+		transition:
+			background-color 0.25s ease,
+			backdrop-filter 0.25s ease,
+			overlay 0.25s allow-discrete,
+			display 0.25s allow-discrete;
+	}
+
+	.booking-popup[open]::backdrop {
+		background: rgb(16 33 45 / 0.55);
+		backdrop-filter: blur(3px);
+
+		@starting-style {
+			background: rgb(16 33 45 / 0);
+			backdrop-filter: blur(0);
+		}
+	}
+
+	/* Khóa cuộn trang khi popup mở. */
+	html:has(.booking-popup[open]) {
+		overflow: hidden;
+	}
+
+	.booking-popup__panel {
+		display: flex;
+		flex-direction: column;
+		max-height: inherit;
+		overflow: hidden;
+		border-radius: 1.5rem;
+		background: #fff;
+		box-shadow: 0 24px 64px rgb(16 33 45 / 0.28);
+	}
+
+	/* Đầu popup: nền xanh thương hiệu (chữ trắng ≥ 5,4:1), điểm sáng góc phải. */
+	.booking-popup__head {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: start;
+		gap: 0.875rem;
+		padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+		background:
+			radial-gradient(circle at 100% 0, rgb(255 255 255 / 0.16), transparent 45%),
+			linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+		color: #fff;
+	}
+
+	.booking-popup__icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 1rem;
+		background: rgb(255 255 255 / 0.15);
+		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+	}
+
+	.booking-popup__icon svg {
+		width: 1.625rem;
+		height: 1.625rem;
+	}
+
+	.booking-popup__heading {
+		padding-top: 0.125rem;
+	}
+
+	.booking-popup__title {
+		margin: 0;
+		font-size: 1.375rem;
+		font-weight: 700;
+		line-height: 1.25;
+	}
+
+	.booking-popup__desc {
+		margin: 0.25rem 0 0;
+		font-size: 0.9375rem;
+		line-height: 1.5;
+	}
+
+	.booking-popup__close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin: -0.25rem -0.25rem 0 0;
+		border: 0;
+		border-radius: 9999px;
+		background: rgb(255 255 255 / 0.12);
+		color: #fff;
+		cursor: pointer;
+		transition: background-color 0.15s;
+	}
+
+	.booking-popup__close:hover,
+	.booking-popup__close:focus-visible {
+		background: rgb(255 255 255 / 0.24);
+	}
+
+	.booking-popup__close:focus-visible {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+
+	.booking-popup__close svg {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.booking-popup__body {
+		flex: 1;
+		min-height: 0;
+		padding: 1.5rem;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.booking-popup__hotline {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+		padding-top: 1rem;
+		border-top: 1px dashed var(--color-line);
+		color: var(--color-muted);
+		font-size: 0.9375rem;
+	}
+
+	.booking-popup__hotline strong {
+		color: var(--color-primary);
+		font-size: 1.0625rem;
+	}
+
+	.booking-popup__hotline svg {
+		width: 1.25rem;
+		height: 1.25rem;
+		flex-shrink: 0;
+		color: var(--color-primary);
+	}
+
+	.booking-popup__hotline:hover strong {
+		color: var(--color-primary-dark);
+	}
+
+	/* Mobile: bottom sheet. */
+	@media (width < 40rem) {
+		.booking-popup {
+			max-width: 100%;
+			max-height: 92dvh;
+			margin: auto 0 0;
+			transform: translateY(100%);
+		}
+
+		.booking-popup[open] {
+			@starting-style {
+				transform: translateY(100%);
+			}
+		}
+
+		.booking-popup__panel {
+			border-radius: 1.5rem 1.5rem 0 0;
+		}
+
+		.booking-popup__head {
+			padding: 1.125rem 1rem 1.125rem 1.25rem;
+		}
+
+		.booking-popup__title {
+			font-size: 1.25rem;
+		}
+
+		.booking-popup__body {
+			padding: 1.25rem 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.booking-popup,
+		.booking-popup::backdrop {
+			transition: none;
+		}
+	}
+}
+
+/* Nút gửi luôn rộng hết khung trong popup. Ngoài @layer: phải thắng rule của _booking-form.css (cũng ngoài layer). */
+.booking-popup .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
+	width: 100%;
+}

@@ -15,7 +15,7 @@ $rhm_hotline = rhm_get_option( 'rhm_hotline' );
 		</div>
 		<div class="rhm-booking doctor-booking__form">
 			<?php if ( $rhm_form_id && shortcode_exists( 'fluentform' ) ) : ?>
-				<?php echo do_shortcode( sprintf( '[fluentform id="%d"]', $rhm_form_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin renders form. ?>
+				<?php echo rhm_render_fluent_form( $rhm_form_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin renders form. ?>
 			<?php elseif ( $rhm_hotline ) : ?>
 				<p><?php esc_html_e( 'Vui lòng gọi hotline để được hỗ trợ đặt lịch tư vấn.', 'themeranghammatsg' ); ?></p>
 			<?php elseif ( current_user_can( 'edit_theme_options' ) ) : ?>

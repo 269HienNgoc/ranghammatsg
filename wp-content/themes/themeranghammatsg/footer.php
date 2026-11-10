@@ -153,6 +153,12 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 	</div>
 </footer>
 
+<?php
+// Nút liên hệ nhanh + popup đặt lịch: style trong footer.css (component, không dùng utility vì nằm ngoài .site-footer).
+get_template_part( 'template-parts/components/floating-cta' );
+get_template_part( 'template-parts/components/booking-popup' );
+?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

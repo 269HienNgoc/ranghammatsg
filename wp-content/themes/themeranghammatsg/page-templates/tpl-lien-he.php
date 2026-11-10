@@ -114,7 +114,7 @@ while ( have_posts() ) :
 			<div class="mt-6">
 				<?php
 				if ( $rhm_form_id && shortcode_exists( 'fluentform' ) ) {
-					echo do_shortcode( sprintf( '[fluentform id="%d"]', $rhm_form_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fluent Forms output.
+					echo rhm_render_fluent_form( $rhm_form_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fluent Forms output.
 				} elseif ( current_user_can( 'edit_theme_options' ) ) {
 					echo '<p class="rounded-xl border border-dashed border-primary p-4 text-sm">' . esc_html__( 'Chưa cấu hình form: tạo form trong Fluent Forms rồi nhập ID tại Giao diện → Tùy biến → Thông tin phòng khám.', 'themeranghammatsg' ) . '</p>';
 				}

@@ -1,6 +1,6 @@
 /*
- * Form Fluent Forms trong khối .rhm-booking — dùng chung cho Liên hệ và hồ sơ bác sĩ.
- * Trang Liên hệ KHÔNG nạp 2 file CSS của Fluent (fluent-forms-public.css + fluentform-public-default.css, ~9 kB gzip
+ * Form Fluent Forms trong khối .rhm-booking — dùng chung cho Liên hệ, hồ sơ bác sĩ và popup đặt lịch (nạp mọi trang qua footer.css).
+ * Trang chỉ có form của theme (rhm_render_fluent_form) KHÔNG nạp 2 file CSS của Fluent (fluent-forms-public.css + fluentform-public-default.css, ~9 kB gzip
  * chặn hiển thị — gỡ ở inc/plugin/fluentform.php). Phần dưới chỉ chép những gì form dùng: nhãn + dấu * bắt buộc, ô nhập,
  * lỗi từng trường, thông báo thành công, nút gửi. Thêm loại trường mới (checkbox, upload, nhiều bước…) vào form → thêm style ở đây.
  * Viết NGOÀI @layer: Fluent in <style> nội tuyến cho nút gửi ("form.fluent_form_N .ff-btn-submit:not(.ff_btn_no_style)").

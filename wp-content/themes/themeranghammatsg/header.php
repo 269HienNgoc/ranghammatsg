@@ -59,7 +59,7 @@ $rhm_current_url = get_pagenum_link( max( 1, (int) get_query_var( 'paged' ) ), f
 		</div>
 
 		<div class="header-booking order-3 shrink-0 lg:order-4">
-			<?php rhm_booking_button( 'h-11 gap-2 rounded-xl border-0 bg-linear-to-b from-primary-light to-primary px-3.5 text-[15px] font-semibold whitespace-nowrap shadow-[0_4px_12px_rgb(11_122_85/0.25)] hover:from-primary-dark hover:to-primary-dark lg:h-[52px] lg:rounded-lg lg:text-base lg:font-medium xl:px-5 xl:text-[17px] 2xl:px-7 2xl:text-xl', 'size-5 shrink-0 max-[374px]:hidden lg:hidden' ); ?>
+			<?php rhm_booking_button( 'h-11 gap-2 rounded-xl border-0 bg-linear-to-b from-primary-light to-primary px-3.5 text-[15px] font-semibold max-[359px]:px-3 max-[359px]:text-sm whitespace-nowrap shadow-[0_4px_12px_rgb(11_122_85/0.25)] hover:from-primary-dark hover:to-primary-dark lg:h-[52px] lg:rounded-lg lg:text-base lg:font-medium xl:px-5 xl:text-[17px] 2xl:px-7 2xl:text-xl', 'size-5 shrink-0 max-[389px]:hidden lg:hidden' ); ?>
 		</div>
 
 		<?php if ( $rhm_hotline ) : ?>

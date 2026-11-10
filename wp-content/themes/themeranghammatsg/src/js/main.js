@@ -181,4 +181,43 @@
 
 		window.matchMedia( '(min-width: 1024px)' ).addEventListener( 'change', closeAll );
 	}
+
+	// Popup đặt lịch (template-parts/components/booking-popup.php): phần tử [data-rhm-popup="booking"] mở popup thay vì chuyển
+	// trang (href vẫn là trang Liên hệ: dự phòng khi chưa có JS / mở tab mới bằng Ctrl+click).
+	const popup = document.getElementById( 'rhm-booking-popup' );
+
+	if ( popup && typeof popup.showModal === 'function' ) {
+		const finePointer = window.matchMedia( '(pointer: fine)' );
+		let opener = null;
+
+		document.addEventListener( 'click', ( event ) => {
+			const trigger = event.target.closest( '[data-rhm-popup="booking"]' );
+			if ( ! trigger || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
+				return;
+			}
+			event.preventDefault();
+			opener = trigger;
+			if ( document.documentElement.classList.contains( 'nav-open' ) ) {
+				document.querySelector( '.nav-close' )?.click();
+			}
+			popup.showModal();
+
+			// Tải JS của Fluent ngay khi mở (fluent-lazy.js nghe focusin trên form). Chuột: focus ô đầu tiên;
+			// cảm ứng: không focus để bàn phím ảo không bật lên che form.
+			const form = popup.querySelector( 'form' );
+			form?.dispatchEvent( new FocusEvent( 'focusin', { bubbles: true } ) );
+			if ( finePointer.matches ) {
+				form?.querySelector( 'input:not([type="hidden"]), select, textarea' )?.focus();
+			}
+		} );
+
+		// Bấm nền mờ (sự kiện rơi vào chính <dialog>) hoặc nút ✕ → đóng. Esc: trình duyệt tự đóng.
+		popup.addEventListener( 'click', ( event ) => {
+			if ( event.target === popup || event.target.closest( '[data-rhm-popup-close]' ) ) {
+				popup.close();
+			}
+		} );
+
+		popup.addEventListener( 'close', () => opener?.focus( { preventScroll: true } ) );
+	}
 } )();

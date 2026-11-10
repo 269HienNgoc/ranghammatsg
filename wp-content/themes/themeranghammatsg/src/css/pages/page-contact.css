@@ -3,7 +3,6 @@
  */
 @import "../_tailwind.css";
 @import "../components/_entry-content.css";
-@import "../components/_booking-form.css";
 
 /* Utility chỉ áp dụng trong .site-main (vùng <main>). */
 @layer utilities {
