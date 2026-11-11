@@ -19,13 +19,13 @@ Thứ tự theo thiết kế: Banner → Dải điểm nổi bật → Thẻ gi�
 
 | Section | Cần nhập | Ghi chú |
 |---|---|---|
-| Banner đầu trang (H1) | Tiêu đề (trống → tiêu đề trang), đoạn nổi bật (chữ đậm), mô tả, ảnh desktop 1600×1000 + ảnh mobile 828×620 (tùy chọn), nút (tùy chọn) | **Đặt đầu tiên**: tiêu đề banner là H1 của trang. Ảnh phủ nửa phải màn hình, mép trái tự mờ dần, nên để chủ thể lệch phải. Đây là ảnh tải đầu tiên (LCP): nén WebP, ≤ 150 kB |
+| Banner đầu trang (H1) | Tiêu đề (trống → tiêu đề trang), đoạn nổi bật (chữ đậm), mô tả, ảnh desktop 1600×1000 + ảnh mobile 828×620 (tùy chọn), nút (tùy chọn) | **Đặt đầu tiên**: tiêu đề banner là H1 của trang (banner ở vị trí khác: tiêu đề thành H2, không có breadcrumb, ảnh tải lazy). Ảnh phủ nửa phải màn hình, mép trái tự mờ dần, nên để chủ thể lệch phải. Đây là ảnh tải đầu tiên (LCP): nén WebP, ≤ 150 kB |
 | Dải điểm nổi bật | 4 ô: icon + nhãn ngắn | Đặt ngay sau Banner thì dải nổi lên đè mép dưới banner |
 | Thẻ giá trị + ảnh | Tiêu đề, 3 thẻ (icon, tiêu đề, mô tả), ảnh bên phải 4:3 (tùy chọn) | |
 | Danh sách dịch vụ | Tiêu đề, mô tả, dịch vụ (ảnh 16:10, tên, link) | 5 dịch vụ / hàng desktop; mobile vuốt ngang |
-| Bác sĩ tiêu biểu | Tiêu đề, mô tả, chọn hồ sơ bác sĩ (+ mô tả riêng nếu cần) | Ảnh, tên, link lấy từ hồ sơ; mô tả trống → ô Tóm tắt của hồ sơ → Chức danh |
+| Bác sĩ tiêu biểu | Tiêu đề, mô tả, chọn hồ sơ bác sĩ (+ mô tả riêng nếu cần) | Dưới 640px: ảnh trên, chữ dưới; từ 640px: thẻ ngang, từ 1024px: 2 thẻ/hàng. Ảnh, tên, link lấy từ hồ sơ; mô tả trống → ô Tóm tắt của hồ sơ → Chức danh |
 | **Ô** thông tin: ảnh + chữ | Độ rộng, tiêu đề, ảnh (giữ tỉ lệ), nội dung, nút | Vd Giấy phép hoạt động, Hệ thống vô trùng, Vật liệu chính hãng |
-| **Ô** lưới ảnh nhỏ | Độ rộng, tiêu đề, ô (ảnh vuông nền trắng + nhãn 2 dòng) | Vd Công nghệ hiện đại: 6 ô với độ rộng 3/5 |
+| **Ô** lưới ảnh nhỏ | Độ rộng, tiêu đề, ô (ảnh vuông nền trắng + nhãn 2 dòng) | Mobile: vuốt ngang, khoảng 2 ô + hé ô kế tiếp. Từ 640px: 6 ô/hàng; desktop từ 1024px: 6 ô với khối ≥ 3/5, khối hẹp 3 ô. Dư ô: cuộn ngang, có nút trái/phải trên tablet/desktop |
 | **Ô** banner nổi bật | Độ rộng, tiêu đề, dòng phụ, ảnh, logo (tùy chọn), link (tùy chọn) | Vd All-on-4, Invisalign. Có link → bấm cả ô |
 | Ảnh lớn + chữ + ô nổi bật | Tiêu đề, nội dung, ảnh 4:3, video (tùy chọn); tab "Ô nổi bật": icon, tiêu đề, mô tả, nút | Vd Cơ sở vật chất + Chi phí hợp lý |
 | Số liệu nổi bật | Các ô số + nhãn (tối đa 8) | Tiêu đề không bắt buộc |
@@ -52,9 +52,15 @@ Chưa thêm section nào: trang hiện tiêu đề + nội dung trình soạn th
 
 Đổi template của trang: dữ liệu section vẫn được giữ, nhưng loại section mà chủ đề mới không có thì không hiển thị.
 
+### Trang mẫu
+
+Plugin **RHM Demo Data** (≥ 1.1.0) tạo trang "Giới thiệu (dữ liệu mẫu)" (`/gioi-thieu-mau/`) có đủ mọi section, nội dung theo thiết kế trang Giới thiệu: Công cụ → Dữ liệu mẫu RHM → **Tạo trang landing mẫu**, hoặc `wp rhm-demo landing`. Chạy lại = ghi đè nội dung về mặc định. Xóa dữ liệu mẫu / xóa plugin thì trang và ảnh mẫu bị xóa theo. Nội dung + key field ACF nằm ở `rhm-demo-data/includes/class-rhm-demo-landing.php` — đổi field của layout trong theme thì sửa cả file này.
+
 ## Cho dev
 
 Code: `inc/landing/` (điểm vào `landing.php`), template-part: `template-parts/landing/<layout>.php`.
+
+"Ô lưới ảnh nhỏ" dùng native scroll + CSS scroll-snap ở mọi kích thước. Khi cần nút trái/phải, section nạp module `carousel.js`, module này tải động `src/js/_tiles.js` để điều khiển nút và cập nhật trạng thái khi cuộn/resize; không tự chạy.
 
 | File | Vai trò |
 |---|---|
@@ -83,6 +89,6 @@ Tiêu đề section: `rhm_landing_heading( $id, $title, $eyebrow, $description, 
 
 ### Hiệu năng
 
-- Ngân sách CSS inline ≤ 20 kB gzip: `base + header + footer + page-about` ≈ 21,1 kB (2026-11-11, page-about 8,8 kB) — VƯỢT ~1 kB vì chủ đề Giới thiệu giữ cả các section slider (Swiper CSS + CSS bác sĩ trang chủ). Muốn về dưới ngân sách: bỏ `gallery`, `doctors`, `certificates` khỏi `layouts` của chủ đề và bỏ `swiper/css`, `_carousel.css`, `_home-doctors.css`, `@source` sections/doctors + certificates khỏi `page-about.css`.
+- Ngân sách CSS inline ≤ 20 kB gzip: `base + header + footer + page-about` ≈ 21,3 kB (2026-11-11, page-about 9,0 kB) — VƯỢT ~1 kB vì chủ đề Giới thiệu giữ cả các section slider (Swiper CSS + CSS bác sĩ trang chủ). Muốn về dưới ngân sách: bỏ `gallery`, `doctors`, `certificates` khỏi `layouts` của chủ đề và bỏ `swiper/css`, `_carousel.css`, `_home-doctors.css`, `@source` sections/doctors + certificates khỏi `page-about.css`.
 - Ảnh banner (LCP) phải được loại trừ khỏi Lazyload của Swift Performance AI (giống ảnh hero trang chủ). Nếu không, Swift ghi đè thành `loading="lazy" fetchpriority="low"`.
 - Kiểm tra: đúng 1 `<h1>`, đúng 1 `img[fetchpriority=high]`, CLS khi cuộn = 0, đo PageSpeed theo `.claude/rules/pagespeed-measure.md`.

@@ -4,7 +4,8 @@
  *
  * Desktop (≥ 1024px): chữ nửa trái (canh theo .site-container), ảnh tuyệt đối phủ nửa phải màn hình, object-cover,
  * mép trái mờ dần vào nền (mask CSS). Mobile: chữ → ảnh (rộng hết màn hình) bên dưới; có ảnh mobile riêng thì dùng.
- * Luôn hiện (thiếu tiêu đề → tiêu đề trang) vì giữ H1 của trang. Section đầu → ảnh là LCP (fetchpriority=high).
+ * Luôn hiện (thiếu tiêu đề → tiêu đề trang). Chỉ banner ĐẦU TRANG mới là H1 + ảnh LCP (fetchpriority=high);
+ * banner đặt ở vị trí khác dùng H2 (trang đã có H1 từ khối tiêu đề trang) và ảnh lazy.
  *
  * @package themeranghammatsg
  */
@@ -20,15 +21,20 @@ $rhm_lines   = rhm_landing_lines( $rhm_data, 'description' );
 $rhm_eyebrow = rhm_landing_text( $rhm_data, 'eyebrow' );
 $rhm_booking = ! empty( $rhm_data['booking'] );
 $rhm_button  = rhm_landing_text( $rhm_data, 'button_text' ) && rhm_landing_url( $rhm_data, 'button_link' );
+$rhm_heading = $args['is_first'] ? 'h1' : 'h2';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="landing-hero relative overflow-hidden">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container relative z-10 py-8 lg:flex lg:min-h-[480px] lg:items-center lg:py-12 xl:min-h-[540px]' : 'site-container relative z-10 py-10 lg:py-14' ); ?>">
 		<div class="<?php echo esc_attr( $rhm_image ? 'min-w-0 lg:w-1/2 lg:pr-10' : 'min-w-0 max-w-4xl' ); ?>">
-			<?php rhm_breadcrumb(); ?>
+			<?php
+			if ( $args['is_first'] ) {
+				rhm_breadcrumb();
+			}
+			?>
 			<?php if ( '' !== $rhm_eyebrow ) : ?>
 				<p class="mt-5 text-[13px] font-semibold tracking-wide text-dark uppercase lg:text-sm"><?php echo esc_html( $rhm_eyebrow ); ?></p>
 			<?php endif; ?>
-			<h1 class="mt-4 text-[26px] leading-tight font-bold text-pretty text-primary uppercase sm:text-[32px] xl:text-[38px]"><?php echo esc_html( $rhm_title ); ?></h1>
+			<<?php echo esc_html( $rhm_heading ); ?> class="mt-4 text-[26px] leading-tight font-bold text-pretty text-primary uppercase sm:text-[32px] xl:text-[38px]"><?php echo esc_html( $rhm_title ); ?></<?php echo esc_html( $rhm_heading ); ?>>
 
 			<?php foreach ( $rhm_lead as $rhm_line ) : ?>
 				<p class="mt-5 font-semibold leading-relaxed text-dark lg:text-lg"><?php echo esc_html( $rhm_line ); ?></p>

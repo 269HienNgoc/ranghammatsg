@@ -10,7 +10,7 @@ Repo này chứa **toàn bộ site WordPress** (core + plugin + theme) cho phòn
 |---|---|
 | `wp-content/themes/themeranghammatsg/` | Theme classic tự viết, nơi diễn ra gần như mọi thay đổi. **Đọc `wp-content/themes/themeranghammatsg/CLAUDE.md`** trước khi sửa theme: build Vite/Tailwind, cấu trúc `inc/`, quy ước CSS theo vùng DOM, link external, icon, CPT `bac-si`. |
 | `wp-content/mu-plugins/0-rhm-head-order.php` | (Tiền tố `0-` để nạp trước `__swift3-loader.php` mà Code Optimizer của Swift tạo ra.) Output buffer ngoài cùng: đưa khối Yoast SEO lên trên `<meta id="swift3-viewport">` + observer script của Swift (Swift chèn bằng buffer riêng, không có filter nên theme không làm được). Nằm ngoài theme → **deploy riêng** vào `wp-content/mu-plugins/` (không có trong zip theme). |
-| `wp-content/plugins/rhm-demo-data/` | Plugin tự viết: sinh dữ liệu mẫu (bài viết + hồ sơ bác sĩ, ảnh vẽ bằng GD, field ACF), đánh dấu bằng meta `_rhm_demo` để xóa sạch mà không đụng dữ liệu thật. Admin: Công cụ → Dữ liệu mẫu RHM. |
+| `wp-content/plugins/rhm-demo-data/` | Plugin tự viết: sinh dữ liệu mẫu (bài viết + hồ sơ bác sĩ + trang landing "Giới thiệu" đủ section, ảnh vẽ bằng GD, field ACF ghi thẳng định dạng meta ACF), đánh dấu bằng meta `_rhm_demo` để xóa sạch mà không đụng dữ liệu thật. Admin: Công cụ → Dữ liệu mẫu RHM. |
 
 Code bên thứ ba được commit, không sửa: `plugins/advanced-custom-fields-pro`, `plugins/swift-ai` (Swift Performance AI, cache/tối ưu), `mu-plugins/swift-performance-loader.php` (chứa đường dẫn production `/var/www/html/...`), `migrate/` (interconnect/it Search-Replace-DB, dùng khi chuyển domain/DB). `wp-config.php`, `uploads/`, `cache/`, `node_modules/` bị gitignore.
 
@@ -30,7 +30,8 @@ npm run dev     # watch
 php -l wp-content/themes/themeranghammatsg/inc/<file>.php
 
 # Dữ liệu mẫu (khi có WP-CLI)
-wp rhm-demo generate --posts=100 --doctors=100 --fresh
+wp rhm-demo generate --posts=100 --doctors=100 --fresh [--landing]
+wp rhm-demo landing   # trang landing mẫu "Giới thiệu (dữ liệu mẫu)" /gioi-thieu-mau/, đủ mọi section (chạy lại = ghi đè về mặc định)
 wp rhm-demo status
 wp rhm-demo delete
 ```

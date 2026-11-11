@@ -1,6 +1,6 @@
 <?php
 /**
- * Xóa plugin (Plugin → Xóa) = dọn sạch dữ liệu mẫu: bài viết, hồ sơ bác sĩ, ảnh (cả file), danh mục/thẻ mẫu,
+ * Xóa plugin (Plugin → Xóa) = dọn sạch dữ liệu mẫu: bài viết, hồ sơ bác sĩ, trang landing mẫu, ảnh (cả file), danh mục/thẻ mẫu,
  * banner mẫu (banner thật bị ghi đè được trả lại) và option/transient của plugin. Dữ liệu thật không bị đụng.
  *
  * @package rhm-demo-data
@@ -13,6 +13,7 @@ defined( 'RHM_DEMO_META' ) || define( 'RHM_DEMO_META', '_rhm_demo' );
 
 require_once __DIR__ . '/includes/class-rhm-demo-images.php';
 require_once __DIR__ . '/includes/class-rhm-demo-content.php';
+require_once __DIR__ . '/includes/class-rhm-demo-landing.php';
 require_once __DIR__ . '/includes/class-rhm-demo-generator.php';
 
 ( new RHM_Demo_Generator() )->delete();

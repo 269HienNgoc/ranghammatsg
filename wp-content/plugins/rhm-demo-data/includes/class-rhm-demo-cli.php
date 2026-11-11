@@ -1,6 +1,6 @@
 <?php
 /**
- * WP-CLI: wp rhm-demo generate | delete | status
+ * WP-CLI: wp rhm-demo generate | landing | hero | distribute | delete | status
  *
  * @package rhm-demo-data
  */
@@ -23,6 +23,9 @@ final class RHM_Demo_CLI {
 	 * [--fresh]
 	 * : Xóa bài viết/bác sĩ mẫu cũ trước (giữ ảnh).
 	 *
+	 * [--landing]
+	 * : Tạo luôn trang landing mẫu "Giới thiệu" (như lệnh wp rhm-demo landing).
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp rhm-demo generate --posts=100 --doctors=100 --fresh
@@ -34,10 +37,29 @@ final class RHM_Demo_CLI {
 				WP_CLI::log( sprintf( 'Đã xóa %d bài/hồ sơ mẫu cũ.', $generator->delete_content() ) );
 			}
 			$r = $generator->generate( absint( $assoc['posts'] ?? 100 ), absint( $assoc['doctors'] ?? 100 ) );
+			if ( WP_CLI\Utils\get_flag_value( $assoc, 'landing', false ) ) {
+				$generator->landing();
+			}
 		} catch ( Throwable $e ) {
 			WP_CLI::error( $e->getMessage() );
 		}
 		WP_CLI::success( sprintf( '%d bài viết, %d hồ sơ bác sĩ, %d ảnh — %s giây.', $r['posts'], $r['doctors'], $r['images'], $r['seconds'] ) );
+	}
+
+	/**
+	 * Tạo (hoặc ghi đè về mặc định) trang landing mẫu "Giới thiệu (dữ liệu mẫu)" đủ mọi section.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp rhm-demo landing
+	 */
+	public function landing(): void {
+		try {
+			$r = ( new RHM_Demo_Generator( static fn( string $m ) => WP_CLI::log( $m ) ) )->landing();
+		} catch ( Throwable $e ) {
+			WP_CLI::error( $e->getMessage() );
+		}
+		WP_CLI::success( sprintf( 'Trang landing mẫu #%d — %s (%s giây).', $r['id'], $r['url'], $r['seconds'] ) );
 	}
 
 	/**
@@ -84,6 +106,6 @@ final class RHM_Demo_CLI {
 	/** Đếm dữ liệu mẫu hiện có. */
 	public function status(): void {
 		$c = RHM_Demo_Generator::counts();
-		WP_CLI::log( sprintf( 'Bài viết: %d · Bác sĩ: %d · Ảnh: %d', $c['posts'], $c['doctors'], $c['images'] ) );
+		WP_CLI::log( sprintf( 'Bài viết: %d · Bác sĩ: %d · Trang landing: %d · Ảnh: %d', $c['posts'], $c['doctors'], $c['pages'], $c['images'] ) );
 	}
 }

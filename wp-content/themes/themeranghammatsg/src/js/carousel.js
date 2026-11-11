@@ -7,6 +7,11 @@
  */
 const carousels = document.querySelectorAll( '.js-carousel' );
 
+// Ô ảnh dùng native scroll: chỉ tải phần xử lý nút khi có khối cần điều hướng.
+if ( document.querySelector( '[data-rhm-tiles-controls]' ) ) {
+	import( './_tiles.js' );
+}
+
 if ( carousels.length ) {
 	const observer = new IntersectionObserver(
 		( entries ) => {

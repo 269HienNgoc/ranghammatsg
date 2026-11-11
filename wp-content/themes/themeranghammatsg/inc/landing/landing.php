@@ -197,9 +197,9 @@ function rhm_landing_render( int $post_id ): void {
 	echo '<div class="rhm-landing">';
 	foreach ( $sections as $index => $section ) {
 		$args = rhm_landing_part_args( $section['data'], $index, $sections[ $index - 1 ]['layout'] ?? '' );
-		// Neo trùng (2 section cùng neo) → section sau dùng id tự sinh.
-		if ( isset( $used[ $args['id'] ] ) ) {
-			$args['id'] = 'rhm-section-' . ( $index + 1 );
+		// Neo trùng (2 section cùng neo, hoặc neo nhập tay trùng id tự sinh) → thêm hậu tố đến khi duy nhất.
+		for ( $rhm_n = 2, $rhm_base = $args['id']; isset( $used[ $args['id'] ] ); $rhm_n++ ) {
+			$args['id'] = $rhm_base . '-' . $rhm_n;
 		}
 		$used[ $args['id'] ] = true;
 

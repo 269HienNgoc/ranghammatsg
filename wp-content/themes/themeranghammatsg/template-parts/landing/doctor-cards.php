@@ -1,6 +1,6 @@
 <?php
 /**
- * Landing – Bác sĩ tiêu biểu: tiêu đề canh giữa + thẻ ngang (ảnh vuông bên trái, tên H3 + mô tả bên phải), 2 thẻ / hàng ≥ 1024px.
+ * Landing – Bác sĩ tiêu biểu: mobile ảnh vuông trên, tên H3 + mô tả dưới; từ 640px thẻ ngang, 2 thẻ / hàng ≥ 1024px.
  * Field: inc/landing/layouts/doctor-cards.php. Dữ liệu từ hồ sơ bac-si (đã xuất bản, có ảnh đại diện); không có ai → không hiện.
  *
  * @package themeranghammatsg
@@ -51,19 +51,24 @@ if ( ! $rhm_doctors ) {
 
 $rhm_title   = rhm_landing_text( $rhm_data, 'title' ) ?: __( 'Đội ngũ bác sĩ chuyên môn cao', 'themeranghammatsg' );
 $rhm_head_id = $args['id'] . '-title';
-// Ảnh = 40% thẻ. ≥ 1024px: thẻ (1408 − 24) / 2 = 692px → 277px; 1024–1439px: 40% × (100vw − 56) / 2; dưới 1024px: 40% × (100vw − 32).
-$rhm_sizes = '(min-width: 1440px) 277px, (min-width: 1024px) calc(20vw - 11px), calc(40vw - 13px)';
+$rhm_single  = 1 === count( $rhm_doctors );
+// Mobile: ảnh rộng cả thẻ, trừ lề khung 32px + viền 2px. Từ 640px: ảnh = 40% phần trong thẻ.
+// Một thẻ: tối đa 692px từ viewport 724px → ảnh (692 − 2) × 40% = 276px.
+// Nhiều thẻ: từ 1024px chia 2 cột, gap 24px → ảnh ((100vw − 32 − 24) / 2 − 2) × 40%; khung tối đa 1440px.
+$rhm_sizes = $rhm_single
+	? '(min-width: 724px) 276px, (min-width: 640px) calc(40vw - 14px), calc(100vw - 34px)'
+	: '(min-width: 1440px) 276px, (min-width: 1024px) calc(20vw - 12px), (min-width: 640px) calc(40vw - 14px), calc(100vw - 34px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
 		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_text( $rhm_data, 'description' ), 'center' ); ?>
-		<div class="<?php echo esc_attr( 1 === count( $rhm_doctors ) ? 'mx-auto grid max-w-[692px] gap-6' : 'grid gap-6 lg:grid-cols-2' ); ?>">
+		<div class="<?php echo esc_attr( $rhm_single ? 'mx-auto grid max-w-[692px] gap-6' : 'grid gap-6 lg:grid-cols-2' ); ?>">
 			<?php foreach ( $rhm_doctors as $rhm_doctor ) : ?>
-				<article class="grid grid-cols-[40%_minmax(0,1fr)] items-center overflow-hidden rounded-2xl border border-line bg-white shadow-card" aria-labelledby="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>">
-					<a class="relative block aspect-square self-stretch overflow-hidden bg-soft" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>" tabindex="-1" aria-hidden="true">
+				<article class="grid grid-cols-1 items-center overflow-hidden rounded-2xl border border-line bg-white shadow-card sm:grid-cols-[40%_minmax(0,1fr)]" aria-labelledby="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>">
+					<a class="relative block aspect-square w-full min-w-0 self-start overflow-hidden bg-soft" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>" tabindex="-1" aria-hidden="true">
 						<?php rhm_doctor_image( $rhm_doctor['image'], $rhm_sizes, 'absolute inset-0 size-full object-cover object-top', $rhm_doctor['name'], false, 1 ); ?>
 					</a>
-					<div class="min-w-0 p-4 sm:p-6 lg:p-8">
+					<div class="min-w-0 p-4 wrap-break-word sm:p-6 lg:p-8">
 						<h3 id="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>" class="text-base leading-snug font-bold text-primary uppercase sm:text-lg">
 							<a class="hover:text-primary-dark" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
 						</h3>

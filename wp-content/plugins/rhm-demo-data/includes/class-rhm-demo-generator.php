@@ -298,6 +298,28 @@ final class RHM_Demo_Generator {
 		return $result;
 	}
 
+	/**
+	 * Tạo (hoặc cập nhật) trang landing mẫu "Giới thiệu (dữ liệu mẫu)" đủ mọi section — RHM_Demo_Landing.
+	 *
+	 * @return array{id:int, url:string, seconds:float}
+	 */
+	public function landing(): array {
+		$start = microtime( true );
+		if ( ! RHM_Demo_Images::available() ) {
+			throw new RuntimeException( 'PHP chưa bật extension GD (cần để sinh ảnh mẫu).' );
+		}
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
+		$this->log( 'Đang sinh ảnh cho trang landing mẫu (lần đầu mất khoảng 1 phút)…' );
+		$id = RHM_Demo_Landing::create( new RHM_Demo_Images(), $this->author_id(), $this->log );
+		return array(
+			'id'      => $id,
+			'url'     => (string) get_permalink( $id ),
+			'seconds' => round( microtime( true ) - $start, 1 ),
+		);
+	}
+
 	/** Xóa bài viết + bác sĩ mẫu nhưng giữ ảnh (tạo lại nhanh, không phải sinh ảnh lần nữa). */
 	public function delete_content(): int {
 		global $wpdb;
@@ -315,7 +337,7 @@ final class RHM_Demo_Generator {
 		return count( $ids );
 	}
 
-	/** @return array{posts:int, doctors:int, images:int} */
+	/** @return array{posts:int, doctors:int, pages:int, images:int} */
 	public static function counts(): array {
 		global $wpdb;
 		$rows = $wpdb->get_results(
@@ -328,6 +350,7 @@ final class RHM_Demo_Generator {
 		return array(
 			'posts'   => (int) ( $rows['post']->total ?? 0 ),
 			'doctors' => (int) ( $rows['bac-si']->total ?? 0 ),
+			'pages'   => (int) ( $rows['page']->total ?? 0 ),
 			'images'  => (int) ( $rows['attachment']->total ?? 0 ),
 		);
 	}

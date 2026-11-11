@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       RHM Demo Data
- * Description:       Tạo dữ liệu mẫu cho theme Răng Hàm Mặt SG: 1 bài viết + 1 hồ sơ bác sĩ đầy đủ thông tin (ảnh tự sinh bằng GD, field ACF), rồi nhân bản thành N bản. Công cụ → Dữ liệu mẫu RHM, hoặc WP-CLI: wp rhm-demo.
- * Version:           1.0.0
+ * Description:       Tạo dữ liệu mẫu cho theme Răng Hàm Mặt SG: 1 bài viết + 1 hồ sơ bác sĩ đầy đủ thông tin (ảnh tự sinh bằng GD, field ACF), rồi nhân bản thành N bản; trang landing mẫu "Giới thiệu" đủ mọi section. Công cụ → Dữ liệu mẫu RHM, hoặc WP-CLI: wp rhm-demo.
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Aimedis
@@ -21,6 +21,7 @@ const RHM_DEMO_META = '_rhm_demo';
 
 require_once RHM_DEMO_DIR . '/includes/class-rhm-demo-images.php';
 require_once RHM_DEMO_DIR . '/includes/class-rhm-demo-content.php';
+require_once RHM_DEMO_DIR . '/includes/class-rhm-demo-landing.php';
 require_once RHM_DEMO_DIR . '/includes/class-rhm-demo-generator.php';
 
 if ( is_admin() ) {
