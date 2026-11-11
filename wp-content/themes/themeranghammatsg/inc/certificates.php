@@ -1,7 +1,7 @@
 <?php
 /**
- * Chứng nhận trang chủ: tiêu đề + danh sách ảnh chứng nhận (không giới hạn số lượng).
- * Nhập ở Customizer → "Chứng nhận (Trang chủ)" (danh sách động, inc/customize-list.php).
+ * Chứng nhận landing page: tiêu đề + danh sách ảnh chứng nhận (không giới hạn số lượng).
+ * Nhập ở Customizer → "Chứng nhận (Landing page)" (danh sách động, inc/customize-list.php).
  * Hiển thị: template-parts/sections/certificates.php. JS slider: src/js/carousel.js.
  *
  * @package themeranghammatsg

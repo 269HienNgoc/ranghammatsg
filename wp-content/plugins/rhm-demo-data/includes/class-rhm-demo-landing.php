@@ -132,8 +132,8 @@ final class RHM_Demo_Landing {
 				'title'         => 'Giấy phép hoạt động',
 				'image'         => $img['landing-license'],
 				'text'          => 'Phòng khám được cấp giấy phép hoạt động bởi Sở Y tế, đảm bảo tiêu chuẩn khám chữa bệnh.',
-				'button_text'   => 'Xem chi tiết',
-				'button_link'   => '#chung-nhan',
+				'button_text'   => '',
+				'button_link'   => '',
 			),
 			array(
 				'acf_fc_layout' => 'tiles',
@@ -230,11 +230,6 @@ final class RHM_Demo_Landing {
 				'acf_fc_layout' => 'doctors',
 				'eyebrow'       => '',
 				'title'         => '',
-			),
-			array(
-				'acf_fc_layout' => 'certificates',
-				'title'         => '',
-				'anchor'        => 'chung-nhan',
 			),
 			array(
 				'acf_fc_layout' => 'faq',

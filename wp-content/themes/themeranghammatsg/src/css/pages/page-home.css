@@ -21,6 +21,15 @@
 @source "../../../inc/hero.php";
 @source "../../../inc/news.php";
 @source "../../../inc/home-doctors.php";
+@source "../../../inc/home-branches.php";
+
+@layer components {
+	/* Chiều cao tự động để flex kéo đều các thẻ, giữ nguyên trước/sau khi Swiper khởi tạo. */
+	.home-branches .swiper-slide {
+		height: auto;
+		display: flex;
+	}
+}
 
 @layer components {
 	/* Chấm phân trang hero (Swiper Pagination tự sinh span .swiper-pagination-bullet).

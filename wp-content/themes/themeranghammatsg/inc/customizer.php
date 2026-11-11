@@ -279,13 +279,13 @@ function rhm_customize_news( WP_Customize_Manager $wp_customize ): void {
 add_action( 'customize_register', 'rhm_customize_news' );
 
 /**
- * Chứng nhận trang chủ (inc/certificates.php): tiêu đề + danh sách ảnh không giới hạn.
+ * Chứng nhận landing page (inc/certificates.php): tiêu đề + danh sách ảnh không giới hạn.
  */
 function rhm_customize_certificates( WP_Customize_Manager $wp_customize ): void {
 	$wp_customize->add_section(
 		'rhm_certificates',
 		array(
-			'title'       => __( 'Chứng nhận (Trang chủ)', 'themeranghammatsg' ),
+			'title'       => __( 'Chứng nhận (Landing page)', 'themeranghammatsg' ),
 			'description' => __( 'Ảnh chứng nhận: .jpg ngang tỉ lệ 4:3, rộng khoảng 600–800px (ảnh dọc / khác tỉ lệ vẫn hiển thị đủ, có viền trắng). Mục chưa có ảnh sẽ bị bỏ qua.', 'themeranghammatsg' ),
 			'priority'    => 35,
 		)

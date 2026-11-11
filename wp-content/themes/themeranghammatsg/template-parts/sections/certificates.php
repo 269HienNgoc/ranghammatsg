@@ -1,7 +1,7 @@
 <?php
 /**
  * Section: chứng nhận tiêu chuẩn (slider ảnh). Dữ liệu: inc/certificates.php. CSS: page-home.css, page-about.css
- * Dùng ở: trang chủ, landing page (layout "certificates"). $args (tùy chọn): id (id của section), title (trống → Customizer).
+ * Hiện không được dùng ở trang nào (đã bỏ khỏi trang chủ và landing page). $args (tùy chọn): id (id của section), title (trống → Customizer).
  *
  * Số ảnh / khung: < 640px 1 ảnh + hé ảnh kế (vuốt) | 640px 2 | 768px 3 (+ nút ‹ ›) | 1024px 4.
  * Hiệu năng:

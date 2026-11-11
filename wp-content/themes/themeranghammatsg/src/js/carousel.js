@@ -1,5 +1,5 @@
 /**
- * Slider dạng băng chuyền (.js-carousel), vd section Chứng nhận (template-parts/sections/certificates.php).
+ * Slider dạng băng chuyền (.js-carousel), vd section Chi nhánh trang chủ (template-parts/sections/branches.php), Thư viện ảnh landing.
  *
  * File này rất nhỏ: chỉ chờ slider sắp vào màn hình (IntersectionObserver) rồi mới tải Swiper (_carousel.js)
  * → không tải / chạy JS slider lúc trang mới mở (tốt cho TBT, "Reduce unused JavaScript" của PageSpeed).

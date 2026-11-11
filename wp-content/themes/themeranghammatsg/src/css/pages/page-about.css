@@ -4,7 +4,7 @@
  * Thêm layout cho chủ đề: thêm @source template-part tương ứng.
  */
 @import "../_tailwind.css";
-/* CSS lõi Swiper (slider ảnh, bác sĩ, chứng nhận), đặt vào layer components để utility vẫn ghi đè được. */
+/* CSS lõi Swiper (slider ảnh, bác sĩ), đặt vào layer components để utility vẫn ghi đè được. */
 @import "swiper/css" layer(components);
 @import "../components/_entry-content.css";
 @import "../components/_carousel.css";
@@ -28,7 +28,6 @@
 @source "../../../template-parts/components/page-title.php";
 @source "../../../template-parts/landing/";
 @source "../../../template-parts/sections/doctors.php";
-@source "../../../template-parts/sections/certificates.php";
 @source "../../../template-parts/sections/booking-cta.php";
 
 @layer components {

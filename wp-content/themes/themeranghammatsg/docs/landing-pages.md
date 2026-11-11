@@ -32,7 +32,6 @@ Thứ tự theo thiết kế: Banner → Dải điểm nổi bật → Thẻ gi�
 | Chặng đường phát triển | Tiêu đề, các mốc (năm, tiêu đề, mô tả) | |
 | Thư viện ảnh (slider) | Tiêu đề, ảnh 4:3 | Nhập "Văn bản thay thế" cho từng ảnh trong Thư viện |
 | Đội ngũ bác sĩ (slider) | (chỉ tiêu đề, tùy chọn) | Giống trang chủ: hồ sơ bật "Hiện ở section Đội ngũ bác sĩ" |
-| Chứng nhận (slider) | (chỉ tiêu đề, tùy chọn) | Ảnh lấy từ Tùy biến → Chứng nhận (Trang chủ) |
 | Câu hỏi thường gặp | Câu hỏi + trả lời | Mở/đóng không cần JS |
 | Nội dung trình soạn thảo | — | In nội dung ô soạn thảo chính của trang (bảng, ảnh, shortcode…) |
 | Kêu gọi đặt lịch | Tiêu đề, mô tả (trống → chữ mặc định) | Nút đặt lịch (mở popup) + hotline |
@@ -89,6 +88,6 @@ Tiêu đề section: `rhm_landing_heading( $id, $title, $eyebrow, $description, 
 
 ### Hiệu năng
 
-- Ngân sách CSS inline ≤ 20 kB gzip: `base + header + footer + page-about` ≈ 21,3 kB (2026-11-11, page-about 9,0 kB) — VƯỢT ~1 kB vì chủ đề Giới thiệu giữ cả các section slider (Swiper CSS + CSS bác sĩ trang chủ). Muốn về dưới ngân sách: bỏ `gallery`, `doctors`, `certificates` khỏi `layouts` của chủ đề và bỏ `swiper/css`, `_carousel.css`, `_home-doctors.css`, `@source` sections/doctors + certificates khỏi `page-about.css`.
+- Ngân sách CSS inline ≤ 20 kB gzip: `base + header + footer + page-about` ≈ 21,1 kB (2026-11-11, page-about 8,8 kB sau khi bỏ layout Chứng nhận) — VƯỢT ~1 kB vì chủ đề Giới thiệu giữ cả các section slider (Swiper CSS + CSS bác sĩ trang chủ). Muốn về dưới ngân sách: bỏ `gallery`, `doctors` khỏi `layouts` của chủ đề và bỏ `swiper/css`, `_carousel.css`, `_home-doctors.css`, `@source` sections/doctors khỏi `page-about.css`.
 - Ảnh banner (LCP) phải được loại trừ khỏi Lazyload của Swift Performance AI (giống ảnh hero trang chủ). Nếu không, Swift ghi đè thành `loading="lazy" fetchpriority="low"`.
 - Kiểm tra: đúng 1 `<h1>`, đúng 1 `img[fetchpriority=high]`, CLS khi cuộn = 0, đo PageSpeed theo `.claude/rules/pagespeed-measure.md`.

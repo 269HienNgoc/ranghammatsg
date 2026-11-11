@@ -47,7 +47,6 @@ function rhm_landing_layouts(): array {
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ) ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
 		'doctors'      => $layout( __( 'Đội ngũ bác sĩ (slider như trang chủ)', 'themeranghammatsg' ) ),
-		'certificates' => $layout( __( 'Chứng nhận (slider như trang chủ)', 'themeranghammatsg' ) ),
 		'faq'          => $layout( __( 'Câu hỏi thường gặp', 'themeranghammatsg' ) ),
 		'editor'       => $layout( __( 'Nội dung trình soạn thảo', 'themeranghammatsg' ) ),
 		'booking'      => $layout( __( 'Kêu gọi đặt lịch', 'themeranghammatsg' ) ),

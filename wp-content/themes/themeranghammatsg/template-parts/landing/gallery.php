@@ -3,7 +3,7 @@
  * Landing – Thư viện ảnh (slider, khung 4:3). Field: inc/landing/layouts/gallery.php. Thiếu tiêu đề hoặc ảnh → không hiện.
  *
  * Số ảnh / khung: < 640px 1 ảnh + hé ảnh kế (vuốt) | 640px 2 | 1024px 3 (+ nút ‹ › từ 768px).
- * Hiệu năng (cùng cách làm với template-parts/sections/certificates.php):
+ * Hiệu năng (cùng cách làm với slider chi nhánh / bác sĩ trang chủ):
  * - Bố cục slider dựng sẵn bằng CSS (độ rộng slide = utility, Swiper slidesPerView 'auto') → CLS = 0 trước/sau khi JS chạy.
  * - JS (src/js/carousel.js) chỉ nạp khi có ≥ 2 ảnh; Swiper chỉ tải khi section sắp vào màn hình.
  * - Ảnh lazy (trừ khi section là section đầu trang), sizes = độ rộng ảnh thật theo bố cục.

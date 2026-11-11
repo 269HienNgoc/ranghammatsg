@@ -41,10 +41,10 @@ themeranghammatsg/
 │   ├── landing/              landing.php (registry + render + helper), fields.php (ACF), layouts/<layout>.php (field từng khối)
 │   └── plugin/               tích hợp plugin, tên = thư mục plugin: fluentform.php, kk-star-ratings.php (nạp qua inc/plugins.php)
 ├── template-parts/
-│   ├── sections/             trang chủ (thứ tự trong front-page.php): hero, quick-services, about, doctors, news, certificates, booking-cta
-│   │                         doctors, certificates, booking-cta nhận $args để landing dùng lại
-│   ├── landing/              17 layout: hero, highlights, cards, services, doctor-cards, feature, tiles, promo, intro,
-│   │                         stats, timeline, gallery, doctors, certificates, faq, editor, booking
+│   ├── sections/             trang chủ (thứ tự trong front-page.php): hero, quick-services, about, doctors, news, branches, booking-cta
+│   │                         doctors, booking-cta nhận $args để landing dùng lại
+│   ├── landing/              16 layout: hero, highlights, cards, services, doctor-cards, feature, tiles, promo, intro,
+│   │                         stats, timeline, gallery, doctors, faq, editor, booking
 │   ├── doctor/               hồ sơ bác sĩ: hero, intro, qualifications, certificates, videos, cases, case-videos,
 │   │                         booking, related, news + partial carousel, profile-card, case-card, video-grid
 │   ├── components/           doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq,
@@ -76,7 +76,7 @@ themeranghammatsg/
 └── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
 
-Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. ZIP lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (phiên bản hiện tại 1.3.0). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
+Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. ZIP lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (phiên bản hiện tại 1.4.2). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
 
 Sau khi upload theme lên server: xóa page cache Swift / LiteSpeed / Cloudflare ở các lớp đang dùng; loại `themeranghammatsg/dist/js/main.js` khỏi Delay JS của Swift để popup đặt lịch và menu mobile sẵn sàng ngay khi người dùng bấm.
 
@@ -103,6 +103,8 @@ Sau khi upload theme lên server: xóa page cache Swift / LiteSpeed / Cloudflare
 | `booking-popup.php` | popup đặt lịch (`<dialog>` + form Fluent, in cuối trang qua `template-parts/components/booking-popup.php`): `rhm_booking_popup_enabled()`, `rhm_booking_popup_form_id()`, Customizer "Popup đặt lịch". Không in ở trang Liên hệ (nút đặt lịch ở đó trỏ `#dat-lich`) |
 | `floating-cta.php` | nút liên hệ nhanh (desktop cột phải, mobile thanh đáy): `rhm_get_floating_cta_items()`, Customizer "Nút liên hệ nhanh" (5 nút: nhãn, icon bộ `cta/`, hành động popup/link, link, màu) |
 | `home-doctors.php` | section "Đội ngũ bác sĩ" trang chủ (`template-parts/sections/doctors.php`, slider 1 bác sĩ/slide): `rhm_get_home_doctors()` (hồ sơ bật field `rhm_doctor_home`, sắp theo `menu_order`; chưa bật hồ sơ nào → 6 hồ sơ mới nhất), Customizer "Đội ngũ bác sĩ (Trang chủ)". Field tab "Trang chủ" của hồ sơ: `degree`, `years`, `case_count`, `credentials` |
+| `branches.php` | CPT `chi-nhanh` không có trang công khai; tên, ảnh đại diện, địa chỉ/hotline; `rhm_get_branches()` đọc dữ liệu đã xuất bản qua cache transient |
+| `home-branches.php` | `rhm_get_home_branches()` và Customizer "Chi nhánh (Trang chủ)": chọn và sắp chi nhánh riêng cho home, mặc định trống; hiển thị qua `template-parts/sections/branches.php` |
 | `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
 | `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
@@ -168,7 +170,7 @@ Sau khi upload theme lên server: xóa page cache Swift / LiteSpeed / Cloudflare
 - `fields.php` đăng ký `group_rhm_landing_<slug>` ở `acf/init`, location `page_template`; mỗi layout có field chung `show` (ẩn/hiện) và `anchor` (neo HTML). Content thêm/xóa/kéo sắp xếp section trong ACF, xem trang qua Preview.
 - `tpl-gioi-thieu.php` gọi `rhm_landing_render( get_the_ID() )` trong vòng lặp `the_post()`. Renderer chỉ lấy section đang hiện và layout chủ đề cho phép; từng template-part bỏ qua dữ liệu không hợp lệ. Đổi template không tự chuyển đổi dữ liệu; layout ngoài danh sách của chủ đề mới không được render.
 - Không có section đang hiện/hợp lệ theo registry, hoặc thiếu ACF: hiện tiêu đề trang + nội dung Classic Editor (nếu có) + CTA đặt lịch. Khi đã có section, nội dung Classic Editor chỉ được in ở layout `editor` (chỉ nên thêm một lần).
-- Layout `doctors`, `certificates`, `booking` dùng lại các section tương ứng trong `template-parts/sections/`, truyền `$args` để đổi ID/tiêu đề. Bác sĩ/chứng nhận lấy dữ liệu chung như trang chủ; `doctor-cards` cho chọn riêng hồ sơ bác sĩ.
+- Layout `doctors`, `booking` dùng lại các section tương ứng trong `template-parts/sections/`, truyền `$args` để đổi ID/tiêu đề. Bác sĩ lấy dữ liệu chung như trang chủ; `doctor-cards` cho chọn riêng hồ sơ bác sĩ. Layout `certificates` (Chứng nhận) đã bị bỏ khỏi landing.
 
 ### Hợp đồng template-part và bố cục
 
@@ -191,6 +193,18 @@ Sau khi upload theme lên server: xóa page cache Swift / LiteSpeed / Cloudflare
 - `is_first` dựa trên vị trí section trong danh sách trước khi template-part bỏ qua dữ liệu rỗng. Đây là cờ ưu tiên ảnh, không phải phép đo LCP thực tế. Kiểm tra phần tử LCP, `sizes`/`srcset`, ưu tiên ảnh đầu màn hình và loại trừ ảnh này khỏi Lazyload của Swift; khi ưu tiên bằng `rhm_landing_picture()`, ảnh có `fetchpriority="high"` và không lazy.
 - Ngân sách tổng CSS inline **≤ 20 kB gzip**. Ngày **2026-11-11**: tổng kích thước gzip riêng từng bundle `base + header + footer + page-about` là **21.147 byte (~21,1 kB)**, trong đó `page-about` 8.809 byte; đang vượt ngân sách. Đây là mốc đo asset, chưa phải kết quả PageSpeed và không thay đổi ngưỡng yêu cầu.
 - Khi mở rộng chủ đề, kiểm soát CSS của cả các layout được cho phép dù trang chưa dùng chúng. Chưa được coi landing đã đạt yêu cầu hiệu năng chỉ vì build thành công; đo mobile/desktop, CLS khi cuộn và tương tác theo `.claude/rules/pagespeed-measure.md`. Hướng dẫn content và dev chi tiết: [docs/landing-pages.md](docs/landing-pages.md).
+
+## Chi nhánh trang chủ
+
+- Section `template-parts/sections/branches.php` thay vị trí Chứng nhận trong `front-page.php`. Logic tại `inc/home-branches.php`, CSS tại `src/css/pages/page-home.css`.
+- Tùy biến → **Chi nhánh (Trang chủ)**: tiêu đề lưu bằng `rhm_home_branches_title`, mặc định **Hệ thống chi nhánh**; danh sách lưu bằng `rhm_home_branch_ids` (JSON, mỗi mục có khóa `branch` là ID CPT), dùng control list hiện có với nút thêm, xóa, sắp ↑↓.
+- Mặc định danh sách trống → ẩn toàn bộ section. Danh sách độc lập với `rhm_footer_branch_ids`; thêm chi nhánh mới không tự đưa vào home.
+- `rhm_get_home_branches()` đọc qua `rhm_get_branches()`, giữ đúng thứ tự chọn; bỏ ID trùng, chi nhánh chưa xuất bản/đã xóa, thiếu tên, địa chỉ hoặc ảnh hợp lệ. Kiểm tra lại attachment khi render để bỏ ảnh đã xóa dù cache còn ID cũ. Giữ cơ chế cache hiện có; khi ghi dữ liệu ngoài admin, gọi `rhm_flush_branches_cache()`.
+- Mỗi thẻ hiển thị **ảnh → tên (H3, 20px) → địa chỉ (18px, đầy đủ, xuống dòng)**; không gắn permalink vì CPT chưa có trang công khai. Ảnh tỉ lệ **4:3**, `object-cover`, lazy-load, có kích thước và `srcset/sizes` theo bố cục.
+- **Bo góc thẻ 16px bằng `rounded-2xl`, kết hợp `overflow-hidden` để ảnh ôm theo góc thẻ**, tạo cảm giác mềm mại. Các thẻ cùng hàng cao đều nhờ `.home-branches .swiper-slide` dùng `height: auto; display: flex`.
+- Dùng carousel chung `.js-carousel` (`src/js/carousel.js`, Swiper), không tự chạy: mobile hiện 1 thẻ và hé thẻ kế; từ 640/768/1024px hiện 2/3/4 thẻ. Ít mục thì canh giữa; nút điều hướng từ 768px, ẩn khi không cần trượt và giữ chỗ để tránh đổi bố cục.
+- Chứng nhận đã bỏ khỏi cả trang chủ lẫn landing page (không còn layout landing `certificates`); vẫn giữ `template-parts/sections/certificates.php`, `rhm_cert_title`, `rhm_cert_items` và dữ liệu cũ.
+- Khi sửa giao diện: build lại `dist/`; kiểm tra 1/2/4/nhiều hơn 4 thẻ, tên/địa chỉ dài, dữ liệu thiếu và thứ tự chọn ở mobile 320–390px, tablet 768px, desktop 1024–1440px; kiểm tra không tràn ngang, carousel hoạt động và không đổi bố cục khi khởi tạo.
 
 ## CPT Bác sĩ
 

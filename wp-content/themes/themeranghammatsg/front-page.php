@@ -17,7 +17,7 @@ $rhm_sections = array(
 	'about',
 	'doctors',
 	'news',
-	'certificates',
+	'branches',
 	// 'why-choose-us',
 	// 'testimonials',
 	'booking-cta',
