@@ -1,0 +1,10 @@
+/*
+ * Slider .js-carousel (src/js/carousel.js): section Chứng nhận, Đội ngũ bác sĩ, Thư viện ảnh landing.
+ * Import vào bundle của trang có slider (page-home, page-about).
+ */
+@layer components {
+	/* Nút ‹ › của slider .js-carousel khi mọi ảnh đã vừa khung (Swiper gắn .swiper-button-lock). Giữ chỗ để không xô lệch bố cục. */
+	.js-carousel .swiper-button-lock {
+		@apply invisible;
+	}
+}

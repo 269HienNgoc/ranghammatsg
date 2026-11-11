@@ -26,7 +26,7 @@ function rhm_asset_version( string $relative_path ): string {
 function rhm_page_style_bundle(): string {
 	return match ( true ) {
 		is_front_page()                                         => 'page-home',
-		is_page_template( 'page-templates/tpl-gioi-thieu.php' ) => 'page-about',
+		'' !== rhm_landing_style_bundle()                       => rhm_landing_style_bundle(), // Landing page theo chủ đề (inc/landing/landing.php).
 		is_page_template( 'page-templates/tpl-lien-he.php' )    => 'page-contact',
 		is_singular( 'post' )                                   => 'single-post',
 		is_singular( 'bac-si' )                                 => 'single-doctor',

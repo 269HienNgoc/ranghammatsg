@@ -54,6 +54,15 @@ function rhm_booking_button( string $class = '', string $icon_class = '', bool $
 }
 
 /**
+ * Chữ mặc định của section kêu gọi đặt lịch (template-parts/sections/booking-cta.php): 'title' | 'text'.
+ */
+function rhm_booking_cta_default( string $key ): string {
+	return 'title' === $key
+		? __( 'Đặt lịch khám ngay hôm nay', 'themeranghammatsg' )
+		: __( 'Đội ngũ bác sĩ sẽ liên hệ xác nhận lịch hẹn của bạn trong thời gian sớm nhất.', 'themeranghammatsg' );
+}
+
+/**
  * Ngày đăng bài.
  */
 function rhm_posted_on(): void {

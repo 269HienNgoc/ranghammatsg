@@ -22,6 +22,7 @@ const RHM_ICON_SETS = array(
 	'menu'     => 'Icon menu',
 	'services' => 'Icon dịch vụ nổi bật',
 	'cta'      => 'Icon nút liên hệ nhanh',
+	'landing'  => 'Icon landing page',
 );
 
 function rhm_icon_dir( string $set ): string {

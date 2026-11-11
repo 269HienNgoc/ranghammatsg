@@ -3,8 +3,9 @@
  * Template Name: Giới thiệu
  * Template Post Type: page
  *
- * CSS: page-about.css. Section riêng của trang Giới thiệu sẽ thêm vào $rhm_sections khi có thiết kế
- * (nhớ thêm @source của section vào src/css/pages/page-about.css).
+ * Landing page chủ đề "Giới thiệu": các section do content chọn và sắp xếp trong editor
+ * (ACF Flexible Content "Landing page – Giới thiệu", inc/landing/). Chưa có section nào → tiêu đề + nội dung editor.
+ * CSS: page-about.css (khai báo trong rhm_landing_templates()).
  *
  * @package themeranghammatsg
  */
@@ -15,25 +16,7 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	get_template_part( 'template-parts/components/page-title' );
-	?>
-	<div class="site-container py-12 lg:py-20">
-		<article id="post-<?php the_ID(); ?>" <?php post_class( 'entry-content' ); ?>>
-			<?php the_content(); ?>
-		</article>
-	</div>
-	<?php
+	rhm_landing_render( get_the_ID() );
 endwhile;
-
-$rhm_sections = array(
-	// 'about-intro',
-	// 'mission-vision',
-	// 'doctors',
-	// 'facilities',
-	'booking-cta',
-);
-foreach ( $rhm_sections as $rhm_section ) {
-	get_template_part( 'template-parts/sections/' . $rhm_section );
-}
 
 get_footer();

@@ -6,6 +6,8 @@
 /* CSS lõi Swiper (hero banner), đặt vào layer components để utility vẫn ghi đè được. */
 @import "swiper/css" layer(components);
 @import "../components/_entry-content.css";
+@import "../components/_carousel.css";
+@import "../components/_home-doctors.css";
 
 /* Utility chỉ áp dụng trong .site-main (vùng <main>). */
 @layer utilities {
@@ -35,49 +37,6 @@
 
 	.hero-pagination .swiper-pagination-bullet-active::before {
 		@apply w-7 bg-primary;
-	}
-
-	/* Nút ‹ › của slider .js-carousel khi mọi ảnh đã vừa khung (Swiper gắn .swiper-button-lock). Giữ chỗ để không xô lệch bố cục. */
-	.js-carousel .swiper-button-lock {
-		@apply invisible;
-	}
-
-	/* ---- Section Đội ngũ bác sĩ (template-parts/sections/doctors.php) ----
-	 * Họa tiết và icon tích viết bằng pseudo-element (không thêm node DOM — mỗi slide lặp lại 1 lần cho mỗi bác sĩ). */
-
-	/* Răng lớn mờ ở góc trên + vầng sáng góc dưới (thay ảnh bản đồ của thiết kế, không tải ảnh). */
-	.home-doctor-card::before,
-	.home-doctor-card::after {
-		@apply pointer-events-none absolute -z-10 content-[''];
-	}
-
-	.home-doctor-card::before {
-		@apply -top-16 -right-16 size-80 bg-primary/[0.05] lg:-top-24 lg:right-[24%] lg:size-[420px];
-		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5.6C10.4 4 8.6 3.5 7 3.8 4.6 4.3 3.5 6.6 4 9.3c.4 2.2 1.4 3.6 1.8 5.6.5 2.6.8 5.6 2.4 5.6 1.5 0 1.6-3.4 2.3-5.1.3-.8.8-1.2 1.5-1.2s1.2.4 1.5 1.2c.7 1.7.8 5.1 2.3 5.1 1.6 0 1.9-3 2.4-5.6.4-2 1.4-3.4 1.8-5.6.5-2.7-.6-5-3-5.5-1.6-.3-3.4.2-5 1.8z'/%3E%3C/svg%3E") center / contain no-repeat;
-	}
-
-	.home-doctor-card::after {
-		@apply -bottom-32 -left-24 size-80 rounded-full bg-white/70 blur-3xl;
-	}
-
-	/* Khối tròn mint sau góc dưới phải + khung nét đứt góc trên trái của ảnh. */
-	.home-doctor-photo::before,
-	.home-doctor-photo::after {
-		@apply absolute content-[''];
-	}
-
-	.home-doctor-photo::before {
-		@apply -right-4 -bottom-4 size-32 rounded-full bg-mint-dark sm:size-40 lg:-right-6 lg:-bottom-6;
-	}
-
-	.home-doctor-photo::after {
-		@apply -top-3 -left-3 size-16 rounded-2xl border-2 border-dashed border-primary/25;
-	}
-
-	/* Dấu tích trước mỗi chứng chỉ (vòng tròn primary + tích trắng). */
-	.home-doctor-check::before {
-		@apply absolute top-[0.2em] left-0 size-5 rounded-full bg-primary content-[''] lg:top-[0.25em];
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='m7.5 12.3 3 3 6-6.3'/%3E%3C/svg%3E");
 	}
 
 	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu). */

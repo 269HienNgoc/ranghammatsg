@@ -36,6 +36,7 @@ require_once RHM_THEME_DIR . '/inc/certificates.php';
 require_once RHM_THEME_DIR . '/inc/footer.php';
 require_once RHM_THEME_DIR . '/inc/contact.php';
 require_once RHM_THEME_DIR . '/inc/booking-popup.php';
+require_once RHM_THEME_DIR . '/inc/landing/landing.php';
 require_once RHM_THEME_DIR . '/inc/floating-cta.php';
 require_once RHM_THEME_DIR . '/inc/svg-upload.php';
 require_once RHM_THEME_DIR . '/inc/disable-comments.php';

@@ -1,6 +1,7 @@
 <?php
 /**
- * Section: Đội ngũ bác sĩ (slider, mỗi slide 1 bác sĩ). Dữ liệu: inc/home-doctors.php. CSS: utility + page-home.css
+ * Section: Đội ngũ bác sĩ (slider, mỗi slide 1 bác sĩ). Dữ liệu: inc/home-doctors.php. CSS: utility + components/_home-doctors.css
+ * Dùng ở: trang chủ, landing page (layout "doctors"). $args (tùy chọn): id (id của section), eyebrow, title (trống → Customizer).
  *
  * Mỗi thẻ: học vị → tên (H3) → chức vụ → 2 ô số liệu (kinh nghiệm, số ca) → chứng chỉ chuyên môn → nút Xem hồ sơ / Đặt lịch hẹn;
  * ảnh chân dung: cột phải (≥ 1024px), trên cùng (mobile). Dòng nào thiếu dữ liệu thì không in.
@@ -31,7 +32,10 @@ if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 	wp_enqueue_script_module( 'rhm-carousel', RHM_THEME_URI . '/dist/js/carousel.js', array(), rhm_asset_version( 'dist/js/carousel.js' ) );
 }
 
-$rhm_eyebrow  = rhm_home_doctors_text( 'eyebrow' );
+$rhm_id       = (string) ( $args['id'] ?? '' );
+$rhm_title_id = '' !== $rhm_id ? $rhm_id . '-title' : 'doctors-title';
+$rhm_eyebrow  = (string) ( $args['eyebrow'] ?? '' ) ?: rhm_home_doctors_text( 'eyebrow' );
+$rhm_title    = (string) ( $args['title'] ?? '' ) ?: rhm_home_doctors_text( 'title' );
 $rhm_all_text = rhm_home_doctors_text( 'all_text' );
 $rhm_all_link = rhm_home_doctors_text( 'all_link' );
 
@@ -39,7 +43,7 @@ $rhm_all_link = rhm_home_doctors_text( 'all_link' );
 // < 640px: màn hình − lề khung 16 − đệm thẻ 20 (mỗi bên; đệm slide bù bằng lề âm của .swiper) − viền 12 = 100vw − 84px.
 $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 640px) 348px, calc(100vw - 84px)';
 ?>
-<section class="overflow-hidden py-12 lg:py-16" aria-labelledby="doctors-title">
+<section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="overflow-hidden py-12 lg:py-16" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
 	<?php
 	// Bố cục: < 1024px xếp dọc: tiêu đề → thẻ → nút ‹ › → link "xem tất cả".
 	// ≥ 1024px lưới 2 cột: hàng 1 = tiêu đề | link + nút ‹ › (không đặt nút ở mép thẻ: cột nút liên hệ nhanh cố định ở mép phải
@@ -53,7 +57,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 					<?php echo esc_html( $rhm_eyebrow ); ?>
 				</p>
 			<?php endif; ?>
-			<h2 id="doctors-title" class="text-[28px] leading-tight font-bold text-dark lg:text-4xl"><?php echo esc_html( rhm_home_doctors_text( 'title' ) ); ?></h2>
+			<h2 id="<?php echo esc_attr( $rhm_title_id ); ?>" class="text-[28px] leading-tight font-bold text-dark lg:text-4xl"><?php echo esc_html( $rhm_title ); ?></h2>
 		</div>
 
 		<div class="order-3 flex items-center justify-center gap-3 lg:order-none lg:mb-5">

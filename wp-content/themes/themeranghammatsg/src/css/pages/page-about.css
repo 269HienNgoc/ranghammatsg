@@ -1,17 +1,82 @@
 /*
- * page-about.css — chỉ trang dùng template "Giới thiệu".
+ * page-about.css — landing page chủ đề "Giới thiệu" (page-templates/tpl-gioi-thieu.php, inc/landing/).
+ * Chỉ @source các section chủ đề này dùng (rhm_landing_templates()['…tpl-gioi-thieu.php']['layouts']) → bundle nhỏ.
+ * Thêm layout cho chủ đề: thêm @source template-part tương ứng.
  */
 @import "../_tailwind.css";
+/* CSS lõi Swiper (slider ảnh, bác sĩ, chứng nhận), đặt vào layer components để utility vẫn ghi đè được. */
+@import "swiper/css" layer(components);
 @import "../components/_entry-content.css";
+@import "../components/_carousel.css";
+@import "../components/_home-doctors.css";
 
 /* Utility chỉ áp dụng trong .site-main (vùng <main>). */
 @layer utilities {
 	.site-main {
 		@tailwind utilities source(none);
 	}
+
+	/* Cỡ chữ nhỏ viết trực tiếp trong các khối dùng chung cũng tăng lên 18px. */
+	.site-main :is(.text-\[13px\], .text-\[15px\], .lg\:text-\[15px\]) {
+		font-size: var(--text-base);
+	}
 }
 
 @source "../../../page-templates/tpl-gioi-thieu.php";
-@source "../../../template-parts/sections/booking-cta.php";
-@source "../../../template-parts/components/page-title.php";
+@source "../../../inc/landing/landing.php";
 @source "../../../inc/template-tags.php";
+@source "../../../template-parts/components/page-title.php";
+@source "../../../template-parts/landing/";
+@source "../../../template-parts/sections/doctors.php";
+@source "../../../template-parts/sections/certificates.php";
+@source "../../../template-parts/sections/booking-cta.php";
+
+@layer components {
+	/* Chỉ mẫu Giới thiệu: chữ nội dung và nhãn nhỏ 18px, giữ cỡ tiêu đề lớn. */
+	.site-main {
+		--text-xs: 1.125rem;
+		--text-sm: 1.125rem;
+		--text-base: 1.125rem;
+		--entry-font-size: 1.125rem;
+		font-size: var(--text-base);
+	}
+
+	.site-main .entry-content .rhm-table table {
+		font-size: var(--entry-font-size);
+	}
+
+	/* Nền chung của các section landing (rhm_landing_render bọc .rhm-landing): mint nhạt → trắng, thẻ trắng nổi lên trên. */
+	.rhm-landing {
+		@apply bg-linear-to-b from-[#f2faf7] via-white to-[#f2faf7] pb-6 lg:pb-10;
+	}
+
+	/* Banner: nền mint; ảnh desktop phủ nửa phải, mép trái mờ dần vào nền (mask, không thêm phần tử). */
+	.landing-hero {
+		@apply bg-linear-to-br from-mint via-[#f5fbf9] to-white;
+	}
+
+	.landing-hero__media picture {
+		@apply block lg:h-full;
+	}
+
+	@media (width >= 64rem) {
+		.landing-hero__media {
+			mask-image: linear-gradient(to right, transparent, #000 30%);
+		}
+	}
+
+	/* Tiêu đề canh giữa: 2 vạch mảnh 2 bên (pseudo-element, ẩn trên màn hình hẹp). */
+	.landing-title-center {
+		@apply flex items-center justify-center gap-4 sm:before:block sm:after:block;
+	}
+
+	.landing-title-center::before,
+	.landing-title-center::after {
+		@apply hidden h-0.5 w-10 shrink-0 rounded-full bg-primary/40 content-[''] lg:w-16;
+	}
+
+	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu chữ + video). */
+	.embed-player {
+		@apply absolute inset-0 size-full border-0 bg-black;
+	}
+}

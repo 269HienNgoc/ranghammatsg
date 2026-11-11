@@ -35,12 +35,16 @@ themeranghammatsg/
 ├── page.php                  trang thường: tiêu đề + cột 868px (ảnh đại diện = LCP) + .entry-content
 ├── archive.php, archive-bac-si.php, category.php, search.php, 404.php, index.php
 ├── page-templates/
-│   ├── tpl-gioi-thieu.php    Template "Giới thiệu"
+│   ├── tpl-gioi-thieu.php    Template "Giới thiệu" = landing page (rhm_landing_render, xem inc/landing/)
 │   └── tpl-lien-he.php       Template "Liên hệ – Đặt lịch" (form Fluent ngay trên trang, không có popup)
 ├── inc/                      logic PHP, 1 file = 1 tính năng (bảng bên dưới)
+│   ├── landing/              landing page theo chủ đề: landing.php (điểm vào), fields.php (ACF), layouts/<layout>.php
 │   └── plugin/               tích hợp plugin, tên = thư mục plugin: fluentform.php, kk-star-ratings.php (nạp qua inc/plugins.php)
 ├── template-parts/
 │   ├── sections/             trang chủ (thứ tự trong front-page.php): hero, quick-services, about, doctors, news, certificates, booking-cta
+│   │                         (doctors, certificates, booking-cta nhận $args id/title… để landing dùng lại)
+│   ├── landing/              section landing page: hero, highlights, cards, services, doctor-cards, feature/tiles/promo (dạng ô, xếp hàng theo Độ rộng), intro,
+│   │                         stats, timeline, gallery, doctors, certificates, faq, editor, booking
 │   ├── doctor/               hồ sơ bác sĩ: hero, intro, qualifications, certificates, videos, cases, case-videos,
 │   │                         booking, related, news + partial carousel, profile-card, case-card, video-grid
 │   ├── components/           doctor-box, featured-grid, category-filter, page-banner, page-title, post-faq,
@@ -62,21 +66,24 @@ themeranghammatsg/
 │   ├── icons/                thư viện icon .svg (README.md) — đồng bộ nguyên thư mục lên CDN
 │   │   ├── menu/             24px currentColor, inline — icon mục menu
 │   │   ├── services/         48px màu vẽ sẵn, <img> — Dịch vụ nổi bật
+│   │   ├── landing/          24px nét stroke currentColor, inline — section landing page
 │   │   └── cta/              24px currentColor, inline — nút liên hệ nhanh
 │   └── images/flags/         vn.svg, gb.svg (cờ ngôn ngữ ở header)
 ├── languages/                (trống) file dịch
-├── docs/                     doctor-profiles.md (hướng dẫn nhập hồ sơ bác sĩ), doctor-profiles-verification.md (kết quả đo)
-├── AGENTS.md                 bản hướng dẫn cho agent khác (nội dung gốc giống file này)
+├── docs/                     doctor-profiles.md (hướng dẫn nhập hồ sơ bác sĩ), doctor-profiles-verification.md (kết quả đo), landing-pages.md (landing page: nhập liệu + thêm layout/chủ đề)
+├── AGENTS.md                 bản hướng dẫn cho agent khác (bản cũ của file này; KHÔNG có trong zip theme)
 └── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
 
-Đóng gói: zip thư mục theme, bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md` (build trước khi zip). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
+Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất 1.3.0). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
+
+Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; loại `themeranghammatsg/dist/js/main.js` khỏi Delay JS của Swift (nếu không, popup đặt lịch và menu mobile chỉ chạy sau tương tác đầu tiên).
 
 ### Các module trong `inc/`
 
 | File | Vai trò |
 |---|---|
-| `setup.php` | theme supports, menu (`primary`, `footer`), image sizes `rhm-*`, `rhm_custom_logo()` (thay `the_custom_logo()`), `RHM_LOGO_HEIGHTS` |
+| `setup.php` | theme supports, menu (`primary`, `footer`), image sizes `rhm-*`, `rhm_custom_logo()` (thay `the_custom_logo()`), `RHM_LOGO_HEIGHTS` (cao logo theo breakpoint: ≥1280px 84 · ≥1024px 64 · ≥360px 60 · <360px 50; phải khớp class `h-*` của `.custom-logo` trong `header.css`, logo gốc 1409×592) |
 | `enqueue.php` | nạp CSS/JS từ `dist/`, preload font Roboto, cảnh báo admin khi chưa build |
 | `cleanup.php` | gỡ block styles, chỉ cho jQuery khi cần |
 | `template-tags.php` | helper chung: `rhm_get_option`, `rhm_get_booking_url`, `rhm_booking_button`, `rhm_breadcrumb`, `rhm_pagination`, `rhm_get_picture`, `rhm_list_image_loading`… |
@@ -85,7 +92,7 @@ themeranghammatsg/
 | `icons.php` | SVG icon UI inline dùng trong template: `rhm_get_icon()` (không có thì tìm trong thư viện icon menu) |
 | `icon-library.php` | thư viện `assets/icons/<bộ>/`: `rhm_icon_list()`, `rhm_icon_url()` (CDN qua theme mod `rhm_icon_base_url`), `rhm_icon_svg()` |
 | `menus.php` | icon menu (ô chọn icon ở Giao diện → Menu, meta `_rhm_menu_icon`; class `icon-<tên>` vẫn dùng được) + nút `.submenu-toggle` |
-| `doctors.php` / `doctor-fields.php` | CPT `bac-si`, field ACF, `rhm_get_doctor()`, ảnh bác sĩ |
+| `doctors.php` / `doctor-fields.php` | CPT `bac-si` (có `page-attributes`), field ACF (các tab hồ sơ + tab "Trang chủ": `home`, `degree`, `years`, `case_count`, `credentials`), `rhm_get_doctor()`, ảnh bác sĩ |
 | `doctor-box.php` | shortcode `[bac_si_tham_van id="" label=""]` trong bài viết |
 | `post-extras.php` / `post-fields.php` | ACF bài viết: người tham vấn, FAQ, tài liệu tham khảo; nút Hiện/Ẩn FAQ và tài liệu tham khảo từng bài (`rhm_post_section_visible()`) |
 | `post-meta.php` | bật/tắt meta bài viết |
@@ -94,12 +101,13 @@ themeranghammatsg/
 | `category.php` | query/lưới danh mục (`RHM_CATEGORY_GRID = 12`), bộ lọc chuyên mục |
 | `booking-popup.php` | popup đặt lịch (`<dialog>` + form Fluent, in cuối trang qua `template-parts/components/booking-popup.php`): `rhm_booking_popup_enabled()`, `rhm_booking_popup_form_id()`, Customizer "Popup đặt lịch". Không in ở trang Liên hệ (nút đặt lịch ở đó trỏ `#dat-lich`) |
 | `floating-cta.php` | nút liên hệ nhanh (desktop cột phải, mobile thanh đáy): `rhm_get_floating_cta_items()`, Customizer "Nút liên hệ nhanh" (5 nút: nhãn, icon bộ `cta/`, hành động popup/link, link, màu) |
-| `home-doctors.php` | section "Đội ngũ bác sĩ" trang chủ (`template-parts/sections/doctors.php`, slider 1 bác sĩ/slide): `rhm_get_home_doctors()` (hồ sơ bật field `rhm_doctor_home`, sắp theo `menu_order`; chưa bật hồ sơ nào → 6 hồ sơ mới nhất), Customizer "Đội ngũ bác sĩ (Trang chủ)". Field tab "Trang chủ" của hồ sơ: `degree`, `years`, `case_count`, `credentials` |
+| `home-doctors.php` | section "Đội ngũ bác sĩ" trang chủ (`template-parts/sections/doctors.php`, slider 1 bác sĩ/slide, nằm trước `news`): `rhm_home_doctor_ids()` + `rhm_get_home_doctors()` (hồ sơ bật field `rhm_doctor_home` và có ảnh đại diện, sắp `menu_order ASC, date DESC`, tối đa `RHM_HOME_DOCTORS_MAX` = 8; chưa bật hồ sơ nào → `RHM_HOME_DOCTORS_FALLBACK` = 6 hồ sơ mới nhất; chứng chỉ tối đa `RHM_HOME_DOCTORS_CREDENTIALS` = 5 dòng, trống thì lấy "Học vấn"), `rhm_home_doctors_text()`, Customizer "Đội ngũ bác sĩ (Trang chủ)" (eyebrow, tiêu đề, chữ + link "Xem tất cả bác sĩ") |
 | `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
 | `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
 | `svg-upload.php` | cho upload SVG, chặn SVG không an toàn |
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
+| `landing/` | Landing page theo chủ đề (Page Template + ACF Flexible Content `rhm_landing_sections`): `rhm_landing_templates()` (chủ đề → bundle CSS + layout được dùng; `rhm_page_style_bundle()` đọc từ đây), `rhm_landing_layouts()`, `rhm_landing_render()`; field 1 group/chủ đề ở `fields.php` + `layouts/<layout>.php`. Hướng dẫn: `docs/landing-pages.md` |
 | `plugins.php` | require các file `inc/plugin/*` |
 | `plugin/fluentform.php` | Fluent Forms: jQuery + JS "chạm mới tải", `rhm_render_fluent_form()` (form của theme), gỡ CSS Fluent khi trang chỉ có form của theme |
 | `plugin/kk-star-ratings.php` | kk Star Ratings: `rhm_get_star_rating()` (luôn tồn tại, trả rỗng khi plugin tắt), chỉ giữ CSS/JS của plugin ở bài viết có sao |
@@ -107,6 +115,7 @@ themeranghammatsg/
 ## Quy ước quan trọng
 
 ### CSS
+- Trang trí/icon tích của section bác sĩ trang chủ là pseudo-element trong `page-home.css` (`.home-doctor-card`, `.home-doctor-photo`, `.home-doctor-check`) thay vì phần tử HTML → giữ DOM nhỏ (~35 node/bác sĩ; DOM trang chủ hiện ~825 node, mục tiêu < 800).
 - `footer.css` còn chứa form đặt lịch, popup đặt lịch và nút liên hệ nhanh (in sau `</footer>`, ngoài mọi vùng utility → viết bằng class component, không dùng utility Tailwind trong 2 template đó).
 - Mọi trang nạp `base` + `header` + `footer` + **đúng 1** file theo loại trang do `rhm_page_style_bundle()` (`inc/enqueue.php`) chọn:
   `page-home`, `page-about`, `page-contact`, `single-post`, `single-doctor`, `page`, `404`, `archive`.
@@ -118,7 +127,11 @@ themeranghammatsg/
 ### PHP
 - Mỗi file mở đầu `defined( 'ABSPATH' ) || exit;`, có type hint, theo WordPress Coding Standards.
 - Tính năng mới → file mới trong `inc/` + `require_once` trong `functions.php`. Tích hợp plugin mới → `inc/plugin/<tên-thư-mục-plugin>.php` + require trong `inc/plugins.php`; tự kiểm tra plugin bật (`function_exists`, `shortcode_exists`…).
-- Section mới cho trang chủ → `template-parts/sections/<tên>.php` + thêm vào mảng trong `front-page.php`.
+- Landing page: chủ đề mới / layout mới → làm theo `docs/landing-pages.md` (không viết cứng section trong `page-templates/`). Partial CSS dùng chung với trang chủ: `_carousel.css`, `_home-doctors.css`.
+- Section mới cho trang chủ → `template-parts/sections/<tên>.php` + thêm vào mảng trong `front-page.php` + `@source` file `inc/` của nó trong `src/css/pages/page-home.css`.
+- Slider dùng chung `src/js/carousel.js` (`.js-carousel` > `.swiper`, Swiper chỉ tải khi sắp vào màn hình). Nút ‹ › của section bác sĩ nằm ở hàng tiêu đề cạnh link "Xem tất cả" (không đè mép thẻ → không chồng lên cột nút liên hệ nhanh bên phải); chỉ in khi ≥ 2 bác sĩ.
+- Popup đặt lịch: `<dialog id="rhm-booking-popup" closedby="any">`; ID form Fluent nhập ở Customizer "Popup đặt lịch" (theme mod `rhm_popup_form_id`, trống thì dùng `rhm_booking_form_id`). `main.js` gọi `showModal()`, phát `focusin` để `fluent-lazy` tải script form, chỉ tự focus ô đầu tiên khi `(pointer: fine)`.
+- Nút liên hệ nhanh: tối đa `RHM_FLOATING_CTA_MAX` nút, màu trong `RHM_FLOATING_CTA_COLORS`; nút "link" chưa nhập link (vd Messenger, Zalo) bị ẩn. Số nút lẻ → nút giữa có class `floating-cta__item--main` (nổi lên trên thanh đáy mobile).
 - Escape đầu ra (`esc_html`, `esc_url`, `esc_attr`); chuỗi hiển thị bọc `__()` với text domain `themeranghammatsg`.
 - Nút đặt lịch luôn dùng `rhm_get_booking_url()` / `rhm_booking_button()` (filter `rhm_booking_url`; trên hồ sơ bác sĩ và trang Liên hệ trỏ `#dat-lich`). Có popup → nút có `data-rhm-popup="booking"`, `main.js` mở popup thay vì chuyển trang (href vẫn là link thật). Phần tử nào có thuộc tính này cũng mở popup.
 - Form Fluent do theme in luôn qua `rhm_render_fluent_form( $id )` (`inc/plugin/fluentform.php`), đặt trong khối `.rhm-booking`: trang chỉ có form của theme thì CSS Fluent bị gỡ (style ở `_booking-form.css`, nạp mọi trang qua `footer.css`); form chèn bằng shortcode trong nội dung vẫn giữ CSS của plugin.

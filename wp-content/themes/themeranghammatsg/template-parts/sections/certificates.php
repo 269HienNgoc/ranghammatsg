@@ -1,6 +1,7 @@
 <?php
 /**
- * Section: chứng nhận tiêu chuẩn (slider ảnh). Dữ liệu: inc/certificates.php. CSS: page-home.css
+ * Section: chứng nhận tiêu chuẩn (slider ảnh). Dữ liệu: inc/certificates.php. CSS: page-home.css, page-about.css
+ * Dùng ở: trang chủ, landing page (layout "certificates"). $args (tùy chọn): id (id của section), title (trống → Customizer).
  *
  * Số ảnh / khung: < 640px 1 ảnh + hé ảnh kế (vuốt) | 640px 2 | 768px 3 (+ nút ‹ ›) | 1024px 4.
  * Hiệu năng:
@@ -20,7 +21,10 @@ if ( ! $rhm_items ) {
 	return;
 }
 
-$rhm_count = count( $rhm_items );
+$rhm_count    = count( $rhm_items );
+$rhm_id       = (string) ( $args['id'] ?? '' );
+$rhm_title_id = '' !== $rhm_id ? $rhm_id . '-title' : 'certificates-title';
+$rhm_title    = (string) ( $args['title'] ?? '' ) ?: get_theme_mod( 'rhm_cert_title', rhm_certificates_default_title() );
 
 if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 	wp_enqueue_script_module( 'rhm-carousel', RHM_THEME_URI . '/dist/js/carousel.js', array(), rhm_asset_version( 'dist/js/carousel.js' ) );
@@ -45,10 +49,10 @@ $rhm_nav_hidden = match ( true ) {
 // Độ rộng ảnh thật: khung 1440px, lề 16px, nút 40/44px + khoảng cách, đệm slide 8/12/32px, đệm + viền thẻ 7px mỗi bên.
 $rhm_sizes = '(min-width: 1440px) 242px, (min-width: 1280px) calc(25vw - 118px), (min-width: 1024px) calc(25vw - 76px), (min-width: 768px) calc(33.33vw - 76px), (min-width: 640px) calc(50vw - 38px), calc(80vw - 43px)';
 ?>
-<section class="py-8 lg:py-10" aria-labelledby="certificates-title">
+<section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="py-8 lg:py-10" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
 	<div class="site-container">
-		<h2 id="certificates-title" class="mb-4 text-center text-[22px] leading-tight font-bold text-[#143c45] uppercase sm:text-2xl lg:mb-6 lg:text-[32px]">
-			<?php echo esc_html( get_theme_mod( 'rhm_cert_title', rhm_certificates_default_title() ) ); ?>
+		<h2 id="<?php echo esc_attr( $rhm_title_id ); ?>" class="mb-4 text-center text-[22px] leading-tight font-bold text-[#143c45] uppercase sm:text-2xl lg:mb-6 lg:text-[32px]">
+			<?php echo esc_html( $rhm_title ); ?>
 		</h2>
 
 		<div class="js-carousel flex items-center md:gap-3 lg:gap-4 xl:gap-5">
