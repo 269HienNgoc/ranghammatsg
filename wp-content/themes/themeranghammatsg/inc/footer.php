@@ -4,7 +4,9 @@
  *
  * - Logo: Biểu tượng trang web (Nhận diện website → huy hiệu tròn, hợp nền tối); chưa có thì dùng Logo.
  * - Địa chỉ / hotline / email / giờ làm việc: dùng chung "Thông tin phòng khám".
- * - Chi nhánh, mạng xã hội, huy hiệu (Bộ Công Thương, DMCA…): danh sách động (inc/customize-list.php).
+ * - Chi nhánh ("Hệ thống đối tác"): chọn + sắp thứ tự chi nhánh (CPT, inc/branches.php) trong Tùy biến, chỉ in địa chỉ;
+ *   không chọn chi nhánh nào thì ẩn cột.
+ * - Mạng xã hội, huy hiệu (Bộ Công Thương, DMCA…): danh sách động (inc/customize-list.php).
  * - Điều khoản chính sách: menu vị trí "footer" (Giao diện → Menu).
  *
  * @package themeranghammatsg
@@ -37,12 +39,25 @@ function rhm_footer_text( string $key ): string {
 	return 'copyright' === $key ? str_replace( '{year}', wp_date( 'Y' ), $text ) : $text;
 }
 
-/** Field danh sách chi nhánh. */
+/** Field danh sách "Chi nhánh hiển thị" (Tùy biến → Chân trang): mỗi mục chọn 1 chi nhánh. */
 function rhm_footer_branch_fields(): array {
 	return array(
-		'name' => array( __( 'Tên chi nhánh', 'themeranghammatsg' ), 'text' ),
-		'link' => array( __( 'Link (tùy chọn)', 'themeranghammatsg' ), 'url' ),
+		'branch' => array( __( 'Chi nhánh', 'themeranghammatsg' ), 'select', rhm_footer_branch_choices() ),
 	);
+}
+
+/**
+ * Lựa chọn cho ô chọn chi nhánh: ID => "Tên — địa chỉ rút gọn" (chi nhánh đã xuất bản, A → Z).
+ *
+ * @return array<int, string>
+ */
+function rhm_footer_branch_choices(): array {
+	$choices = array();
+	foreach ( rhm_get_branches() as $branch ) {
+		$address                  = '' !== $branch['address'] ? wp_html_excerpt( str_replace( "\n", ', ', $branch['address'] ), 60, '…' ) : __( '(chưa có địa chỉ)', 'themeranghammatsg' );
+		$choices[ $branch['id'] ] = $branch['name'] . ' — ' . $address;
+	}
+	return $choices;
 }
 
 /** Field danh sách mạng xã hội. */
@@ -95,22 +110,28 @@ function rhm_get_footer_contacts(): array {
 }
 
 /**
- * Chi nhánh có tên.
+ * Chi nhánh hiển thị ở cột "Hệ thống đối tác": chọn + sắp thứ tự trong Tùy biến (setting rhm_footer_branch_ids),
+ * chỉ in địa chỉ. Bỏ: ID trùng, chi nhánh đã xóa / nháp / trong thùng rác, chi nhánh chưa có địa chỉ.
+ * Không chọn chi nhánh nào → mảng rỗng → footer.php ẩn cả cột.
  *
- * @return array<int, array{name:string, link:string}>
+ * @return array<int, array{id:int, address:string}> address đã làm sạch, chưa escape (có thể nhiều dòng).
  */
 function rhm_get_footer_branches(): array {
-	$items = array();
-	foreach ( rhm_get_list( 'rhm_footer_branches' ) as $item ) {
-		$name = trim( (string) ( $item['name'] ?? '' ) );
-		if ( '' !== $name ) {
-			$items[] = array(
-				'name' => $name,
-				'link' => (string) ( $item['link'] ?? '' ),
-			);
+	$branches = array_column( rhm_get_branches(), null, 'id' ); // Chi nhánh đã xuất bản (có cache) theo ID.
+	$items    = array();
+
+	foreach ( rhm_get_list( 'rhm_footer_branch_ids' ) as $item ) {
+		$id = absint( $item['branch'] ?? 0 );
+		if ( ! $id || isset( $items[ $id ] ) || '' === ( $branches[ $id ]['address'] ?? '' ) ) {
+			continue;
 		}
+		$items[ $id ] = array(
+			'id'      => $id,
+			'address' => $branches[ $id ]['address'],
+		);
 	}
-	return $items;
+
+	return array_values( $items );
 }
 
 /**

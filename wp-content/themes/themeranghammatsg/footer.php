@@ -77,11 +77,7 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 					<?php foreach ( $rhm_branches as $rhm_branch ) : ?>
 						<li class="flex items-start gap-2.5">
 							<?php echo rhm_get_icon( 'map-pin', 'mt-0.5 size-5 shrink-0 text-footer-accent' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
-							<?php if ( $rhm_branch['link'] ) : ?>
-								<a class="text-footer-text hover:text-footer-accent" href="<?php echo esc_url( $rhm_branch['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_branch['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_branch['name'] ); ?></a>
-							<?php else : ?>
-								<span><?php echo esc_html( $rhm_branch['name'] ); ?></span>
-							<?php endif; ?>
+							<span><?php echo nl2br( esc_html( $rhm_branch['address'] ) ); // Chỉ địa chỉ của chi nhánh được chọn trong Tùy biến (rhm_get_footer_branches). ?></span>
 						</li>
 					<?php endforeach; ?>
 				</ul>

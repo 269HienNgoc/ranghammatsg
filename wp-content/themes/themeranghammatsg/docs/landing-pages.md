@@ -54,7 +54,7 @@ Chưa thêm section nào: trang hiện tiêu đề + nội dung trình soạn th
 
 ### Trang mẫu
 
-Plugin **RHM Demo Data** (≥ 1.1.0) tạo trang "Giới thiệu (dữ liệu mẫu)" (`/gioi-thieu-mau/`) có đủ mọi section, nội dung theo thiết kế trang Giới thiệu: Công cụ → Dữ liệu mẫu RHM → **Tạo trang landing mẫu**, hoặc `wp rhm-demo landing`. Chạy lại = ghi đè nội dung về mặc định. Xóa dữ liệu mẫu / xóa plugin thì trang và ảnh mẫu bị xóa theo. Nội dung + key field ACF nằm ở `rhm-demo-data/includes/class-rhm-demo-landing.php` — đổi field của layout trong theme thì sửa cả file này.
+Plugin **RHM Demo Data** (≥ 1.1.0) tạo trang "Giới thiệu (dữ liệu mẫu)" (`/gioi-thieu-mau/`) có đủ mọi section, nội dung theo thiết kế trang Giới thiệu: Công cụ → Dữ liệu mẫu RHM → **Tạo trang landing mẫu**, hoặc `wp rhm-demo landing`. Chạy lại = ghi đè nội dung về mặc định. Nút "Xóa toàn bộ dữ liệu mẫu" (hoặc `wp rhm-demo delete`) xóa trang và ảnh mẫu; ngừng kích hoạt / xóa plugin thì dữ liệu mẫu vẫn giữ nguyên (từ 1.1.1). Nội dung + key field ACF nằm ở `rhm-demo-data/includes/class-rhm-demo-landing.php` — đổi field của layout trong theme thì sửa cả file này.
 
 ## Cho dev
 

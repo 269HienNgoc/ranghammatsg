@@ -13,7 +13,7 @@ class RHM_Customize_List_Control extends WP_Customize_Control {
 	/** @var string */
 	public $type = 'rhm-list';
 
-	/** @var array<string, array{0:string, 1:string}> field => [nhãn, kiểu]. */
+	/** @var array<string, array{0:string, 1:string, 2?:array}> field => [nhãn, kiểu, choices (kiểu select)]. */
 	public array $fields = array();
 
 	/** Tên 1 mục (vd "Chứng nhận") → tiêu đề "Chứng nhận 1, 2…". */
@@ -31,8 +31,8 @@ class RHM_Customize_List_Control extends WP_Customize_Control {
 		// Ảnh xem trước cho các mục đã lưu (ảnh chọn mới lấy URL từ thư viện Media trong JS).
 		$images = array();
 		foreach ( rhm_decode_list( $this->value() ) as $item ) {
-			foreach ( $this->fields as $key => [ , $type ] ) {
-				$id  = 'image' === $type ? absint( $item[ $key ] ?? 0 ) : 0;
+			foreach ( $this->fields as $key => $field ) {
+				$id  = 'image' === $field[1] ? absint( $item[ $key ] ?? 0 ) : 0;
 				$src = $id ? wp_get_attachment_image_url( $id, 'medium' ) : false;
 				if ( $src ) {
 					$images[ $id ] = $src;
@@ -41,11 +41,18 @@ class RHM_Customize_List_Control extends WP_Customize_Control {
 		}
 
 		$fields = array();
-		foreach ( $this->fields as $key => [ $label, $type ] ) {
+		foreach ( $this->fields as $key => $field ) {
 			$fields[ $key ] = array(
-				'label' => $label,
-				'type'  => $type,
+				'label' => $field[0],
+				'type'  => $field[1],
 			);
+			if ( 'select' === $field[1] ) {
+				// Mảng [[giá trị, nhãn], …] thay vì object: object có khóa số bị JS tự sắp lại, mất thứ tự.
+				$fields[ $key ]['choices'] = array();
+				foreach ( (array) ( $field[2] ?? array() ) as $value => $label ) {
+					$fields[ $key ]['choices'][] = array( (string) $value, (string) $label );
+				}
+			}
 		}
 
 		$this->json['fields']    = $fields;
@@ -53,6 +60,7 @@ class RHM_Customize_List_Control extends WP_Customize_Control {
 		$this->json['images']    = (object) $images;
 		$this->json['l10n']      = array(
 			'chooseImage'   => __( 'Chọn ảnh', 'themeranghammatsg' ),
+			'choose'        => __( '— Chọn —', 'themeranghammatsg' ),
 			'addImages'     => __( 'Chọn nhiều ảnh (giữ Ctrl/Shift để chọn nhiều)', 'themeranghammatsg' ),
 			'select'        => __( 'Dùng ảnh này', 'themeranghammatsg' ),
 			'noImage'       => __( 'Bấm để chọn ảnh', 'themeranghammatsg' ),
@@ -66,7 +74,7 @@ class RHM_Customize_List_Control extends WP_Customize_Control {
 	}
 
 	protected function render_content(): void {
-		$has_image = in_array( 'image', array_column( $this->fields, 1 ), true );
+		$has_image = in_array( 'image', array_map( static fn( array $field ): string => $field[1], $this->fields ), true );
 		?>
 		<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 		<?php if ( $this->description ) : ?>

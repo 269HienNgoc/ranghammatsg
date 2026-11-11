@@ -1,26 +1,16 @@
 <?php
 /**
- * Xóa plugin (Plugin → Xóa) = dọn sạch dữ liệu mẫu: bài viết, hồ sơ bác sĩ, trang landing mẫu, ảnh (cả file), danh mục/thẻ mẫu,
- * banner mẫu (banner thật bị ghi đè được trả lại) và option/transient của plugin. Dữ liệu thật không bị đụng.
+ * Xóa plugin (Plugin → Xóa): CỐ Ý KHÔNG LÀM GÌ.
+ *
+ * Mọi dữ liệu plugin đã tạo được giữ nguyên: bài viết, hồ sơ bác sĩ, trang landing mẫu, ảnh (cả file), danh mục/thẻ mẫu,
+ * banner trang chủ đã gán, option rhm_demo_terms / rhm_demo_hero_backup. Lý do: nội dung thật có thể đang dùng
+ * ảnh / bác sĩ mẫu, hoặc content đã sửa dữ liệu mẫu thành nội dung dùng thật.
+ * Ngừng kích hoạt plugin cũng không đụng tới dữ liệu (plugin không đăng ký hook deactivation).
+ *
+ * Muốn dọn dữ liệu mẫu: TRƯỚC KHI xóa plugin, vào Công cụ → Dữ liệu mẫu RHM → "Xóa toàn bộ dữ liệu mẫu"
+ * (hoặc `wp rhm-demo delete`). Dữ liệu mẫu vẫn mang meta _rhm_demo nên cài lại plugin là dọn được.
  *
  * @package rhm-demo-data
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
-
-defined( 'RHM_DEMO_DIR' ) || define( 'RHM_DEMO_DIR', __DIR__ );
-defined( 'RHM_DEMO_META' ) || define( 'RHM_DEMO_META', '_rhm_demo' );
-
-require_once __DIR__ . '/includes/class-rhm-demo-images.php';
-require_once __DIR__ . '/includes/class-rhm-demo-content.php';
-require_once __DIR__ . '/includes/class-rhm-demo-landing.php';
-require_once __DIR__ . '/includes/class-rhm-demo-generator.php';
-
-( new RHM_Demo_Generator() )->delete();
-
-// Option còn sót (term mẫu được giữ vì đang nằm trong menu) + thông báo admin.
-delete_option( 'rhm_demo_terms' );
-delete_option( 'rhm_demo_hero_backup' );
-
-global $wpdb;
-$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_rhm\\_demo\\_notice\\_%' OR option_name LIKE '\\_transient\\_timeout\\_rhm\\_demo\\_notice\\_%'" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery

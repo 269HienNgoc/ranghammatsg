@@ -107,7 +107,8 @@ function rhm_demo_admin_page(): void {
 
 		<hr>
 		<h2>Xóa dữ liệu mẫu</h2>
-		<p>Chỉ xóa nội dung do plugin này tạo (bài viết, hồ sơ bác sĩ, trang landing mẫu — đánh dấu bằng meta <code><?php echo esc_html( RHM_DEMO_META ); ?></code>), kể cả ảnh mẫu và danh mục/thẻ mẫu không còn bài nào dùng. Danh mục đang nằm trong menu được giữ lại để không mất menu; banner thật từng bị banner mẫu ghi đè được trả lại. Xóa plugin (Plugin → Xóa) cũng tự dọn như nút này.</p>
+		<p>Chỉ xóa nội dung do plugin này tạo (bài viết, hồ sơ bác sĩ, trang landing mẫu — đánh dấu bằng meta <code><?php echo esc_html( RHM_DEMO_META ); ?></code>), kể cả ảnh mẫu và danh mục/thẻ mẫu không còn bài nào dùng. Danh mục đang nằm trong menu được giữ lại để không mất menu; banner thật từng bị banner mẫu ghi đè được trả lại.</p>
+		<p><strong>Lưu ý:</strong> ngừng kích hoạt hoặc xóa plugin (Plugin → Xóa) <strong>không</strong> xóa dữ liệu mẫu — mọi bài viết, hồ sơ, trang, ảnh đã tạo vẫn còn nguyên. Muốn dọn thì bấm nút dưới đây trước khi xóa plugin.</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Xóa toàn bộ dữ liệu mẫu?');">
 			<input type="hidden" name="action" value="rhm_demo_delete">
 			<?php wp_nonce_field( 'rhm_demo_delete' ); ?>

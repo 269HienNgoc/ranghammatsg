@@ -350,10 +350,11 @@ function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
 	rhm_customize_list(
 		$wp_customize,
 		'rhm_footer',
-		'rhm_footer_branches',
-		__( 'Danh sách chi nhánh', 'themeranghammatsg' ),
+		'rhm_footer_branch_ids',
+		__( 'Chi nhánh hiển thị', 'themeranghammatsg' ),
 		__( 'Chi nhánh', 'themeranghammatsg' ),
-		rhm_footer_branch_fields()
+		rhm_footer_branch_fields(),
+		__( 'Chọn chi nhánh (nhập ở menu admin "Chi nhánh") và sắp thứ tự bằng ↑↓. Footer chỉ hiện địa chỉ của chi nhánh. Không chọn chi nhánh nào thì ẩn cột này.', 'themeranghammatsg' )
 	);
 
 	rhm_customize_list(

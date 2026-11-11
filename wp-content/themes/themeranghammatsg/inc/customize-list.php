@@ -30,19 +30,22 @@ function rhm_get_list( string $id ): array {
  * Sanitize theo kiểu field; chỉ giữ field đã khai báo. Giữ cả mục trống (vừa bấm "Thêm mới") —
  * phần hiển thị tự bỏ qua mục thiếu dữ liệu.
  *
- * @param array<string, array{0:string, 1:string}> $fields
+ * @param array<string, array{0:string, 1:string, 2?:array}> $fields
  */
 function rhm_sanitize_list( mixed $value, array $fields ): string {
 	$clean = array();
 
 	foreach ( rhm_decode_list( $value ) as $item ) {
 		$row = array();
-		foreach ( $fields as $key => [ , $type ] ) {
+		foreach ( $fields as $key => $field ) {
+			$type        = $field[1];
 			$raw         = $item[ $key ] ?? '';
 			$row[ $key ] = match ( $type ) {
 				'image'    => absint( $raw ),
 				'url'      => esc_url_raw( (string) $raw ),
 				'textarea' => sanitize_textarea_field( (string) $raw ),
+				// Chỉ nhận giá trị có trong danh sách lựa chọn (vd ID chi nhánh đã xuất bản); còn lại = chưa chọn.
+				'select'   => array_key_exists( (string) $raw, (array) ( $field[2] ?? array() ) ) ? (string) $raw : '',
 				default    => sanitize_text_field( (string) $raw ),
 			};
 		}
@@ -55,7 +58,8 @@ function rhm_sanitize_list( mixed $value, array $fields ): string {
 /**
  * Thêm setting + control danh sách động.
  *
- * @param array<string, array{0:string, 1:string}> $fields field => [nhãn, 'image'|'text'|'textarea'|'url'].
+ * @param array<string, array{0:string, 1:string, 2?:array}> $fields field => [nhãn, 'image'|'text'|'textarea'|'url'|'select', choices].
+ *                                                         'select': choices = [ giá trị => nhãn ] (ô thả xuống, theo đúng thứ tự mảng).
  *                                                         Field 'text' đầu tiên được điền sẵn từ alt/tiêu đề ảnh khi "Thêm nhiều ảnh".
  */
 function rhm_customize_list( WP_Customize_Manager $wp_customize, string $section, string $id, string $label, string $item_label, array $fields, string $description = '' ): void {

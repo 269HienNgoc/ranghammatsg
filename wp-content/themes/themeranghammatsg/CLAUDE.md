@@ -55,11 +55,12 @@ themeranghammatsg/
 │   │   ├── _tailwind.css     thứ tự layer + import tokens (import ở đầu MỌI entry pages/)
 │   │   ├── theme.css         design tokens @theme
 │   │   ├── pages/            entry CSS: base, header, footer (+ popup, nút liên hệ nhanh, form đặt lịch), page-home,
-│   │   │                     page-about, page-contact, page, single-post, single-doctor, archive, 404
+│   │   │                     page-about (landing "Giới thiệu"), page-contact, page, single-post, single-doctor, archive, 404
 │   │   └── components/       partial: _booking-form, _booking-popup, _floating-cta, _doctor-box, _entry-content,
-│   │                         _fonts, _pagination, _toc
+│   │                         _fonts, _pagination, _toc, _carousel + _home-doctors (dùng chung page-home + page-about)
 │   └── js/                   main.js (header sticky, menu mobile/submenu, mở popup đặt lịch), home (hero), carousel
-│                             (+ _carousel nạp động), dropdown, embed (facade video/bản đồ), fluent-lazy
+│                             (+ _carousel nạp động; + _tiles: nút ‹ › của landing "Ô lưới ảnh", nạp động khi có
+│                             [data-rhm-tiles-controls]), dropdown, embed (facade video/bản đồ), fluent-lazy
 ├── dist/                     kết quả build — ĐƯỢC COMMIT (server không build): css/, js/, fonts/ (Roboto latin + vietnamese)
 ├── assets/
 │   ├── admin/                customize-list.css/js: control "list" (repeater) trong Customizer
@@ -75,7 +76,7 @@ themeranghammatsg/
 └── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
 
-Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất 1.3.0). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
+Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất 1.4.1). Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
 
 Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; loại `themeranghammatsg/dist/js/main.js` khỏi Delay JS của Swift (nếu không, popup đặt lịch và menu mobile chỉ chạy sau tương tác đầu tiên).
 
@@ -93,6 +94,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 | `icon-library.php` | thư viện `assets/icons/<bộ>/`: `rhm_icon_list()`, `rhm_icon_url()` (CDN qua theme mod `rhm_icon_base_url`), `rhm_icon_svg()` |
 | `menus.php` | icon menu (ô chọn icon ở Giao diện → Menu, meta `_rhm_menu_icon`; class `icon-<tên>` vẫn dùng được) + nút `.submenu-toggle` |
 | `doctors.php` / `doctor-fields.php` | CPT `bac-si` (có `page-attributes`), field ACF (các tab hồ sơ + tab "Trang chủ": `home`, `degree`, `years`, `case_count`, `credentials`), `rhm_get_doctor()`, ảnh bác sĩ |
+| `branches.php` | CPT `chi-nhanh` "Chi nhánh" (chỉ dữ liệu, không có trang công khai) + taxonomy `danh-muc-chi-nhanh` + ảnh đại diện + field ACF `rhm_branch_address` / `rhm_branch_hotline`: `rhm_get_branches( [ 'term' => slug ] )` (cache transient), `rhm_get_branch_field()`, cột Địa chỉ/Hotline trong admin. Footer đọc qua `rhm_get_footer_branches()` (`footer.php`) |
 | `doctor-box.php` | shortcode `[bac_si_tham_van id="" label=""]` trong bài viết |
 | `post-extras.php` / `post-fields.php` | ACF bài viết: người tham vấn, FAQ, tài liệu tham khảo; nút Hiện/Ẩn FAQ và tài liệu tham khảo từng bài (`rhm_post_section_visible()`) |
 | `post-meta.php` | bật/tắt meta bài viết |
@@ -102,8 +104,8 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 | `booking-popup.php` | popup đặt lịch (`<dialog>` + form Fluent, in cuối trang qua `template-parts/components/booking-popup.php`): `rhm_booking_popup_enabled()`, `rhm_booking_popup_form_id()`, Customizer "Popup đặt lịch". Không in ở trang Liên hệ (nút đặt lịch ở đó trỏ `#dat-lich`) |
 | `floating-cta.php` | nút liên hệ nhanh (desktop cột phải, mobile thanh đáy): `rhm_get_floating_cta_items()`, Customizer "Nút liên hệ nhanh" (5 nút: nhãn, icon bộ `cta/`, hành động popup/link, link, màu) |
 | `home-doctors.php` | section "Đội ngũ bác sĩ" trang chủ (`template-parts/sections/doctors.php`, slider 1 bác sĩ/slide, nằm trước `news`): `rhm_home_doctor_ids()` + `rhm_get_home_doctors()` (hồ sơ bật field `rhm_doctor_home` và có ảnh đại diện, sắp `menu_order ASC, date DESC`, tối đa `RHM_HOME_DOCTORS_MAX` = 8; chưa bật hồ sơ nào → `RHM_HOME_DOCTORS_FALLBACK` = 6 hồ sơ mới nhất; chứng chỉ tối đa `RHM_HOME_DOCTORS_CREDENTIALS` = 5 dòng, trống thì lấy "Học vấn"), `rhm_home_doctors_text()`, Customizer "Đội ngũ bác sĩ (Trang chủ)" (eyebrow, tiêu đề, chữ + link "Xem tất cả bác sĩ") |
-| `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer) |
-| `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON) + control chọn icon (kiểu field `rhm-icon`) |
+| `news.php`, `about.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer). Cột "Hệ thống đối tác" ở footer: chọn + sắp thứ tự chi nhánh (CPT) trong Tùy biến → Chân trang → "Chi nhánh hiển thị" (theme mod `rhm_footer_branch_ids`, `rhm_footer_branch_fields()` / `rhm_footer_branch_choices()`), `rhm_get_footer_branches()` trả địa chỉ theo đúng thứ tự đã chọn |
+| `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON; field `[nhãn, kiểu, choices]`, kiểu `image` / `text` / `textarea` / `url` / `select` — `select` chỉ lưu giá trị có trong `choices`, JS ở `assets/admin/customize-list.js`) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
 | `svg-upload.php` | cho upload SVG, chặn SVG không an toàn |
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
@@ -115,11 +117,12 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 ## Quy ước quan trọng
 
 ### CSS
-- Trang trí/icon tích của section bác sĩ trang chủ là pseudo-element trong `page-home.css` (`.home-doctor-card`, `.home-doctor-photo`, `.home-doctor-check`) thay vì phần tử HTML → giữ DOM nhỏ (~35 node/bác sĩ; DOM trang chủ hiện ~825 node, mục tiêu < 800).
+- Trang trí/icon tích của section bác sĩ trang chủ là pseudo-element trong `components/_home-doctors.css` (import vào `page-home.css` + `page-about.css`; `.home-doctor-card`, `.home-doctor-photo`, `.home-doctor-check`) thay vì phần tử HTML → giữ DOM nhỏ (~35 node/bác sĩ; DOM trang chủ hiện ~825 node, mục tiêu < 800).
 - `footer.css` còn chứa form đặt lịch, popup đặt lịch và nút liên hệ nhanh (in sau `</footer>`, ngoài mọi vùng utility → viết bằng class component, không dùng utility Tailwind trong 2 template đó).
 - Mọi trang nạp `base` + `header` + `footer` + **đúng 1** file theo loại trang do `rhm_page_style_bundle()` (`inc/enqueue.php`) chọn:
   `page-home`, `page-about`, `page-contact`, `single-post`, `single-doctor`, `page`, `404`, `archive`.
   Thêm loại trang mới: tạo `src/css/pages/<tên>.css` + thêm nhánh `match` trong `rhm_page_style_bundle()`.
+  Landing page: bundle khai báo trong `rhm_landing_templates()` (`inc/landing/landing.php`), `rhm_page_style_bundle()` tự đọc qua `rhm_landing_style_bundle()` — không thêm nhánh `match`.
 - **Tailwind chia theo vùng DOM**: `header.css` → utility chỉ trong `.site-header`; các file trang → `.site-main`; `footer.css` → `.site-footer`. Lý do: tránh utility thường ở file nạp sau đè utility responsive ở file nạp trước. Đặt class Tailwind vào đúng vùng tương ứng với file CSS sẽ biên dịch nó.
 - Dùng `.site-container` (không dùng `.container` của Tailwind — đã bị loại).
 - Token trong `src/css/theme.css`: màu `primary`, `dark`, `teal`, `mint`, `deep`, `muted`, `line`, `soft`, `footer-*`…; font duy nhất Roboto (tự host); breakpoint thêm `xs` = 560px; `max-w-site` = 1440px; `shadow-card`. Ưu tiên token thay vì mã màu cứng.
@@ -127,7 +130,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 ### PHP
 - Mỗi file mở đầu `defined( 'ABSPATH' ) || exit;`, có type hint, theo WordPress Coding Standards.
 - Tính năng mới → file mới trong `inc/` + `require_once` trong `functions.php`. Tích hợp plugin mới → `inc/plugin/<tên-thư-mục-plugin>.php` + require trong `inc/plugins.php`; tự kiểm tra plugin bật (`function_exists`, `shortcode_exists`…).
-- Landing page: chủ đề mới / layout mới → làm theo `docs/landing-pages.md` (không viết cứng section trong `page-templates/`). Partial CSS dùng chung với trang chủ: `_carousel.css`, `_home-doctors.css`.
+- Landing page: xem mục **Landing page** bên dưới và `docs/landing-pages.md` (không viết cứng section trong `page-templates/`).
 - Section mới cho trang chủ → `template-parts/sections/<tên>.php` + thêm vào mảng trong `front-page.php` + `@source` file `inc/` của nó trong `src/css/pages/page-home.css`.
 - Slider dùng chung `src/js/carousel.js` (`.js-carousel` > `.swiper`, Swiper chỉ tải khi sắp vào màn hình). Nút ‹ › của section bác sĩ nằm ở hàng tiêu đề cạnh link "Xem tất cả" (không đè mép thẻ → không chồng lên cột nút liên hệ nhanh bên phải); chỉ in khi ≥ 2 bác sĩ.
 - Popup đặt lịch: `<dialog id="rhm-booking-popup" closedby="any">`; ID form Fluent nhập ở Customizer "Popup đặt lịch" (theme mod `rhm_popup_form_id`, trống thì dùng `rhm_booking_form_id`). `main.js` gọi `showModal()`, phát `focusin` để `fluent-lazy` tải script form, chỉ tự focus ô đầu tiên khi `(pointer: fine)`.
@@ -154,6 +157,33 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 - Fluent Forms được tải kiểu "chạm mới tải" (`inc/plugin/fluentform.php` + `src/js/fluent-lazy.js`); CSS Fluent bị gỡ, style riêng ở `_booking-form.css`.
 - Video YouTube chỉ kết nối sau khi bấm phát (`embed.js`); slider không tự chạy.
 - JS vanilla, không phụ thuộc jQuery; nạp `defer` ở footer.
+
+## Landing page (Page + Page Template + ACF Flexible Content)
+
+Chi tiết nhập liệu + cách thêm layout/chủ đề: `docs/landing-pages.md`. Code: `inc/landing/` (điểm vào `landing.php`, require trong `functions.php`).
+
+- **Chủ đề** = Page Template, khai báo trong `rhm_landing_templates()` (filter `rhm_landing_templates`): `slug` (tiền tố key ACF — **không đổi** khi đã có dữ liệu), `label`, `bundle` CSS, `layouts` cho phép. Hiện có 1 chủ đề: `page-templates/tpl-gioi-thieu.php` (slug `about`, bundle `page-about`, dùng mọi layout). Template chỉ gọi `rhm_landing_render( get_the_ID() )` trong vòng lặp `the_post()`.
+- **Layout** = thư viện section dùng chung, khai báo trong `rhm_landing_layouts()` (`label`, `boxed`). Mỗi layout: field ở `inc/landing/layouts/<key>.php` (hàm `rhm_landing_layout_<key>_fields( $prefix )`, gạch ngang trong key → gạch dưới) + hiển thị ở `template-parts/landing/<key>.php`.
+  Layout hiện có: `hero`, `highlights`, `cards`, `services`, `doctor-cards`, `feature`, `tiles`, `promo` (3 cái cuối là dạng ô), `intro`, `stats`, `timeline`, `gallery`, `doctors`, `certificates`, `faq`, `editor`, `booking`.
+- **Field ACF**: `inc/landing/fields.php` đăng ký 1 field group / chủ đề (`group_rhm_landing_<slug>`, location `page_template`), 1 Flexible Content `rhm_landing_sections`. Key: `field_rhm_landing_<slug>_<layout>_<field>` (repeater con: `…_<repeater>_<field>`), name ngắn giống nhau giữa các chủ đề. Mọi layout tự có field chung `show` (Hiện/Ẩn) + `anchor` (id section); layout dạng ô có thêm `width` (`RHM_LANDING_SPANS` = 10, 5, 4, 6 phần mười hàng). Ảnh luôn trả **ID**. Helper: `rhm_landing_field()`, `rhm_landing_image_field()`, `rhm_landing_wysiwyg_field()`, `rhm_landing_button_fields()`, `rhm_landing_icon_field()`.
+- **Render** (`rhm_landing_render()`): bỏ section Ẩn / layout chủ đề không cho phép; section đầu không phải `hero` → in `components/page-title` (H1); chưa có section nào → tiêu đề + nội dung editor + `booking-cta` (giao diện cũ). Layout dạng ô in `<section class="h-full …">` KHÔNG tự bọc `.site-container`: các ô liền nhau được gom vào hàng `.site-container grid lg:grid-cols-10` cho tới khi đủ 10 phần (ô không in gì thì bỏ qua). Neo trùng → thêm hậu tố `-2`, `-3`….
+- **$args** của template-part: `data`, `index`, `is_first` (section đầu → ảnh là LCP: `fetchpriority="high"`, không lazy), `id` (id section; id tiêu đề = `<id>-title`), `prev` (layout liền trước, vd `highlights` sau `hero` thì đè lên mép banner), `span` (chỉ dạng ô).
+- **Chỉ đúng 1 H1**: `hero` là H1 + breadcrumb CHỈ khi đứng đầu; ở vị trí khác là H2, ảnh lazy.
+- Helper đọc dữ liệu (trả giá trị đã làm sạch, chưa escape): `rhm_landing_text/lines/image/gallery/rows/icon/url/html()`. Helper in: `rhm_landing_heading( $id, $title, $eyebrow, $desc, $style )` (`center` | `bar` | `box` | `plain`), `rhm_landing_button()`, `rhm_landing_picture()` (srcset + ảnh mobile art direction), `rhm_landing_box_sizes( $span, $fraction, $mobile_fraction, $offset )` (`sizes` cho ảnh trong ô), `rhm_landing_enqueue_module( 'carousel' | 'embed' )` (chỉ gọi khi section cần).
+- Class Tailwind của layout phải viết nguyên văn trong `template-parts/landing/*.php` hoặc `inc/landing/landing.php` (2 chỗ được `@source` trong `page-about.css`). CSS riêng của landing (nền `.rhm-landing`, `.landing-hero` + mask ảnh, vạch `.landing-title-center`) nằm trong `@layer components` của `page-about.css`.
+- Icon: bộ `assets/icons/landing/` (24×24, nét `stroke="currentColor"`, in inline bằng `rhm_icon_svg( 'landing', … )`); thêm icon = chép file `.svg` có `<title>` tiếng Việt.
+- `doctors`, `certificates`, `booking` dùng lại `template-parts/sections/*` của trang chủ, truyền `$args` (`id`, `title`, `eyebrow`/`text`); trống thì lấy chữ của Customizer / `rhm_booking_cta_default()`.
+- **Ngân sách CSS**: `page-about.css` ≈ 9 kB gzip → tổng CSS trang Giới thiệu ≈ 21,3 kB, VƯỢT 20 kB vì chủ đề giữ cả các section slider (Swiper CSS + `_home-doctors.css`). Muốn giảm: bỏ `gallery`, `doctors`, `certificates` khỏi `layouts` của chủ đề và bỏ import/`@source` tương ứng trong `page-about.css`.
+- **Dữ liệu mẫu**: plugin `rhm-demo-data` (≥ 1.1.0) tạo trang "Giới thiệu (dữ liệu mẫu)" `/gioi-thieu-mau/` đủ mọi section (Công cụ → Dữ liệu mẫu RHM → "Tạo trang landing mẫu", hoặc `wp rhm-demo landing`). Plugin ghi meta theo định dạng ACF với key field ở trên (`rhm-demo-data/includes/class-rhm-demo-landing.php`) → **đổi/thêm field của layout thì sửa cả file đó**.
+- Sau deploy: loại ảnh banner (`hero`, ảnh LCP) khỏi Lazyload của Swift giống ảnh hero trang chủ.
+
+## CPT Chi nhánh
+- Post type `chi-nhanh` (`RHM_BRANCH_POST_TYPE`), menu admin "Chi nhánh". **Không công khai**: `public`/`publicly_queryable` = false, không rewrite, không archive → `/chi-nhanh/` trả 404, không vào tìm kiếm/sitemap. Cần trang riêng thì phải bật lại các tham số này + thêm template, CSS bundle và flush rewrite.
+- `supports`: `title` (tên chi nhánh) + `thumbnail` (ảnh đại diện: mặt tiền / không gian chi nhánh; `rhm_get_branches()` trả `image` = ID, khi in vẫn kiểm tra `wp_attachment_is_image()`). KHÔNG có `page-attributes` (không có khung Thuộc tính / ô Thứ tự) → chi nhánh luôn sắp theo tên A → Z, cả ngoài site lẫn danh sách admin. Danh sách admin có cột ảnh 60px.
+- Taxonomy `danh-muc-chi-nhanh` (`RHM_BRANCH_TAXONOMY`, phân cấp như Chuyên mục, không công khai, có cột trong admin).
+- Field ACF (`group_rhm_branch`): `rhm_branch_address` (textarea, bắt buộc), `rhm_branch_hotline` (text). Đọc qua `rhm_get_branch_field( 'address' | 'hotline', $id )` (fallback `get_post_meta` khi không có ACF). In hotline thành link gọi điện bằng `rhm_get_tel_href()`.
+- `rhm_get_branches()` cache bằng transient theo số phiên bản `rhm_branches_cache_version`; `rhm_flush_branches_cache()` tăng phiên bản khi lưu / xóa / bỏ thùng rác / khôi phục chi nhánh, sửa / xóa danh mục, sau `acf/save_post`, và khi đổi/xóa ảnh đại diện (meta `_thumbnail_id`, Classic Editor lưu bằng AJAX không qua `save_post`). Ghi dữ liệu ngoài admin (script, `update_field`) thì gọi `rhm_flush_branches_cache()` sau khi ghi.
+- Footer (cột "Hệ thống đối tác"): chỉ in **địa chỉ** của các chi nhánh được chọn ở Tùy biến → Chân trang → "Chi nhánh hiển thị" (`rhm_footer_branch_ids`), đúng thứ tự ↑↓ đã sắp. `rhm_get_footer_branches()` bỏ ID trùng, chi nhánh đã xóa / nháp / thùng rác, chi nhánh chưa có địa chỉ. **Không chọn chi nhánh nào → ẩn cả cột.** Danh sách nhập tay cũ `rhm_footer_branches` đã bỏ (theme mod cũ còn trong DB nhưng không được đọc).
 
 ## CPT Bác sĩ
 - Post type `bac-si`, archive `/bac-si/`, single `/bac-si/<slug>/`, không có taxonomy.

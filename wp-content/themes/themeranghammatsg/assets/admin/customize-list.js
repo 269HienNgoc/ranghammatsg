@@ -103,6 +103,22 @@
 				] );
 			};
 
+			/** Ô thả xuống (field kiểu select): choices = [[giá trị, nhãn], …] theo đúng thứ tự PHP gửi. */
+			const selectField = ( item, key, field ) => {
+				const current = String( item[ key ] ?? '' );
+				const select = el( 'select', { class: 'widefat' }, [
+					el( 'option', { value: '', text: l10n.choose } ),
+					...( field.choices || [] ).map( ( [ value, label ] ) => el( 'option', { value, text: label } ) ),
+				] );
+				// Giá trị đã lưu nhưng không còn trong danh sách (vd chi nhánh đã xóa/nháp) → hiện "— Chọn —".
+				select.value = ( field.choices || [] ).some( ( [ value ] ) => value === current ) ? current : '';
+				select.addEventListener( 'change', () => {
+					item[ key ] = select.value;
+					save();
+				} );
+				return el( 'label', { class: 'rhm-list-field' }, [ el( 'span', { class: 'rhm-list-label', text: field.label } ), select ] );
+			};
+
 			const textField = ( item, key, field ) => {
 				const multiline = field.type === 'textarea';
 				const input = el( multiline ? 'textarea' : 'input', multiline ? { rows: 3 } : { type: field.type === 'url' ? 'url' : 'text' } );
@@ -144,7 +160,12 @@
 							}
 						} ),
 					] ),
-					...keys.map( ( key ) => ( fields[ key ].type === 'image' ? imageField( item, key, fields[ key ], update ) : textField( item, key, fields[ key ] ) ) ),
+					...keys.map( ( key ) => {
+						if ( fields[ key ].type === 'image' ) {
+							return imageField( item, key, fields[ key ], update );
+						}
+						return fields[ key ].type === 'select' ? selectField( item, key, fields[ key ] ) : textField( item, key, fields[ key ] );
+					} ),
 				] );
 			};
 
@@ -158,7 +179,7 @@
 				items.push( blank() );
 				save();
 				render();
-				list.lastElementChild?.querySelector( '.rhm-list-image, input, textarea' )?.focus();
+				list.lastElementChild?.querySelector( '.rhm-list-image, input, textarea, select' )?.focus();
 			} );
 
 			root.querySelector( '.rhm-list-add-images' )?.addEventListener( 'click', () =>
