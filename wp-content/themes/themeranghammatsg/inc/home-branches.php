@@ -11,6 +11,11 @@ function rhm_home_branches_default_title(): string {
 	return __( 'Hệ thống chi nhánh', 'themeranghammatsg' );
 }
 
+/** Dòng nhỏ phía trên tiêu đề (như section Đội ngũ bác sĩ); để trống trong Tùy biến → không in. */
+function rhm_home_branches_default_eyebrow(): string {
+	return __( 'Phòng khám gần bạn', 'themeranghammatsg' );
+}
+
 /** Chi nhánh đủ tên, địa chỉ và ảnh, theo thứ tự đã chọn; bỏ ID trùng. */
 function rhm_get_home_branches(): array {
 	$list = rhm_get_list( 'rhm_home_branch_ids' );
@@ -44,7 +49,8 @@ function rhm_customize_home_branches( WP_Customize_Manager $wp_customize ): void
 		$wp_customize,
 		'rhm_home_branches',
 		array(
-			'rhm_home_branches_title' => array( __( 'Tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field', array( 'default' => rhm_home_branches_default_title() ) ),
+			'rhm_home_branches_eyebrow' => array( __( 'Dòng nhỏ trên tiêu đề (để trống = ẩn)', 'themeranghammatsg' ), 'text', 'sanitize_text_field', array( 'default' => rhm_home_branches_default_eyebrow() ) ),
+			'rhm_home_branches_title'   => array( __( 'Tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field', array( 'default' => rhm_home_branches_default_title() ) ),
 		)
 	);
 	rhm_customize_list(

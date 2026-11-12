@@ -1,6 +1,6 @@
 <?php
 /**
- * Chi nhánh: CPT chi-nhanh (chỉ dữ liệu, KHÔNG có trang công khai) + danh mục danh-muc-chi-nhanh + ảnh đại diện + field ACF Địa chỉ / Hotline.
+ * Chi nhánh: CPT chi-nhanh (chỉ dữ liệu, KHÔNG có trang công khai) + danh mục danh-muc-chi-nhanh + ảnh đại diện + field ACF Địa chỉ / Hotline / URL Google Maps.
  *
  * - Nhập ở admin → Chi nhánh. Tiêu đề = tên chi nhánh; hiển thị theo tên (A → Z).
  * - Đọc dữ liệu: rhm_get_branches() (cache transient, tự làm mới khi sửa chi nhánh / danh mục).
@@ -81,7 +81,7 @@ function rhm_register_branches(): void {
 }
 add_action( 'init', 'rhm_register_branches' );
 
-/** Field ACF: Địa chỉ, Hotline (tiền tố rhm_branch_). */
+/** Field ACF: Địa chỉ, Hotline, URL Google Maps (tiền tố rhm_branch_). */
 function rhm_branch_acf(): void {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 		return;
@@ -109,6 +109,14 @@ function rhm_branch_acf(): void {
 					'placeholder'  => '1900 xxxx',
 					'instructions' => __( 'Nhập như muốn hiển thị (vd 0909 123 456); link gọi điện tự bỏ khoảng trắng.', 'themeranghammatsg' ),
 				),
+				array(
+					'key'          => 'field_rhm_branch_map_url',
+					'name'         => 'rhm_branch_map_url',
+					'label'        => __( 'URL Google Maps', 'themeranghammatsg' ),
+					'type'         => 'url',
+					'placeholder'  => 'https://maps.app.goo.gl/...',
+					'instructions' => __( 'Mở chi nhánh trên Google Maps → Chia sẻ → Sao chép đường liên kết. Dùng cho nút "Chỉ đường" ở trang chủ; để trống thì không hiện nút.', 'themeranghammatsg' ),
+				),
 			),
 			'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => RHM_BRANCH_POST_TYPE ) ) ),
 			'position' => 'acf_after_title',
@@ -117,7 +125,7 @@ function rhm_branch_acf(): void {
 }
 add_action( 'acf/init', 'rhm_branch_acf' );
 
-/** Giá trị field chi nhánh ('address' | 'hotline'); không có ACF thì đọc post meta. */
+/** Giá trị field chi nhánh ('address' | 'hotline' | 'map_url'); không có ACF thì đọc post meta. */
 function rhm_get_branch_field( string $name, int $post_id ): string {
 	$value = function_exists( 'get_field' ) ? get_field( 'rhm_branch_' . $name, $post_id ) : get_post_meta( $post_id, 'rhm_branch_' . $name, true );
 	return is_scalar( $value ) ? (string) $value : '';
@@ -127,15 +135,16 @@ function rhm_get_branch_field( string $name, int $post_id ): string {
  * Chi nhánh đã xuất bản, theo tên (A → Z).
  *
  * @param array{term?:string} $args term: slug danh mục để lọc (gồm cả danh mục con).
- * @return array<int, array{id:int, name:string, address:string, hotline:string, image:int, terms:string[]}>
- *         address/hotline đã làm sạch, chưa escape; image = ID ảnh đại diện (0 nếu không có — khi in vẫn kiểm tra
+ * @return array<int, array{id:int, name:string, address:string, hotline:string, map_url:string, image:int, terms:string[]}>
+ *         address/hotline/map_url đã làm sạch, chưa escape; image = ID ảnh đại diện (0 nếu không có — khi in vẫn kiểm tra
  *         wp_attachment_is_image() vì cache có thể giữ ID ảnh vừa bị xóa khỏi Thư viện); terms = tên danh mục.
  */
 function rhm_get_branches( array $args = array() ): array {
 	static $cache = array();
 
 	$term = sanitize_title( (string) ( $args['term'] ?? '' ) );
-	$key  = 'rhm_branches_' . (int) get_option( 'rhm_branches_cache_version', 1 ) . '_' . md5( $term );
+	// v2: thêm map_url — đổi tiền tố khi đổi cấu trúc mảng để bỏ transient cũ ngay.
+	$key  = 'rhm_branches_v2_' . (int) get_option( 'rhm_branches_cache_version', 1 ) . '_' . md5( $term );
 	if ( isset( $cache[ $key ] ) ) {
 		return $cache[ $key ];
 	}
@@ -172,6 +181,7 @@ function rhm_get_branches( array $args = array() ): array {
 			'name'    => trim( get_the_title( $post ) ),
 			'address' => trim( sanitize_textarea_field( rhm_get_branch_field( 'address', $post->ID ) ) ),
 			'hotline' => trim( sanitize_text_field( rhm_get_branch_field( 'hotline', $post->ID ) ) ),
+			'map_url' => esc_url_raw( trim( rhm_get_branch_field( 'map_url', $post->ID ) ), array( 'http', 'https' ) ),
 			'image'   => (int) get_post_thumbnail_id( $post ),
 			'terms'   => is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : array(),
 		);
