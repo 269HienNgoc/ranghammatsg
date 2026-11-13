@@ -182,3 +182,28 @@ function rhm_fluent_dequeue_styles(): void {
 }
 add_action( 'wp_enqueue_scripts', 'rhm_fluent_dequeue_styles', 100 );
 add_action( 'wp_footer', 'rhm_fluent_dequeue_styles', 1 );
+
+/**
+ * Danh sách form Fluent đã xuất bản: [ ID => "Tên (#ID)" ] cho ô chọn trong admin (vd layout landing "form").
+ * Chỉ truy vấn trong admin (ngoài site trả rỗng, không tốn truy vấn); Fluent tắt → rỗng.
+ *
+ * @return array<int, string>
+ */
+function rhm_fluent_form_choices(): array {
+	static $choices = null;
+	if ( null !== $choices ) {
+		return $choices;
+	}
+	$choices = array();
+	if ( ! is_admin() || ! shortcode_exists( 'fluentform' ) ) {
+		return $choices;
+	}
+	global $wpdb;
+	$table = $wpdb->prefix . 'fluentform_forms';
+	$rows  = $wpdb->get_results( "SELECT id, title FROM {$table} WHERE status = 'published' ORDER BY id DESC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- bảng của Fluent, không có tham số người dùng; chỉ chạy ở màn hình admin.
+	foreach ( (array) $rows as $row ) {
+		// Tên mặc định của Fluent đã có "(#ID)" (vd "Blank Form (#3)") → không thêm lần nữa.
+		$choices[ (int) $row->id ] = str_contains( (string) $row->title, '#' . $row->id ) ? (string) $row->title : sprintf( '%s (#%d)', $row->title, $row->id );
+	}
+	return $choices;
+}

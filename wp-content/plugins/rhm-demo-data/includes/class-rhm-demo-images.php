@@ -422,6 +422,7 @@ final class RHM_Demo_Images {
 		$id    = wp_insert_attachment(
 			array(
 				'post_title'     => $title,
+				'post_excerpt'   => sanitize_textarea_field( (string) ( $opts['caption'] ?? '' ) ), // Chú thích ảnh (caption).
 				'post_mime_type' => 'image/jpeg',
 				'post_status'    => 'inherit',
 			),

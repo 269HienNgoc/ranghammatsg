@@ -43,10 +43,14 @@ function rhm_landing_layouts(): array {
 		'tiles'        => $layout( __( 'Ô lưới ảnh nhỏ (thiết bị, công nghệ…)', 'themeranghammatsg' ), true ),
 		'promo'        => $layout( __( 'Ô banner nổi bật (ảnh + tiêu đề + logo)', 'themeranghammatsg' ), true ),
 		'intro'        => $layout( __( 'Ảnh lớn + chữ + ô nổi bật', 'themeranghammatsg' ) ),
+		'text-image'   => $layout( __( 'Tiêu đề + nội dung dài + ảnh lớn bên dưới', 'themeranghammatsg' ) ),
+		'image-stack'  => $layout( __( 'Ảnh lớn xếp dọc (kèm mô tả ảnh)', 'themeranghammatsg' ) ),
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ) ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
+		'clinics'      => $layout( __( 'Hệ thống phòng khám (chi nhánh + ảnh theo nhóm)', 'themeranghammatsg' ) ),
 		'doctors'      => $layout( __( 'Đội ngũ bác sĩ (slider như trang chủ)', 'themeranghammatsg' ) ),
+		'form'         => $layout( __( 'Form đăng ký (Fluent Forms)', 'themeranghammatsg' ) ),
 		'faq'          => $layout( __( 'Câu hỏi thường gặp', 'themeranghammatsg' ) ),
 		'editor'       => $layout( __( 'Nội dung trình soạn thảo', 'themeranghammatsg' ) ),
 		'booking'      => $layout( __( 'Kêu gọi đặt lịch', 'themeranghammatsg' ) ),
@@ -133,6 +137,43 @@ function rhm_landing_sections( int $post_id ): array {
 function rhm_landing_has_hero( int $post_id ): bool {
 	return 'hero' === ( rhm_landing_sections( $post_id )[0]['layout'] ?? '' );
 }
+
+/**
+ * Id HTML của section "form" đầu tiên trên trang landing hiện tại dùng CÙNG form Fluent với popup đặt lịch, '' nếu không có.
+ * Fluent sinh id HTML theo số form (fluentform_3, ff_3_…) → in 1 form 2 lần (section + popup) là trùng id (lỗi accessibility,
+ * nhãn trỏ nhầm ô). Có section như vậy thì giống trang Liên hệ: không in popup, mọi nút đặt lịch cuộn tới section
+ * (inc/booking-popup.php + filter rhm_booking_url bên dưới). Tính từ dữ liệu (không đợi render) vì nút đặt lịch ở header in trước.
+ */
+function rhm_landing_booking_form_anchor(): string {
+	static $anchor = null;
+	if ( null !== $anchor ) {
+		return $anchor;
+	}
+	$anchor = '';
+	if ( is_admin() || ! is_page() || ! function_exists( 'rhm_booking_popup_form_id' ) ) {
+		return $anchor;
+	}
+	$popup = rhm_booking_popup_form_id();
+	foreach ( rhm_landing_sections( (int) get_queried_object_id() ) as $index => $section ) {
+		if ( 'form' !== $section['layout'] ) {
+			continue;
+		}
+		$form = absint( $section['data']['form_id'] ?? 0 ) ?: absint( get_theme_mod( 'rhm_booking_form_id', 0 ) );
+		if ( $popup && $form === $popup ) {
+			// Cùng cách đặt id với rhm_landing_render() (neo do content nhập, hoặc rhm-section-N).
+			$anchor = rhm_landing_part_args( $section['data'], $index, '' )['id'];
+			break;
+		}
+	}
+	return $anchor;
+}
+
+/** Trang landing có section form trùng form popup → nút đặt lịch cuộn tới section đó. */
+function rhm_landing_booking_url( string $url ): string {
+	$anchor = rhm_landing_booking_form_anchor();
+	return '' !== $anchor ? '#' . $anchor : $url;
+}
+add_filter( 'rhm_booking_url', 'rhm_landing_booking_url' );
 
 /** Độ rộng ô (2–10 phần mười) của section dạng ô; mặc định 1/2. */
 function rhm_landing_span( array $data ): int {
@@ -390,8 +431,9 @@ function rhm_landing_button( array $data, string $class = 'btn btn-primary h-10 
  * Ảnh co giãn theo cột (srcset w + sizes), tùy chọn ảnh mobile riêng (< 768px, art direction).
  * $priority: ảnh LCP (section đầu trang) → tải ngay, fetchpriority=high; còn lại lazy + decoding async.
  * width/height của từng nhánh giữ đúng tỉ lệ file → CLS = 0 (class nên có h-auto w-full hoặc khung aspect-* + object-cover).
+ * $alt: null = alt của attachment (rhm_landing_image_alt); '' = ảnh minh họa có chữ đi kèm (không đọc lặp).
  */
-function rhm_landing_picture( int $id, string $sizes, string $class, bool $priority = false, int $mobile = 0, string $mobile_sizes = '' ): string {
+function rhm_landing_picture( int $id, string $sizes, string $class, bool $priority = false, int $mobile = 0, string $mobile_sizes = '', ?string $alt = null ): string {
 	$file = wp_get_attachment_image_src( $id, 'full' );
 	if ( ! $file ) {
 		return '';
@@ -417,7 +459,7 @@ function rhm_landing_picture( int $id, string $sizes, string $class, bool $prior
 		'sizes'  => $sizes,
 		'width'  => $file[1],
 		'height' => $file[2],
-		'alt'    => rhm_landing_image_alt( $id ),
+		'alt'    => $alt ?? rhm_landing_image_alt( $id ),
 		'class'  => $class,
 	);
 	if ( $priority ) {

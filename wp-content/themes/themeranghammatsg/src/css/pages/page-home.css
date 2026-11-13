@@ -22,6 +22,7 @@
 @source "../../../inc/news.php";
 @source "../../../inc/home-doctors.php";
 @source "../../../inc/home-branches.php";
+@source "../../../inc/home-before-after.php";
 
 @layer components {
 	/* Chiều cao tự động để flex kéo đều các thẻ, giữ nguyên trước/sau khi Swiper khởi tạo. */

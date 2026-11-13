@@ -55,7 +55,29 @@ final class RHM_Demo_Landing {
 		foreach ( array( 'Sảnh chờ', 'Phòng điều trị', 'Phòng X-quang', 'Khu tiệt khuẩn' ) as $i => $title ) {
 			$list[ 'landing-gallery-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary' ) );
 		}
+		// Section "Tiêu đề + nội dung dài + ảnh lớn": ảnh ngang rộng hết khung.
+		$list['landing-text-image'] = array( 1600, 700, $photo( 'Đội ngũ Răng Hàm Mặt Sài Gòn', 'deep', 'primary' ) );
+		// Section "Ảnh lớn xếp dọc": tỉ lệ khác nhau (giữ nguyên tỉ lệ khi hiển thị), mô tả = caption; ảnh 3 không có caption.
+		$list['landing-stack-1'] = array( 1600, 700, $photo( 'Khu đón tiếp', 'primary', 'teal' ) + array( 'caption' => 'Khu đón tiếp rộng rãi tại chi nhánh Quận 1, mở cửa từ 8:00 đến 20:00 mỗi ngày.' ) );
+		$list['landing-stack-2'] = array( 1600, 1000, $photo( 'Phòng phẫu thuật Implant', 'deep', 'primary' ) + array( 'caption' => "Phòng phẫu thuật Implant vô trùng một chiều.\nTrang bị đèn mổ, máy cấy ghép và hệ thống lọc khí HEPA." ) );
+		$list['landing-stack-3'] = array( 1600, 900, $photo( 'Phòng chỉnh nha', 'teal', 'deep' ) );
+		// Section "Hệ thống phòng khám": ảnh ngang 16:9, 1 ảnh / slide.
+		foreach ( self::clinic_slides() as $i => $slide ) {
+			$list[ 'landing-clinic-' . ( $i + 1 ) ] = array( 1600, 900, $photo( $slide[0], $i % 2 ? 'teal' : 'primary' ) );
+		}
 		return $list;
+	}
+
+	/** Slide section "Hệ thống phòng khám": [tiêu đề, chú thích]. */
+	private static function clinic_slides(): array {
+		return array(
+			array( 'Tổng thể mặt tiền', 'Ba chi nhánh nằm tại các tuyến đường lớn của TP.HCM, dễ tìm, có chỗ gửi xe rộng. Mặt tiền nhận diện thống nhất, lối vào bằng phẳng thuận tiện cho người cao tuổi và trẻ nhỏ.' ),
+			array( 'Quầy lễ tân', 'Lễ tân hỗ trợ đặt lịch, tư vấn chi phí và thủ tục bảo hiểm ngay khi khách hàng đến.' ),
+			array( 'Sảnh chờ', 'Sảnh chờ rộng, thoáng, có nước uống và wifi miễn phí, khu vui chơi riêng cho trẻ nhỏ.' ),
+			array( 'Phòng điều trị', 'Phòng điều trị riêng biệt cho từng chuyên khoa, ghế nha đồng bộ, hệ thống hút và lọc khí liên tục.' ),
+			array( 'Phòng X-quang', 'Máy CT Cone Beam và X-quang kỹ thuật số cho kết quả nhanh, liều tia thấp.' ),
+			array( 'Khu tiệt khuẩn', 'Dụng cụ được tiệt khuẩn bằng nồi hấp chuẩn Châu Âu và đóng gói riêng cho từng khách hàng.' ),
+		);
 	}
 
 	/**
@@ -227,9 +249,55 @@ final class RHM_Demo_Landing {
 				'images'        => array( $img['landing-gallery-1'], $img['landing-gallery-2'], $img['landing-gallery-3'], $img['landing-gallery-4'] ),
 			),
 			array(
+				'acf_fc_layout' => 'text-image',
+				'eyebrow'       => 'Về chúng tôi',
+				'title'         => 'Câu chuyện Răng Hàm Mặt Sài Gòn',
+				'content'       => '<p>Ra đời từ mong muốn mang dịch vụ nha khoa chuẩn bệnh viện đến gần hơn với mọi gia đình, <strong>Răng Hàm Mặt Sài Gòn</strong> bắt đầu từ một phòng khám nhỏ với 3 ghế nha và đội ngũ 5 bác sĩ.</p>'
+					. '<h3>Giá trị cốt lõi</h3>'
+					. '<ul><li>Chẩn đoán đúng, điều trị đủ — không chỉ định thừa.</li><li>Minh bạch chi phí trước khi điều trị.</li><li>Vô trùng tuyệt đối theo tiêu chuẩn Bộ Y tế.</li></ul>'
+					. '<h3>Hôm nay</h3>'
+					. '<p>Sau hơn 15 năm, phòng khám có 3 chi nhánh tại TP.HCM, hơn 30 bác sĩ chuyên khoa và đã đồng hành cùng hơn 100.000 khách hàng. Chúng tôi tiếp tục đầu tư công nghệ và đào tạo để mỗi lần điều trị đều an toàn, nhẹ nhàng và bền lâu.</p>',
+				'image'         => $img['landing-text-image'],
+			),
+			array(
+				'acf_fc_layout' => 'image-stack',
+				'eyebrow'       => '',
+				'title'         => 'Hình ảnh cơ sở vật chất',
+				'images'        => array( $img['landing-stack-1'], $img['landing-stack-2'], $img['landing-stack-3'] ),
+			),
+			array(
+				'acf_fc_layout' => 'clinics',
+				'title'         => 'Hệ thống phòng khám',
+				'description'   => 'Hệ thống phòng khám vận hành trên tiêu chuẩn kiểm soát chất lượng y tế và quy định chuyên môn của Bộ Y tế Việt Nam. Không gian điều trị được chuyên khoa hóa, tách bạch khu vô trùng, phòng chụp phim và các khu kỹ thuật chuyên sâu, giúp mỗi lần điều trị an toàn và chính xác.',
+				'branches'      => array(
+					array( 'name' => 'RHM Sài Gòn Quận 1', 'map_url' => 'https://maps.google.com/?q=Quan+1+TP+HCM' ),
+					array( 'name' => 'RHM Sài Gòn Quận 5', 'map_url' => 'https://maps.google.com/?q=Quan+5+TP+HCM' ),
+					array( 'name' => 'RHM Sài Gòn Gò Vấp', 'map_url' => 'https://maps.google.com/?q=Go+Vap+TP+HCM' ),
+				),
+				'items'         => array_map(
+					static fn( int $i, array $slide ): array => array(
+						'image' => $img[ 'landing-clinic-' . ( $i + 1 ) ],
+						'title' => $slide[0],
+						'text'  => $slide[1],
+					),
+					array_keys( self::clinic_slides() ),
+					self::clinic_slides()
+				),
+			),
+			array(
 				'acf_fc_layout' => 'doctors',
 				'eyebrow'       => '',
 				'title'         => '',
+			),
+			array(
+				'acf_fc_layout' => 'form',
+				'eyebrow'       => 'Đặt lịch online',
+				'title'         => 'Đăng ký tư vấn miễn phí',
+				'description'   => 'Để lại thông tin, bác sĩ chuyên khoa sẽ liên hệ tư vấn phương án điều trị phù hợp và báo chi phí rõ ràng trước khi bắt đầu.',
+				'points'        => "Tư vấn miễn phí với bác sĩ chuyên khoa\nGọi lại xác nhận lịch trong 15 phút (giờ làm việc)\nChụp phim X-quang kỹ thuật số miễn phí khi thăm khám\nBảo mật thông tin khách hàng",
+				'hotline'       => true,
+				'form_id'       => '', // Trống → form đặt lịch mặc định (theme mod rhm_booking_form_id).
+				'form_title'    => 'Để lại thông tin, chúng tôi gọi lại ngay',
 			),
 			array(
 				'acf_fc_layout' => 'faq',
@@ -402,7 +470,9 @@ HTML;
 					$put( $name, (string) count( $value ), $prefix . $sub );
 					foreach ( array_values( $value ) as $j => $item ) {
 						foreach ( $item as $item_sub => $item_value ) {
-							$put( "{$name}_{$j}_{$item_sub}", $scalar( $item_value ), $prefix . $sub . '_' . $item_sub );
+							// Gallery trong repeater: mảng ID dạng chuỗi (rỗng → '').
+							$item_value = is_array( $item_value ) ? ( $item_value ? array_map( 'strval', $item_value ) : '' ) : $scalar( $item_value );
+							$put( "{$name}_{$j}_{$item_sub}", $item_value, $prefix . $sub . '_' . $item_sub );
 						}
 					}
 					continue;

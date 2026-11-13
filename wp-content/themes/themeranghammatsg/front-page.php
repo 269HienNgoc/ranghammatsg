@@ -18,6 +18,7 @@ $rhm_sections = array(
 	'about-2',
 	'doctors',
 	'doctors-2',
+	'before-after',
 	'news',
 	'branches',
 	// 'why-choose-us',

@@ -12,6 +12,11 @@ if ( document.querySelector( '[data-rhm-tiles-controls]' ) ) {
 	import( './_tiles.js' );
 }
 
+// Landing "Hệ thống phòng khám": dải ảnh nhỏ ↔ slider ảnh lớn.
+if ( document.querySelector( '[data-rhm-showcase-thumbs]' ) ) {
+	import( './_showcase.js' );
+}
+
 if ( carousels.length ) {
 	const observer = new IntersectionObserver(
 		( entries ) => {

@@ -31,7 +31,7 @@ php -l wp-content/themes/themeranghammatsg/inc/<file>.php
 
 # Dữ liệu mẫu (khi có WP-CLI)
 wp rhm-demo generate --posts=100 --doctors=100 --fresh [--landing]
-wp rhm-demo landing   # trang landing mẫu "Giới thiệu (dữ liệu mẫu)" /gioi-thieu-mau/, đủ mọi section (chạy lại = ghi đè về mặc định)
+wp rhm-demo landing   # trang landing mẫu "Giới thiệu (dữ liệu mẫu)" /gioi-thieu-mau/, đủ mọi section (chạy lại = ghi đè về mặc định; plugin ≥ 1.2.0 có section clinics)
 wp rhm-demo status
 wp rhm-demo delete
 ```

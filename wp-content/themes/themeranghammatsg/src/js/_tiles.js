@@ -1,13 +1,16 @@
 /**
  * Nút điều hướng cho ô ảnh cuộn ngang: bố cục và thao tác vuốt do CSS/native scroll xử lý.
  * Nạp động từ carousel.js khi có nút điều hướng; không tạo entry Vite mới.
+ * Dùng ở: landing "Ô lưới ảnh", "Hệ thống phòng khám"; trang chủ "Trước – sau" (template-parts/sections/before-after.php).
+ * Track = phần tử mà nút trước trỏ tới qua aria-controls (1 section có thể có nhiều track, vd landing "Hệ thống phòng khám"),
+ * không có thì lấy [data-rhm-tiles-track] đầu tiên của section. Track trong khối đang ẩn: ResizeObserver cập nhật khi hiện.
  */
 document.querySelectorAll( '[data-rhm-tiles]' ).forEach( ( heading ) => {
-	const section = heading.closest( 'section' );
-	const track = section.querySelector( '[data-rhm-tiles-track]' );
 	const controls = heading.querySelector( '[data-rhm-tiles-controls]' );
 	const previous = heading.querySelector( '[data-rhm-tiles-prev]' );
 	const next = heading.querySelector( '[data-rhm-tiles-next]' );
+	const target = previous?.getAttribute( 'aria-controls' );
+	const track = ( target && document.getElementById( target ) ) || heading.closest( 'section' )?.querySelector( '[data-rhm-tiles-track]' );
 	if ( ! track || ! controls || ! previous || ! next ) {
 		return;
 	}
@@ -21,7 +24,12 @@ document.querySelectorAll( '[data-rhm-tiles]' ).forEach( ( heading ) => {
 	};
 
 	const move = ( direction ) => {
-		const item = track.firstElementChild;
+		// Phần tử con đầu có thể là wrapper display: contents (rộng 0, vd trang 4 thẻ của section Trước – sau dưới 1024px)
+		// → lấy con đầu của nó: desktop cuộn 1 trang, mobile cuộn 1 thẻ.
+		let item = track.firstElementChild;
+		while ( item && ! item.getBoundingClientRect().width ) {
+			item = item.firstElementChild;
+		}
 		if ( ! item ) {
 			return;
 		}

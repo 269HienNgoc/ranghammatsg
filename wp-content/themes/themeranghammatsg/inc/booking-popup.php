@@ -22,7 +22,8 @@ function rhm_booking_popup_form_id(): int {
 }
 
 /**
- * Trang hiện tại có popup đặt lịch không: có ID form, Fluent đang bật, không phải trang Liên hệ, không phải admin.
+ * Trang hiện tại có popup đặt lịch không: có ID form, Fluent đang bật, không phải trang Liên hệ, không phải admin,
+ * không phải trang landing có section "form" dùng cùng form (rhm_landing_booking_form_anchor(): tránh trùng id HTML của Fluent).
  */
 function rhm_booking_popup_enabled(): bool {
 	static $enabled = null;
@@ -30,7 +31,8 @@ function rhm_booking_popup_enabled(): bool {
 		$enabled = ! is_admin()
 			&& rhm_booking_popup_form_id() > 0
 			&& shortcode_exists( 'fluentform' )
-			&& ! is_page_template( 'page-templates/tpl-lien-he.php' );
+			&& ! is_page_template( 'page-templates/tpl-lien-he.php' )
+			&& ! ( function_exists( 'rhm_landing_booking_form_anchor' ) && '' !== rhm_landing_booking_form_anchor() );
 	}
 	return $enabled;
 }

@@ -28,9 +28,13 @@ Thứ tự theo thiết kế: Banner → Dải điểm nổi bật → Thẻ gi�
 | **Ô** lưới ảnh nhỏ | Độ rộng, tiêu đề, ô (ảnh vuông nền trắng + nhãn 2 dòng) | Mobile: vuốt ngang, khoảng 2 ô + hé ô kế tiếp. Từ 640px: 6 ô/hàng; desktop từ 1024px: 6 ô với khối ≥ 3/5, khối hẹp 3 ô. Dư ô: cuộn ngang, có nút trái/phải trên tablet/desktop |
 | **Ô** banner nổi bật | Độ rộng, tiêu đề, dòng phụ, ảnh, logo (tùy chọn), link (tùy chọn) | Vd All-on-4, Invisalign. Có link → bấm cả ô. Từ 640px: ảnh 45% bên trái; dưới 640px: ảnh trên, chữ dưới |
 | Ảnh lớn + chữ + ô nổi bật | Tiêu đề, nội dung, ảnh 4:3, video (tùy chọn); tab "Ô nổi bật": icon, tiêu đề, mô tả, nút | Vd Cơ sở vật chất + Chi phí hợp lý |
+| Tiêu đề + nội dung dài + ảnh lớn | Tiêu đề, dòng nhỏ trên tiêu đề (tùy chọn), nội dung (trình soạn thảo đầy đủ: đoạn, danh sách, "Tiêu đề 3"), ảnh rộng ~1600px | Nội dung và ảnh bên dưới đều rộng hết khung (tối đa 1408px), giữ nguyên tỉ lệ ảnh, không cắt. Cần tiêu đề + (nội dung hoặc ảnh). Tiêu đề phụ trong nội dung dùng "Tiêu đề 3" |
+| Ảnh lớn xếp dọc (kèm mô tả ảnh) | Tiêu đề, dòng nhỏ (tùy chọn), chọn nhiều ảnh (tối đa 30, rộng ~1600px) | Ảnh hiện lần lượt từ trên xuống, mỗi ảnh rộng hết khung, giữ nguyên tỉ lệ (không cắt). Mô tả dưới ảnh = ô **"Chú thích"** của ảnh (bấm vào ảnh trong khung chọn ảnh để sửa; trống → không hiện mô tả). Xuống dòng trong Chú thích được giữ |
+| Form đăng ký (Fluent Forms) | Dòng nhỏ, tiêu đề, mô tả, lợi ích (mỗi dòng 1 ý), bật/tắt hotline, **chọn form** Fluent Forms, tiêu đề trên form (tùy chọn) | Khung nền mint: trái chữ + lợi ích có dấu tích + hotline, phải thẻ form trắng (mobile: chữ trên, form dưới). Không chọn form → dùng form đặt lịch mặc định (Tùy biến → Thông tin phòng khám). Không có form nào → khách không thấy section (quản trị viên thấy ghi chú). Nếu form trùng với form của popup đặt lịch: trang không hiện popup, mọi nút "Đặt lịch" cuộn tới section này. Chữ nút gửi / ô chọn ("Submit Form", "- Select -") sửa trong Fluent Forms. Nên đặt Neo (vd `dang-ky`) để link `#dang-ky` cuộn tới |
 | Số liệu nổi bật | Các ô số + nhãn (tối đa 8) | Tiêu đề không bắt buộc |
 | Chặng đường phát triển | Tiêu đề, các mốc (năm, tiêu đề, mô tả) | |
 | Thư viện ảnh (slider) | Tiêu đề, ảnh 4:3 | Nhập "Văn bản thay thế" cho từng ảnh trong Thư viện |
+| Hệ thống phòng khám | Tiêu đề, mô tả; **Chi nhánh**: tên + link Google Maps; **Ảnh** (tối đa 12): ảnh 1600×900 (16:9), tiêu đề ảnh, chú thích | Chi nhánh có link → nút "Chỉ đường" (tab mới). Slider 1 ảnh rộng hết khung / lần (mobile khung 4:3, cắt 2 bên → để chủ thể ở giữa), tiêu đề + chú thích riêng ngay dưới ảnh. ≥ 2 ảnh: nút trái/phải, vuốt trên mobile, dải ảnh nhỏ bên dưới (bấm ô nào slider chuyển tới ảnh đó). Ảnh thiếu tiêu đề bị bỏ qua |
 | Đội ngũ bác sĩ (slider) | (chỉ tiêu đề, tùy chọn) | Giống trang chủ: hồ sơ bật "Hiện ở section Đội ngũ bác sĩ" |
 | Câu hỏi thường gặp | Câu hỏi + trả lời | Mở/đóng không cần JS |
 | Nội dung trình soạn thảo | — | In nội dung ô soạn thảo chính của trang (bảng, ảnh, shortcode…) |
@@ -59,7 +63,9 @@ Plugin **RHM Demo Data** (≥ 1.1.0) tạo trang "Giới thiệu (dữ liệu m�
 
 Code: `inc/landing/` (điểm vào `landing.php`), template-part: `template-parts/landing/<layout>.php`.
 
-"Ô lưới ảnh nhỏ" dùng native scroll + CSS scroll-snap ở mọi kích thước. Khi cần nút trái/phải, section nạp module `carousel.js`, module này tải động `src/js/_tiles.js` để điều khiển nút và cập nhật trạng thái khi cuộn/resize; không tự chạy.
+"Ô lưới ảnh nhỏ" dùng native scroll + CSS scroll-snap ở mọi kích thước. Khi cần nút trái/phải, section nạp module `carousel.js`, module này tải động `src/js/_tiles.js` để điều khiển nút và cập nhật trạng thái khi cuộn/resize; không tự chạy. `_tiles.js` tìm track theo `aria-controls` của nút trước (`[data-rhm-tiles-prev]`), không có thì lấy `[data-rhm-tiles-track]` đầu tiên của section → 1 section có thể có nhiều track.
+
+"Hệ thống phòng khám" (`clinics`) không dùng Swiper: slider là 1 track `_tiles.js` (scroll-snap, slide `w-full` = ảnh + chú thích, các slide cao bằng nhau nên chuyển ảnh không nhảy trang). Nút ‹ › nằm trên lớp phủ cùng khung tỉ lệ với ảnh (canh giữa ảnh), ≥ 1024px lùi vào 96px để cột nút liên hệ nhanh không che. `carousel.js` tải động `src/js/_showcase.js` khi có `[data-rhm-showcase-thumbs]`: bấm ảnh nhỏ → cuộn track tới slide; track cuộn → ảnh nhỏ tương ứng có `aria-current="true"`. Ảnh nhỏ `alt=""` + chữ ẩn "Xem ảnh N: tiêu đề" (tham số `$alt` của `rhm_landing_picture()`).
 
 | File | Vai trò |
 |---|---|
