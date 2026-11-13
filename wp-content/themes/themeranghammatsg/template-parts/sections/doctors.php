@@ -113,7 +113,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 
 									<?php if ( $rhm_doctor['position'] ) : ?>
 										<p class="mt-4 text-[15px] leading-relaxed text-body lg:text-base">
-											<span class="font-semibold text-teal-dark"><?php esc_html_e( 'Chức vụ:', 'themeranghammatsg' ); ?></span>
+											<span class="font-semibold text-teal-dark"><?php esc_html_e( 'Chuyên khoa:', 'themeranghammatsg' ); ?></span>
 											<?php echo esc_html( $rhm_doctor['position'] ); ?>
 										</p>
 									<?php endif; ?>

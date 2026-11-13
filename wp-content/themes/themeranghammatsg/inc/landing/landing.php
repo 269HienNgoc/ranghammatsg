@@ -35,6 +35,7 @@ function rhm_landing_layouts(): array {
 	);
 	return array(
 		'hero'         => $layout( __( 'Banner đầu trang (H1)', 'themeranghammatsg' ) ),
+		'banner'       => $layout( __( 'Banner ảnh (desktop 1920×650, mobile 828×620)', 'themeranghammatsg' ) ),
 		'highlights'   => $layout( __( 'Dải điểm nổi bật (icon + nhãn)', 'themeranghammatsg' ) ),
 		'cards'        => $layout( __( 'Thẻ giá trị (sứ mệnh, tầm nhìn…) + ảnh', 'themeranghammatsg' ) ),
 		'services'     => $layout( __( 'Danh sách dịch vụ (ảnh + tên)', 'themeranghammatsg' ) ),
@@ -45,6 +46,7 @@ function rhm_landing_layouts(): array {
 		'intro'        => $layout( __( 'Ảnh lớn + chữ + ô nổi bật', 'themeranghammatsg' ) ),
 		'text-image'   => $layout( __( 'Tiêu đề + nội dung dài + ảnh lớn bên dưới', 'themeranghammatsg' ) ),
 		'image-stack'  => $layout( __( 'Ảnh lớn xếp dọc (kèm mô tả ảnh)', 'themeranghammatsg' ) ),
+		'photo-groups' => $layout( __( 'Nhóm ảnh 3 cột (tiêu đề + mô tả + hàng ảnh)', 'themeranghammatsg' ) ),
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ) ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
@@ -206,9 +208,9 @@ function rhm_landing_span_class( int $span ): string {
 function rhm_landing_render( int $post_id ): void {
 	$sections = rhm_landing_sections( $post_id );
 
-	if ( ! rhm_landing_has_hero( $post_id ) ) {
-		get_template_part( 'template-parts/components/page-title' );
-	}
+	// if ( ! rhm_landing_has_hero( $post_id ) ) {
+	// 	get_template_part( 'template-parts/components/page-title' );
+	// }
 
 	if ( ! $sections ) {
 		// Giữ đúng giao diện trước khi có landing: nội dung editor (cột rộng) + kêu gọi đặt lịch.

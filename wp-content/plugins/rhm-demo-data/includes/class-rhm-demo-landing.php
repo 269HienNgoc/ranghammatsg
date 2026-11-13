@@ -61,6 +61,14 @@ final class RHM_Demo_Landing {
 		$list['landing-stack-1'] = array( 1600, 700, $photo( 'Khu đón tiếp', 'primary', 'teal' ) + array( 'caption' => 'Khu đón tiếp rộng rãi tại chi nhánh Quận 1, mở cửa từ 8:00 đến 20:00 mỗi ngày.' ) );
 		$list['landing-stack-2'] = array( 1600, 1000, $photo( 'Phòng phẫu thuật Implant', 'deep', 'primary' ) + array( 'caption' => "Phòng phẫu thuật Implant vô trùng một chiều.\nTrang bị đèn mổ, máy cấy ghép và hệ thống lọc khí HEPA." ) );
 		$list['landing-stack-3'] = array( 1600, 900, $photo( 'Phòng chỉnh nha', 'teal', 'deep' ) );
+		// Section "Banner ảnh": desktop 1920 × 650, mobile 828 × 620 (đúng kích thước khuyến nghị của layout).
+		$banner                      = array( 'style' => 'banner', 'from' => 'primary', 'to' => 'deep', 'title' => 'Ưu đãi Implant tháng này', 'subtitle' => 'Giảm 30% chi phí trụ Implant · Dữ liệu mẫu', 'alt' => 'Ưu đãi giảm 30% chi phí trồng răng Implant' );
+		$list['landing-banner']        = array( 1920, 650, $banner );
+		$list['landing-banner-mobile'] = array( 828, 620, $banner );
+		// Section "Nhóm ảnh 3 cột": ảnh 4:3, 3 ảnh / item.
+		foreach ( array( 'Ca Implant 1', 'Ca Implant 2', 'Ca Implant 3', 'Ca niềng răng 1', 'Ca niềng răng 2', 'Ca niềng răng 3' ) as $i => $title ) {
+			$list[ 'landing-group-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
+		}
 		// Section "Hệ thống phòng khám": ảnh ngang 16:9, 1 ảnh / slide.
 		foreach ( self::clinic_slides() as $i => $slide ) {
 			$list[ 'landing-clinic-' . ( $i + 1 ) ] = array( 1600, 900, $photo( $slide[0], $i % 2 ? 'teal' : 'primary' ) );
@@ -249,6 +257,13 @@ final class RHM_Demo_Landing {
 				'images'        => array( $img['landing-gallery-1'], $img['landing-gallery-2'], $img['landing-gallery-3'], $img['landing-gallery-4'] ),
 			),
 			array(
+				'acf_fc_layout' => 'banner',
+				'image'         => $img['landing-banner'],
+				'image_mobile'  => $img['landing-banner-mobile'],
+				'link'          => '#dang-ky', // Neo của section form bên dưới.
+				'layout'        => 'full',
+			),
+			array(
 				'acf_fc_layout' => 'text-image',
 				'eyebrow'       => 'Về chúng tôi',
 				'title'         => 'Câu chuyện Răng Hàm Mặt Sài Gòn',
@@ -264,6 +279,23 @@ final class RHM_Demo_Landing {
 				'eyebrow'       => '',
 				'title'         => 'Hình ảnh cơ sở vật chất',
 				'images'        => array( $img['landing-stack-1'], $img['landing-stack-2'], $img['landing-stack-3'] ),
+			),
+			array(
+				'acf_fc_layout' => 'photo-groups',
+				'title'         => 'Kết quả điều trị thực tế',
+				'description'   => 'Hình ảnh khách hàng đã điều trị tại phòng khám (được sự đồng ý của khách hàng).',
+				'items'         => array(
+					array(
+						'title'  => 'Trồng răng Implant',
+						'text'   => 'Phục hồi răng mất bằng trụ Implant, ăn nhai chắc chắn như răng thật.',
+						'images' => array( $img['landing-group-1'], $img['landing-group-2'], $img['landing-group-3'] ),
+					),
+					array(
+						'title'  => 'Niềng răng mắc cài & khay trong suốt',
+						'text'   => '',
+						'images' => array( $img['landing-group-4'], $img['landing-group-5'], $img['landing-group-6'] ),
+					),
+				),
 			),
 			array(
 				'acf_fc_layout' => 'clinics',
@@ -298,6 +330,7 @@ final class RHM_Demo_Landing {
 				'hotline'       => true,
 				'form_id'       => '', // Trống → form đặt lịch mặc định (theme mod rhm_booking_form_id).
 				'form_title'    => 'Để lại thông tin, chúng tôi gọi lại ngay',
+				'anchor'        => 'dang-ky', // Banner mẫu + nút đặt lịch trỏ #dang-ky.
 			),
 			array(
 				'acf_fc_layout' => 'faq',
