@@ -1,6 +1,9 @@
 <?php
 /**
  * Section: giới thiệu (ảnh/video + chữ + số liệu). Dữ liệu: inc/about.php. CSS: page-home.css
+ * $args (tùy chọn): prefix (khóa trong rhm_about_sections(), mặc định 'rhm_about'). Bản 2 gọi qua sections/about-2.php.
+ * reverse = true: desktop ảnh bên phải, chữ bên trái; DOM giữ ảnh trước → mobile luôn ảnh trên, chữ dưới.
+ * Class 2 chiều viết nguyên văn (Tailwind quét file này).
  * Video (nếu có) chỉ tải khi bấm ▶ — src/js/embed.js, chỉ nạp khi section có video.
  *
  * @package themeranghammatsg
@@ -8,7 +11,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rhm_about = rhm_get_about();
+$rhm_prefix   = (string) ( $args['prefix'] ?? 'rhm_about' );
+$rhm_config   = rhm_about_sections()[ $rhm_prefix ] ?? null;
+if ( ! $rhm_config ) {
+	return;
+}
+$rhm_about    = rhm_get_about( $rhm_prefix );
+$rhm_reverse  = $rhm_config['reverse'];
+$rhm_title_id = $rhm_config['id'] . '-title';
 
 if ( '' === $rhm_about['title'] ) {
 	return;
@@ -20,11 +30,11 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 	wp_enqueue_script_module( 'rhm-embed', RHM_THEME_URI . '/dist/js/embed.js', array(), rhm_asset_version( 'dist/js/embed.js' ) );
 }
 ?>
-<section class="py-12 lg:py-10" aria-labelledby="about-title">
-	<div class="site-container grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+<section id="<?php echo esc_attr( $rhm_config['id'] ); ?>" class="py-12 lg:py-10" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
+	<div class="site-container grid items-center gap-10 lg:gap-16 <?php echo esc_attr( $rhm_reverse ? 'lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]' : 'lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]' ); ?>">
 		<?php if ( $rhm_about['image'] ) : ?>
-			<div class="relative lg:pr-6">
-				<div class="absolute inset-y-8 right-0 hidden w-1/2 rounded-3xl bg-[#eef2f5] lg:block" aria-hidden="true"></div>
+			<div class="relative <?php echo esc_attr( $rhm_reverse ? 'lg:order-last lg:pl-6' : 'lg:pr-6' ); ?>">
+				<div class="absolute inset-y-8 hidden w-1/2 rounded-3xl bg-[#eef2f5] lg:block <?php echo esc_attr( $rhm_reverse ? 'left-0' : 'right-0' ); ?>" aria-hidden="true"></div>
 
 				<div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-soft shadow-card">
 					<?php
@@ -52,7 +62,7 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 				</div>
 
 				<?php if ( $rhm_about['badge_title'] ) : ?>
-					<div class="absolute right-3 bottom-3 flex max-w-[85%] items-center gap-3 rounded-2xl bg-white p-3 shadow-[0_10px_30px_rgb(16_42_67/0.15)] sm:right-0 sm:bottom-6 sm:p-4 lg:max-w-[60%] lg:gap-4 lg:p-5">
+					<div class="absolute bottom-3 flex max-w-[85%] items-center gap-3 rounded-2xl bg-white p-3 shadow-[0_10px_30px_rgb(16_42_67/0.15)] sm:bottom-6 sm:p-4 lg:max-w-[60%] lg:gap-4 lg:p-5 <?php echo esc_attr( $rhm_reverse ? 'left-3 sm:left-0' : 'right-3 sm:right-0' ); ?>">
 						<span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-b from-primary-light to-primary text-white lg:size-14">
 							<?php echo rhm_get_icon( 'tooth', 'size-7 lg:size-8' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 						</span>
@@ -75,7 +85,7 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 				</p>
 			<?php endif; ?>
 
-			<h2 id="about-title" class="mb-4 text-[28px] leading-tight font-bold text-dark lg:text-4xl">
+			<h2 id="<?php echo esc_attr( $rhm_title_id ); ?>" class="mb-4 text-[28px] leading-tight font-bold text-dark lg:text-4xl">
 				<?php echo esc_html( $rhm_about['title'] ); ?>
 				<?php if ( $rhm_about['title_highlight'] ) : ?>
 					<span class="text-green-dark"><?php echo esc_html( $rhm_about['title_highlight'] ); ?></span>

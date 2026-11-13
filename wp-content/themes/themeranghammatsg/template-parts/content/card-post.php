@@ -4,6 +4,7 @@
  *
  * - < 640px: dạng hàng — ảnh trái (38%, nhãn chuyên mục đè góc dưới), phải là tiêu đề, mô tả, ngày + nút mũi tên.
  * - ≥ 640px: thẻ dọc — ảnh trên, ngày, tiêu đề, mô tả, "Xem chi tiết".
+ * - Bác sĩ (bac-si): ảnh khung dọc 4:5, object-top (không cắt mất đầu), ảnh gốc + srcset; bài viết: rhm-card 3:2.
  * Ngày là 1 phần tử duy nhất, đổi vị trí bằng order (mobile xuống cuối).
  *
  * $args['sizes']: độ rộng hiển thị thật của ảnh theo lưới đang dùng. Bỏ trống = lưới 3 cột của index.php / archive.php / search.php
@@ -27,13 +28,36 @@ if ( 'lcp' === $rhm_loading ) {
 	$rhm_image_attrs['fetchpriority'] = 'high';
 }
 
-$rhm_is_post  = 'post' === get_post_type();
+$rhm_is_post   = 'post' === get_post_type();
+$rhm_is_doctor = 'bac-si' === get_post_type();
 $rhm_category = $rhm_is_post ? ( get_the_category()[0] ?? null ) : null;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'flex items-start gap-3 sm:flex-col sm:items-stretch sm:gap-0 sm:overflow-hidden sm:rounded-lg sm:border sm:border-line sm:bg-white sm:shadow-card' ); ?>>
 	<?php if ( has_post_thumbnail() ) : ?>
 		<a class="relative block w-[38%] shrink-0 overflow-hidden rounded-lg sm:w-auto sm:rounded-none" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
-			<?php the_post_thumbnail( 'rhm-card', $rhm_image_attrs ); ?>
+			<?php if ( $rhm_is_doctor ) : ?>
+				<?php
+				// Chân dung bác sĩ: khung dọc 4:5, giữ phần đầu (object-top), ảnh gốc + srcset thay vì bản cắt sẵn rhm-card 3:2
+				// (cắt giữa → mất đầu). sizes nhân theo tỉ lệ khi ảnh nguồn ngang hơn khung (rhm_get_doctor_image_sizes, inc/doctors.php).
+				$rhm_thumb_id = (int) get_post_thumbnail_id();
+				?>
+				<span class="relative block aspect-[4/5] bg-soft">
+					<?php
+					the_post_thumbnail(
+						'full',
+						array_merge(
+							$rhm_image_attrs,
+							array(
+								'class' => 'absolute inset-0 size-full object-cover object-top',
+								'sizes' => rhm_get_doctor_image_sizes( $rhm_thumb_id, $rhm_image_attrs['sizes'], 4 / 5 ),
+							)
+						)
+					);
+					?>
+				</span>
+			<?php else : ?>
+				<?php the_post_thumbnail( 'rhm-card', $rhm_image_attrs ); ?>
+			<?php endif; ?>
 			<?php if ( $rhm_category ) : ?>
 				<span class="absolute bottom-1.5 left-1.5 max-w-[calc(100%-12px)] truncate rounded-md bg-mint px-2 py-0.5 text-[10px] font-bold text-teal-dark uppercase sm:hidden"><?php echo esc_html( $rhm_category->name ); ?></span>
 			<?php endif; ?>

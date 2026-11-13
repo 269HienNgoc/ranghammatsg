@@ -198,38 +198,46 @@ add_action( 'customize_register', 'rhm_customize_icons' );
 
 /**
  * Giới thiệu trang chủ (inc/about.php): ảnh/video, thẻ nổi trên ảnh, chữ, nút, số liệu.
+ * Mỗi bản trong rhm_about_sections() là 1 mục Customizer riêng (id mục = tiền tố theme mod), cùng bộ field.
  */
 function rhm_customize_about( WP_Customize_Manager $wp_customize ): void {
+	foreach ( rhm_about_sections() as $prefix => $config ) {
+		rhm_customize_about_section( $wp_customize, $prefix, $config['label'], $config['description'] );
+	}
+}
+
+/** 1 mục "Giới thiệu": section id = $prefix, theme mod "{$prefix}_<field>". */
+function rhm_customize_about_section( WP_Customize_Manager $wp_customize, string $prefix, string $title, string $description ): void {
 	$wp_customize->add_section(
-		'rhm_about',
+		$prefix,
 		array(
-			'title'       => __( 'Giới thiệu (Trang chủ)', 'themeranghammatsg' ),
-			'description' => __( 'Ảnh: .jpg ngang tỉ lệ 4:3, rộng ≥ 1200px. Có link video thì ảnh thành ảnh bìa, bấm ▶ mới tải video. Mô tả: mỗi dòng là 1 đoạn.', 'themeranghammatsg' ),
+			'title'       => $title,
+			'description' => $description . ' ' . __( 'Ảnh: .jpg ngang tỉ lệ 4:3, rộng ≥ 1200px. Có link video thì ảnh thành ảnh bìa, bấm ▶ mới tải video. Mô tả: mỗi dòng là 1 đoạn.', 'themeranghammatsg' ),
 			'priority'    => 33,
 		)
 	);
 
 	rhm_customize_fields(
 		$wp_customize,
-		'rhm_about',
+		$prefix,
 		array(
-			'rhm_about_image'           => array( __( 'Ảnh (.jpg)', 'themeranghammatsg' ), 'image', 'absint' ),
-			'rhm_about_video'           => array( __( 'Link video (YouTube hoặc file .mp4) – tùy chọn', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-			'rhm_about_badge_title'     => array( __( 'Thẻ trên ảnh – dòng đậm', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_badge_text'      => array( __( 'Thẻ trên ảnh – dòng phụ', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_eyebrow'         => array( __( 'Dòng nhỏ trên tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_title'           => array( __( 'Tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_title_highlight' => array( __( 'Tiêu đề – phần tô xanh (nối sau tiêu đề)', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_content'         => array( __( 'Mô tả', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
-			'rhm_about_button_text'     => array( __( 'Nút – chữ', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
-			'rhm_about_button_link'     => array( __( 'Nút – link', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
+			"{$prefix}_image"           => array( __( 'Ảnh (.jpg)', 'themeranghammatsg' ), 'image', 'absint' ),
+			"{$prefix}_video"           => array( __( 'Link video (YouTube hoặc file .mp4) – tùy chọn', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
+			"{$prefix}_badge_title"     => array( __( 'Thẻ trên ảnh – dòng đậm', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_badge_text"      => array( __( 'Thẻ trên ảnh – dòng phụ', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_eyebrow"         => array( __( 'Dòng nhỏ trên tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_title"           => array( __( 'Tiêu đề', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_title_highlight" => array( __( 'Tiêu đề – phần tô xanh (nối sau tiêu đề)', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_content"         => array( __( 'Mô tả', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
+			"{$prefix}_button_text"     => array( __( 'Nút – chữ', 'themeranghammatsg' ), 'text', 'sanitize_text_field' ),
+			"{$prefix}_button_link"     => array( __( 'Nút – link', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
 		)
 	);
 
 	rhm_customize_repeater(
 		$wp_customize,
-		'rhm_about',
-		'rhm_about_stat',
+		$prefix,
+		"{$prefix}_stat",
 		RHM_ABOUT_STATS_MAX,
 		__( 'Số liệu', 'themeranghammatsg' ),
 		array(

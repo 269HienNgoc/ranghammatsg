@@ -60,7 +60,8 @@ function rhm_register_doctor_fields(): void {
 			$videos( 'case_videos', __( 'Video ca điều trị', 'themeranghammatsg' ) ),
 			// Section "Đội ngũ bác sĩ" trang chủ (inc/home-doctors.php, template-parts/sections/doctors.php).
 			$field( 'tab_home', __( 'Trang chủ', 'themeranghammatsg' ), 'tab' ),
-			$field( 'home', __( 'Hiện ở section Đội ngũ bác sĩ (trang chủ)', 'themeranghammatsg' ), 'true_false', array( 'ui' => 1, 'instructions' => __( 'Thứ tự hiển thị: ô "Thứ tự" ở khung Thuộc tính bên phải (số nhỏ đứng trước). Chưa bác sĩ nào được chọn thì trang chủ hiện các hồ sơ mới nhất. Cần có Ảnh đại diện.', 'themeranghammatsg' ) ) ),
+			// Ô "Hiện ở section Đội ngũ bác sĩ" (rhm_doctor_home) đã bỏ: slider lấy mọi hồ sơ có ảnh (theo chuyên khoa chọn ở Tùy biến).
+			$field( 'home_note', __( 'Section Đội ngũ bác sĩ (trang chủ)', 'themeranghammatsg' ), 'message', array( 'message' => __( 'Mọi hồ sơ đã xuất bản có Ảnh đại diện đều hiện ở slider trang chủ (lọc theo Chuyên khoa chọn trong Tùy biến). Thứ tự: ô "Thứ tự" ở khung Thuộc tính bên phải (số nhỏ đứng trước).', 'themeranghammatsg' ) ) ),
 			$field( 'degree', __( 'Học hàm / học vị', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( 'Bác sĩ CKI', 'themeranghammatsg' ), 'instructions' => __( 'Dòng nhỏ phía trên tên bác sĩ.', 'themeranghammatsg' ) ) ),
 			$field( 'years', __( 'Kinh nghiệm lâm sàng', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( '15+ năm', 'themeranghammatsg' ) ) ),
 			$field( 'case_count', __( 'Hồ sơ điều trị', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( '6.000+ ca', 'themeranghammatsg' ) ) ),

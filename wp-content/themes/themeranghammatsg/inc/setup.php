@@ -47,6 +47,7 @@ function rhm_setup(): void {
 	add_image_size( 'rhm-960', 960, 960, false);
 	add_image_size( 'rhm-828', 828, 828, false);
 	add_image_size( 'rhm-768', 768, 768, false);
+	add_image_size( 'rhm-672', 672, 672, false);
 	add_image_size( 'rhm-640', 640, 640, false);
 	add_image_size( 'rhm-412', 412, 412, false);
 	add_image_size( 'rhm-320', 330, 330, false);

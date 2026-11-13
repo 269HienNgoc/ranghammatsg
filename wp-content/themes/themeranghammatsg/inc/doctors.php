@@ -37,6 +37,74 @@ function rhm_register_doctors(): void {
 }
 add_action( 'init', 'rhm_register_doctors' );
 
+/**
+ * Taxonomy "Chuyên khoa" của bác sĩ (Implant, Niềng răng…): CHỈ dùng trong admin để phân loại hồ sơ.
+ * Không công khai: không có trang /chuyen-khoa/…, không vào sitemap. Cần trang riêng thì bật public/rewrite/query_var
+ * + thêm template, bundle CSS và tăng rhm_doctor_rewrite_version.
+ */
+const RHM_DOCTOR_TAXONOMY = 'chuyen-khoa';
+
+function rhm_register_doctor_taxonomy(): void {
+	register_taxonomy(
+		RHM_DOCTOR_TAXONOMY,
+		'bac-si',
+		array(
+			'labels'            => array(
+				'name'          => __( 'Chuyên khoa', 'themeranghammatsg' ),
+				'singular_name' => __( 'Chuyên khoa', 'themeranghammatsg' ),
+				'menu_name'     => __( 'Chuyên khoa', 'themeranghammatsg' ),
+				'all_items'     => __( 'Tất cả chuyên khoa', 'themeranghammatsg' ),
+				'edit_item'     => __( 'Sửa chuyên khoa', 'themeranghammatsg' ),
+				'add_new_item'  => __( 'Thêm chuyên khoa', 'themeranghammatsg' ),
+				'search_items'  => __( 'Tìm chuyên khoa', 'themeranghammatsg' ),
+				'not_found'     => __( 'Chưa có chuyên khoa.', 'themeranghammatsg' ),
+				'parent_item'   => __( 'Chuyên khoa cha', 'themeranghammatsg' ),
+			),
+			'hierarchical'      => true, // Ô tick như Chuyên mục (vd Implant → Implant toàn hàm).
+			'public'            => false,
+			'show_ui'           => true,
+			'show_in_nav_menus' => false,
+			'show_tagcloud'     => false,
+			'show_admin_column' => true, // Cột "Chuyên khoa" trong danh sách Bác sĩ.
+			'show_in_rest'      => true,
+			'rewrite'           => false,
+			'query_var'         => false,
+		)
+	);
+}
+add_action( 'init', 'rhm_register_doctor_taxonomy' );
+
+/** Ô lọc theo chuyên khoa ở danh sách Bác sĩ (admin). Dùng query var chung taxonomy + term vì taxonomy không có query_var riêng. */
+function rhm_doctor_taxonomy_filter( string $post_type ): void {
+	if ( 'bac-si' !== $post_type || ! wp_count_terms( array( 'taxonomy' => RHM_DOCTOR_TAXONOMY, 'hide_empty' => false ) ) ) {
+		return;
+	}
+	$current = isset( $_GET['term'] ) ? sanitize_title( wp_unslash( $_GET['term'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- chỉ lọc danh sách.
+	echo '<input type="hidden" name="taxonomy" value="' . esc_attr( RHM_DOCTOR_TAXONOMY ) . '">';
+	wp_dropdown_categories(
+		array(
+			'taxonomy'        => RHM_DOCTOR_TAXONOMY,
+			'name'            => 'term',
+			'value_field'     => 'slug',
+			'selected'        => $current,
+			'show_option_all' => __( 'Tất cả chuyên khoa', 'themeranghammatsg' ),
+			'hierarchical'    => true,
+			'hide_empty'      => false,
+			'orderby'         => 'name',
+		)
+	);
+}
+add_action( 'restrict_manage_posts', 'rhm_doctor_taxonomy_filter' );
+
+/** "Tất cả chuyên khoa" gửi term = 0 (hoặc rỗng) → bỏ điều kiện lọc. */
+function rhm_doctor_taxonomy_filter_query( WP_Query $query ): void {
+	if ( is_admin() && $query->is_main_query() && 'bac-si' === $query->get( 'post_type' ) && RHM_DOCTOR_TAXONOMY === $query->get( 'taxonomy' ) && in_array( (string) $query->get( 'term' ), array( '', '0' ), true ) ) {
+		$query->set( 'taxonomy', '' );
+		$query->set( 'term', '' );
+	}
+}
+add_action( 'pre_get_posts', 'rhm_doctor_taxonomy_filter_query' );
+
 /** Cập nhật rewrite một lần khi thêm/thay đổi cấu trúc URL, sau khi CPT đã đăng ký. */
 function rhm_doctor_rewrite(): void {
 	if ( '1' !== get_option( 'rhm_doctor_rewrite_version' ) ) {

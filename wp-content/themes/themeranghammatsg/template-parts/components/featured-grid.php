@@ -44,7 +44,7 @@ update_post_thumbnail_cache( $wp_query );
 						'template-parts/content/card',
 						'post',
 						array(
-							'loading' => is_paged() ? rhm_list_image_loading() : 'lazy', // Trang 2+ không có bài nổi bật → ảnh card đầu là LCP.
+							'loading' => ( is_paged() || $rhm_is_doctor ) ? rhm_list_image_loading() : 'lazy', // Không có bài nổi bật (trang 2+, danh sách bác sĩ) → ảnh card đầu là LCP.
 							'sizes'   => '(min-width: 1440px) 334px, (min-width: 1280px) calc((100vw - 104px) / 4), (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc((100vw - 56px) / 2), calc(38vw - 12px)',
 						)
 					);

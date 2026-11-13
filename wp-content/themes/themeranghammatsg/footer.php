@@ -34,15 +34,16 @@ $rhm_policy_menu = has_nav_menu( 'footer' );
 					<?php if ( $rhm_logo ) : ?>
 						<a class="block shrink-0" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 							<?php
-							// Độ rộng phải khớp class w-20 / xl:w-24 của ảnh.
+							// Độ rộng phải khớp class w-28 / sm:w-20 / xl:w-24 của ảnh (mobile 1 cột: logo lớn hơn cho dễ nhìn).
 							echo rhm_get_picture( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes escaped in rhm_html_attrs().
 								$rhm_logo,
 								array(
 									'(min-width: 1280px)' => 96,
-									''                    => 80,
+									'(min-width: 640px)'  => 80,
+									''                    => 112,
 								),
 								array(
-									'class'    => 'block h-auto w-20 xl:w-24',
+									'class'    => 'block h-auto w-28 sm:w-20 xl:w-24',
 									'alt'      => get_bloginfo( 'name' ),
 									'loading'  => 'lazy',
 									'decoding' => 'async',

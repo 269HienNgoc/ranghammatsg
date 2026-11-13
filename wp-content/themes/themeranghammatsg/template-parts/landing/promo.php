@@ -1,6 +1,6 @@
 <?php
 /**
- * Landing – Ô banner nổi bật (dạng ô): nền gradient mint, ảnh 45% trái + logo / tiêu đề / dòng phụ phải.
+ * Landing – Ô banner nổi bật (dạng ô): nền gradient mint, ảnh 45% trái + logo / tiêu đề / dòng phụ phải (< 640px: ảnh trên, chữ dưới).
  * Có link → link nằm ở tiêu đề, phủ cả ô bằng ::after (1 link duy nhất, bấm đâu trong ô cũng được).
  * Field: inc/landing/layouts/promo.php. Thiếu tiêu đề → không hiện.
  *
@@ -22,12 +22,13 @@ $rhm_url     = rhm_landing_url( $rhm_data, 'link' );
 $rhm_head_id = $args['id'] . '-title';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="relative h-full overflow-hidden rounded-2xl border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card transition-shadow hover:shadow-lg lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
-	<div class="<?php echo esc_attr( $rhm_image ? 'grid h-full grid-cols-[45%_minmax(0,1fr)] items-center gap-4 lg:gap-6' : 'flex h-full flex-col justify-center' ); ?>">
+	<div class="<?php echo esc_attr( $rhm_image ? 'grid h-full content-center items-center gap-4 sm:grid-cols-[45%_minmax(0,1fr)] lg:gap-6' : 'flex h-full flex-col justify-center' ); ?>">
 		<?php if ( $rhm_image ) : ?>
 			<div>
 				<?php
+				// < 640px xếp dọc: ảnh rộng hết ô = 100vw − lề khung 32 − đệm ô 40 − viền 2. ≥ 640px: ảnh 45% phần nội dung ô.
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
-				echo rhm_landing_picture( $rhm_image, rhm_landing_box_sizes( $args['span'] ?? 10, 0.45, 0.45, 8 ), 'block h-auto w-full', (bool) $args['is_first'] );
+				echo rhm_landing_picture( $rhm_image, '(max-width: 639px) calc(100vw - 74px), ' . rhm_landing_box_sizes( $args['span'] ?? 10, 0.45, 0.45, 8 ), 'block h-auto w-full', (bool) $args['is_first'] );
 				?>
 			</div>
 		<?php endif; ?>

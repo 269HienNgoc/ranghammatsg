@@ -19,12 +19,18 @@ Nhóm **Thông tin hồ sơ bác sĩ** của ACF PRO có các tab:
 
 Slider nằm trên section Tin tức, mỗi slide 1 bác sĩ. Nhập trong hồ sơ bác sĩ, tab **Trang chủ**:
 
-- **Hiện ở section Đội ngũ bác sĩ**: bật để đưa bác sĩ lên trang chủ (tối đa 8). Chưa bật hồ sơ nào thì trang chủ tự hiện 6 hồ sơ mới nhất.
+- Không cần bật gì: **mọi hồ sơ đã xuất bản có Ảnh đại diện** đều hiện ở slider (tối đa 8, theo Chuyên khoa nếu đã chọn trong Tùy biến). Ô "Hiện ở section Đội ngũ bác sĩ" cũ đã bỏ.
 - **Học hàm / học vị**: dòng nhỏ trên tên, vd "Bác sĩ CKI".
 - **Kinh nghiệm lâm sàng** và **Hồ sơ điều trị**: hiện thành 2 ô số liệu, vd "15+ năm", "6.000+ ca".
 - **Chứng chỉ chuyên môn**: mỗi dòng 1 mục, hiện tối đa 5 dòng. Để trống thì lấy danh sách Học vấn.
 
 Dòng "Chức vụ" lấy từ ô **Chức danh** (tab Banner & giới thiệu); tên là tiêu đề hồ sơ; ảnh là **Ảnh đại diện** (bắt buộc, hồ sơ không có ảnh sẽ không hiện). Thứ tự: ô **Thứ tự** trong khung **Thuộc tính** bên phải (số nhỏ đứng trước). Tiêu đề section và link "Xem tất cả bác sĩ": **Giao diện → Tùy biến → Đội ngũ bác sĩ (Trang chủ)**.
+
+### Lọc theo chuyên khoa + slider thứ 2
+
+- Tạo chuyên khoa ở **Bác sĩ → Chuyên khoa**, rồi tick chuyên khoa trong từng hồ sơ.
+- **Tùy biến → Đội ngũ bác sĩ (Trang chủ)** → ô **Chuyên khoa**: để "Tất cả chuyên khoa" thì hiện như cũ; chọn 1 chuyên khoa thì chỉ hiện bác sĩ thuộc chuyên khoa đó (kể cả chuyên khoa con).
+- **Tùy biến → Đội ngũ bác sĩ 2 (Trang chủ)**: slider thứ 2, ngay dưới slider đầu, cùng giao diện, chữ (tiêu đề, link) nhập riêng. **Chỉ hiện khi đã chọn Chuyên khoa.** Mỗi slider tối đa 8 bác sĩ; 1 bác sĩ có thể nằm ở cả 2 slider.
 
 ## Box bác sĩ trong bài viết
 

@@ -1,7 +1,9 @@
 <?php
 /**
  * Section: Đội ngũ bác sĩ (slider, mỗi slide 1 bác sĩ). Dữ liệu: inc/home-doctors.php. CSS: utility + components/_home-doctors.css
- * Dùng ở: trang chủ, landing page (layout "doctors"). $args (tùy chọn): id (id của section), eyebrow, title (trống → Customizer).
+ * Dùng ở: trang chủ (bản 1 + bản 2 qua doctors-2.php), landing page (layout "doctors").
+ * $args (tùy chọn): prefix (khóa trong rhm_home_doctor_sections(), mặc định 'rhm_home_doctors': chữ + chuyên khoa lấy từ mục Customizer đó),
+ * id (id của section; trống → id của bản trong rhm_home_doctor_sections()), eyebrow, title (trống → Customizer).
  *
  * Mỗi thẻ: học vị → tên (H3) → chức vụ → 2 ô số liệu (kinh nghiệm, số ca) → chứng chỉ chuyên môn → nút Xem hồ sơ / Đặt lịch hẹn;
  * ảnh chân dung: cột phải (≥ 1024px), trên cùng (mobile). Dòng nào thiếu dữ liệu thì không in.
@@ -20,7 +22,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rhm_doctors = rhm_get_home_doctors();
+$rhm_prefix  = (string) ( $args['prefix'] ?? 'rhm_home_doctors' );
+$rhm_config  = rhm_home_doctor_sections()[ $rhm_prefix ] ?? null;
+if ( ! $rhm_config ) {
+	return;
+}
+$rhm_term = rhm_home_doctor_term( $rhm_prefix );
+if ( $rhm_config['require_term'] && ! $rhm_term ) {
+	return; // Bản 2 chưa chọn chuyên khoa → không hiện (tránh trùng slider bản 1).
+}
+$rhm_doctors = rhm_get_home_doctors( $rhm_term );
 
 if ( ! $rhm_doctors ) {
 	return;
@@ -32,18 +43,20 @@ if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 	wp_enqueue_script_module( 'rhm-carousel', RHM_THEME_URI . '/dist/js/carousel.js', array(), rhm_asset_version( 'dist/js/carousel.js' ) );
 }
 
-$rhm_id       = (string) ( $args['id'] ?? '' );
+$rhm_id       = (string) ( $args['id'] ?? '' ) ?: $rhm_config['id'];
 $rhm_title_id = '' !== $rhm_id ? $rhm_id . '-title' : 'doctors-title';
-$rhm_eyebrow  = (string) ( $args['eyebrow'] ?? '' ) ?: rhm_home_doctors_text( 'eyebrow' );
-$rhm_title    = (string) ( $args['title'] ?? '' ) ?: rhm_home_doctors_text( 'title' );
-$rhm_all_text = rhm_home_doctors_text( 'all_text' );
-$rhm_all_link = rhm_home_doctors_text( 'all_link' );
+$rhm_eyebrow  = (string) ( $args['eyebrow'] ?? '' ) ?: rhm_home_doctors_text( 'eyebrow', $rhm_prefix );
+$rhm_title    = (string) ( $args['title'] ?? '' ) ?: rhm_home_doctors_text( 'title', $rhm_prefix );
+$rhm_all_text = rhm_home_doctors_text( 'all_text', $rhm_prefix );
+$rhm_all_link = rhm_home_doctors_text( 'all_link', $rhm_prefix );
+// Id tên bác sĩ có tiền tố section → 1 bác sĩ nằm ở 2 slider cùng trang không trùng id (bản gốc không id: giữ "doctor-<id>-name").
+$rhm_name_id  = static fn( int $doctor_id ): string => ( '' !== $rhm_id ? $rhm_id . '-' : '' ) . 'doctor-' . $doctor_id . '-name';
 
 // Khung ảnh (trừ viền trắng 6px mỗi bên): ≥ 1280px cột 440px → 428px; 1024px cột 340px → 328px; 640–1023px tối đa 360px → 348px;
 // < 640px: màn hình − lề khung 16 − đệm thẻ 20 (mỗi bên; đệm slide bù bằng lề âm của .swiper) − viền 12 = 100vw − 84px.
 $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 640px) 348px, calc(100vw - 84px)';
 ?>
-<section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="overflow-hidden py-12 lg:py-16" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
+<section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="overflow-hidden py-4 lg:py-5" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
 	<?php
 	// Bố cục: < 1024px xếp dọc: tiêu đề → thẻ → nút ‹ › → link "xem tất cả".
 	// ≥ 1024px lưới 2 cột: hàng 1 = tiêu đề | link + nút ‹ › (không đặt nút ở mép thẻ: cột nút liên hệ nhanh cố định ở mép phải
@@ -82,7 +95,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 				<div class="swiper-wrapper">
 					<?php foreach ( $rhm_doctors as $rhm_doctor ) : ?>
 						<div class="swiper-slide h-auto w-full px-4 pt-4 pb-8">
-							<article class="home-doctor-card relative isolate grid h-full items-center overflow-hidden rounded-[28px] border border-line bg-linear-to-br from-white via-[#f7fcfa] to-mint p-5 shadow-card sm:p-8 lg:grid-cols-[minmax(0,640px)_340px] lg:justify-center lg:gap-10 lg:px-16 lg:py-6 xl:grid-cols-[minmax(0,680px)_440px] xl:gap-16 xl:px-5" aria-labelledby="doctor-<?php echo esc_attr( (string) $rhm_doctor['id'] ); ?>-name">
+							<article class="home-doctor-card relative isolate grid h-full items-center overflow-hidden rounded-[28px] border border-line bg-linear-to-br from-white via-[#f7fcfa] to-mint p-5 shadow-card sm:p-8 lg:grid-cols-[minmax(0,640px)_340px] lg:justify-center lg:gap-10 lg:px-16 lg:py-6 xl:grid-cols-[minmax(0,680px)_440px] xl:gap-16 xl:px-5" aria-labelledby="<?php echo esc_attr( $rhm_name_id( $rhm_doctor['id'] ) ); ?>">
 								<?php // Họa tiết (răng mờ, vầng sáng, khối tròn + khung nét đứt quanh ảnh): pseudo-element trong page-home.css, 0 node DOM. ?>
 								<figure class="home-doctor-photo relative mx-auto w-full max-w-[360px] lg:order-last lg:max-w-none">
 									<a class="relative block aspect-[4/3] overflow-hidden rounded-3xl border-[6px] border-white bg-white shadow-[0_16px_40px_rgb(16_42_67/0.14)] sm:aspect-[4/5]" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>" tabindex="-1" aria-hidden="true">
@@ -94,7 +107,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 									<?php if ( $rhm_doctor['degree'] ) : ?>
 										<p class="text-base font-semibold text-dark lg:text-lg"><?php echo esc_html( $rhm_doctor['degree'] ); ?></p>
 									<?php endif; ?>
-									<h3 id="doctor-<?php echo esc_attr( (string) $rhm_doctor['id'] ); ?>-name" class="mt-1 text-[26px] leading-tight font-bold text-primary uppercase lg:text-[40px]">
+									<h3 id="<?php echo esc_attr( $rhm_name_id( $rhm_doctor['id'] ) ); ?>" class="mt-1 text-[26px] leading-tight font-bold text-primary uppercase lg:text-[40px]">
 										<a class="hover:text-primary-dark" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
 									</h3>
 

@@ -24,9 +24,9 @@ Thứ tự theo thiết kế: Banner → Dải điểm nổi bật → Thẻ gi�
 | Thẻ giá trị + ảnh | Tiêu đề, 3 thẻ (icon, tiêu đề, mô tả), ảnh bên phải 4:3 (tùy chọn) | |
 | Danh sách dịch vụ | Tiêu đề, mô tả, dịch vụ (ảnh 16:10, tên, link) | 5 dịch vụ / hàng desktop; mobile vuốt ngang |
 | Bác sĩ tiêu biểu | Tiêu đề, mô tả, chọn hồ sơ bác sĩ (+ mô tả riêng nếu cần) | Dưới 640px: ảnh trên, chữ dưới; từ 640px: thẻ ngang, từ 1024px: 2 thẻ/hàng. Ảnh, tên, link lấy từ hồ sơ; mô tả trống → ô Tóm tắt của hồ sơ → Chức danh |
-| **Ô** thông tin: ảnh + chữ | Độ rộng, tiêu đề, ảnh (giữ tỉ lệ), nội dung, nút | Vd Giấy phép hoạt động, Hệ thống vô trùng, Vật liệu chính hãng |
+| **Ô** thông tin: ảnh + chữ | Độ rộng, tiêu đề, ảnh (giữ tỉ lệ), nội dung, nút | Vd Giấy phép hoạt động, Hệ thống vô trùng, Vật liệu chính hãng. Từ 640px: ảnh 40% bên trái + chữ bên phải; dưới 640px: ảnh rộng hết ô ở trên, chữ ở dưới |
 | **Ô** lưới ảnh nhỏ | Độ rộng, tiêu đề, ô (ảnh vuông nền trắng + nhãn 2 dòng) | Mobile: vuốt ngang, khoảng 2 ô + hé ô kế tiếp. Từ 640px: 6 ô/hàng; desktop từ 1024px: 6 ô với khối ≥ 3/5, khối hẹp 3 ô. Dư ô: cuộn ngang, có nút trái/phải trên tablet/desktop |
-| **Ô** banner nổi bật | Độ rộng, tiêu đề, dòng phụ, ảnh, logo (tùy chọn), link (tùy chọn) | Vd All-on-4, Invisalign. Có link → bấm cả ô |
+| **Ô** banner nổi bật | Độ rộng, tiêu đề, dòng phụ, ảnh, logo (tùy chọn), link (tùy chọn) | Vd All-on-4, Invisalign. Có link → bấm cả ô. Từ 640px: ảnh 45% bên trái; dưới 640px: ảnh trên, chữ dưới |
 | Ảnh lớn + chữ + ô nổi bật | Tiêu đề, nội dung, ảnh 4:3, video (tùy chọn); tab "Ô nổi bật": icon, tiêu đề, mô tả, nút | Vd Cơ sở vật chất + Chi phí hợp lý |
 | Số liệu nổi bật | Các ô số + nhãn (tối đa 8) | Tiêu đề không bắt buộc |
 | Chặng đường phát triển | Tiêu đề, các mốc (năm, tiêu đề, mô tả) | |
