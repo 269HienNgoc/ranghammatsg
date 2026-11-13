@@ -110,11 +110,12 @@ function rhm_get_footer_contacts(): array {
 }
 
 /**
- * Chi nhánh hiển thị ở cột "Hệ thống đối tác": chọn + sắp thứ tự trong Tùy biến (setting rhm_footer_branch_ids),
- * chỉ in địa chỉ. Bỏ: ID trùng, chi nhánh đã xóa / nháp / trong thùng rác, chi nhánh chưa có địa chỉ.
+ * Chi nhánh hiển thị ở cột "Hệ thống đối tác": chọn + sắp thứ tự trong Tùy biến (setting rhm_footer_branch_ids).
+ * Footer chỉ in địa chỉ; trang Liên hệ (tpl-lien-he.php) in tên + link Google Maps.
+ * Bỏ: ID trùng, chi nhánh đã xóa / nháp / trong thùng rác, chi nhánh chưa có địa chỉ.
  * Không chọn chi nhánh nào → mảng rỗng → footer.php ẩn cả cột.
  *
- * @return array<int, array{id:int, address:string}> address đã làm sạch, chưa escape (có thể nhiều dòng).
+ * @return array<int, array{id:int, name:string, address:string, map_url:string}> đã làm sạch, chưa escape (address có thể nhiều dòng).
  */
 function rhm_get_footer_branches(): array {
 	$branches = array_column( rhm_get_branches(), null, 'id' ); // Chi nhánh đã xuất bản (có cache) theo ID.
@@ -127,7 +128,9 @@ function rhm_get_footer_branches(): array {
 		}
 		$items[ $id ] = array(
 			'id'      => $id,
+			'name'    => (string) ( $branches[ $id ]['name'] ?? '' ),
 			'address' => $branches[ $id ]['address'],
+			'map_url' => (string) ( $branches[ $id ]['map_url'] ?? '' ),
 		);
 	}
 

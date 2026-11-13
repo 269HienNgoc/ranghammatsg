@@ -110,7 +110,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 									<h3 id="<?php echo esc_attr( $rhm_name_id( $rhm_doctor['id'] ) ); ?>" class="mt-1 text-[26px] leading-tight font-bold text-primary uppercase lg:text-[40px]">
 										<a class="hover:text-primary-dark" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
 									</h3>
-
+~
 									<?php if ( $rhm_doctor['position'] ) : ?>
 										<p class="mt-4 text-[15px] leading-relaxed text-body lg:text-base">
 											<span class="font-semibold text-teal-dark"><?php esc_html_e( 'Chuyên khoa:', 'themeranghammatsg' ); ?></span>

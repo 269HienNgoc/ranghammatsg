@@ -65,6 +65,9 @@ final class RHM_Demo_Landing {
 		$banner                      = array( 'style' => 'banner', 'from' => 'primary', 'to' => 'deep', 'title' => 'Ưu đãi Implant tháng này', 'subtitle' => 'Giảm 30% chi phí trụ Implant · Dữ liệu mẫu', 'alt' => 'Ưu đãi giảm 30% chi phí trồng răng Implant' );
 		$list['landing-banner']        = array( 1920, 650, $banner );
 		$list['landing-banner-mobile'] = array( 828, 620, $banner );
+		// Section "Danh sách có icon + ảnh": ảnh cạnh danh sách (4:3) + ảnh rộng hết khung (dưới danh sách).
+		$list['landing-list-side'] = array( 1200, 900, $photo( 'Quy trình chuẩn Bộ Y tế', 'primary', 'teal' ) );
+		$list['landing-list-wide'] = array( 1600, 600, $photo( 'Không gian điều trị', 'deep', 'teal' ) );
 		// Section "Nhóm ảnh 3 cột": ảnh 4:3, 3 ảnh / item.
 		foreach ( array( 'Ca Implant 1', 'Ca Implant 2', 'Ca Implant 3', 'Ca niềng răng 1', 'Ca niềng răng 2', 'Ca niềng răng 3' ) as $i => $title ) {
 			$list[ 'landing-group-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
@@ -279,6 +282,38 @@ final class RHM_Demo_Landing {
 				'eyebrow'       => '',
 				'title'         => 'Hình ảnh cơ sở vật chất',
 				'images'        => array( $img['landing-stack-1'], $img['landing-stack-2'], $img['landing-stack-3'] ),
+			),
+			array(
+				'acf_fc_layout'  => 'icon-list',
+				'eyebrow'        => 'Cam kết',
+				'title'          => 'Vì sao khách hàng chọn chúng tôi',
+				'description'    => 'Mọi ca điều trị đều theo quy trình chuẩn, minh bạch từ lúc thăm khám đến khi tái khám.',
+				'icon'           => 'tich',
+				'items'          => array(
+					array( 'text' => 'Bác sĩ chuyên khoa Răng Hàm Mặt trực tiếp thăm khám và điều trị.', 'icon' => '' ),
+					array( 'text' => 'Báo giá rõ ràng trước khi điều trị, không phát sinh chi phí.', 'icon' => 'heo-dat' ),
+					array( 'text' => 'Dụng cụ tiệt khuẩn theo chuẩn Châu Âu, đóng gói riêng từng khách.', 'icon' => '' ),
+					array( 'text' => "Bảo hành dài hạn cho Implant và răng sứ.\nTái khám định kỳ miễn phí.", 'icon' => '' ),
+				),
+				'image'          => $img['landing-list-side'],
+				'image_position' => 'right',
+			),
+			array(
+				'acf_fc_layout'  => 'icon-list',
+				'eyebrow'        => '',
+				'title'          => 'Dịch vụ đi kèm miễn phí',
+				'description'    => '',
+				'icon'           => 'lap-lanh',
+				'items'          => array(
+					array( 'text' => 'Khám và tư vấn ban đầu', 'icon' => '' ),
+					array( 'text' => 'Chụp phim X-quang kỹ thuật số', 'icon' => '' ),
+					array( 'text' => 'Cạo vôi răng khi điều trị Implant', 'icon' => '' ),
+					array( 'text' => 'Gửi xe và nước uống tại phòng khám', 'icon' => '' ),
+					array( 'text' => 'Nhắc lịch tái khám qua Zalo', 'icon' => '' ),
+					array( 'text' => 'Hỗ trợ thủ tục bảo hiểm', 'icon' => '' ),
+				),
+				'image'          => $img['landing-list-wide'],
+				'image_position' => 'bottom',
 			),
 			array(
 				'acf_fc_layout' => 'photo-groups',

@@ -150,13 +150,21 @@ while ( have_posts() ) :
 					<?php if ( $rhm_branch ) : ?>
 						<h2 class="text-lg font-bold text-teal-dark lg:text-xl"><?php echo esc_html( rhm_footer_text( 'branch_title' ) ); ?></h2>
 						<ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-							<?php foreach ( $rhm_branch as $rhm_item ) : ?>
+							<?php
+							// rhm_get_footer_branches(): chi nhánh (CPT) chọn ở Tùy biến → Chân trang; tên = tiêu đề, link = Google Maps.
+							foreach ( $rhm_branch as $rhm_item ) :
+								$rhm_branch_name = (string) ( $rhm_item['name'] ?? '' );
+								$rhm_branch_link = (string) ( $rhm_item['map_url'] ?? '' );
+								if ( '' === $rhm_branch_name ) {
+									continue;
+								}
+								?>
 								<li class="flex items-center gap-2.5">
 									<?php echo rhm_get_icon( 'map-pin', 'size-5 shrink-0 text-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
-									<?php if ( $rhm_item['link'] ) : ?>
-										<a class="text-body hover:text-primary" href="<?php echo esc_url( $rhm_item['link'] ); ?>"<?php echo rhm_external_link_attrs( $rhm_item['link'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_item['name'] ); ?></a>
+									<?php if ( '' !== $rhm_branch_link ) : ?>
+										<a class="text-body hover:text-primary" href="<?php echo esc_url( $rhm_branch_link ); ?>"<?php echo rhm_external_link_attrs( $rhm_branch_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_branch_name ); ?></a>
 									<?php else : ?>
-										<span class="text-body"><?php echo esc_html( $rhm_item['name'] ); ?></span>
+										<span class="text-body"><?php echo esc_html( $rhm_branch_name ); ?></span>
 									<?php endif; ?>
 								</li>
 							<?php endforeach; ?>
