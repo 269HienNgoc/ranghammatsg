@@ -76,7 +76,10 @@ themeranghammatsg/
 └── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
 
-Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất **1.4.15**, 2026-11-13). Các bản gần đây:
+Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất **1.4.18**, 2026-11-14). Các bản gần đây:
+- 1.4.18: dòng địa điểm header VẪN HIỆN khi cuộn trên desktop (bỏ `opacity: 0` ở `.is-stuck`, thu nhỏ cùng logo).
+- 1.4.17: dòng địa điểm dưới logo header ("Biên Hòa · Cần Thơ · Sydney", `inc/header-locations.php`, Tùy biến → "Dòng địa điểm (Header)": nội dung, bật/tắt + chọn icon, dấu phân cách, màu, mobile/desktop). Header mobile cao thêm 8px.
+- 1.4.16: WebMCP khai báo cho agent AI (nhóm "Agentic browsing" của PSI): form Fluent có `toolname`/`tooldescription` (`book_appointment`, `contact_form_<id>`), form tìm kiếm header `search_site`.
 - 1.4.15: sửa PHP Warning `Undefined array key "link"/"name"` ở `tpl-lien-he.php` (khối chi nhánh trang Liên hệ còn đọc cấu trúc danh sách nhập tay cũ): `rhm_get_footer_branches()` trả thêm `name` + `map_url`, trang Liên hệ in tên chi nhánh (link Google Maps nếu có).
 - 1.4.14: thêm `screenshot.png` (ảnh theme trong Giao diện → Giao diện: logo phòng khám 591 × 592, 87 kB; WP khuyến nghị 1200 × 900, ảnh vuông bị thu nhỏ/cắt trong khung 4:3). Code giống 1.4.13.
 - 1.4.13: landing thêm `icon-list`.
@@ -100,6 +103,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 | `hero.php` | slide hero, `rhm_hero_picture`, `rhm_html_attrs` |
 | `icons.php` | SVG icon UI inline dùng trong template: `rhm_get_icon()` (không có thì tìm trong thư viện icon menu) |
 | `icon-library.php` | thư viện `assets/icons/<bộ>/`: `rhm_icon_list()`, `rhm_icon_url()` (CDN qua theme mod `rhm_icon_base_url`), `rhm_icon_svg()` |
+| `header-locations.php` | dòng địa điểm nhỏ dưới logo header (vd "Biên Hòa · Cần Thơ · Sydney"), in trong `.site-branding` qua `rhm_header_locations()`. Tùy biến → **Dòng địa điểm (Header)**: `rhm_header_locations_show`, `rhm_header_locations` (chữ; tách theo ` - ` có khoảng trắng 2 bên, `\|`, `·`, `•` → "Bà Rịa-Vũng Tàu" giữ nguyên), `_icon_show`, `_icon` (bộ `menu/`, mặc định `location`), `_separator`, `_color` (`muted`/`primary`/`deep`), `_device` (`all`/`mobile` = `lg:hidden`/`desktop` = `max-lg:hidden`); mặc định `RHM_HEADER_LOCATIONS_DEFAULTS`. CSS `.header-locations` trong `header.css`: lề trái = `--logo-h` × 1,095 (chữ logo bắt đầu ở x = 1,095 × cao logo, đo trên file 1409×592; đổi logo → đo lại), `--logo-h` phải khớp `RHM_LOGO_HEIGHTS`. Mobile: dòng dưới logo, `margin-bottom: -15px` + `.header-bar` `padding-bottom: 20px` (`:has`) → nút đặt lịch vẫn canh giữa logo, không đè chữ kể cả logo 50px < 360px (hàng cao thêm 8px). Desktop: kéo lên vào khoảng trống cạnh đáy huy hiệu (`margin-top: −26,5% × --logo-h + 4px`) → hàng vẫn 113px; `.is-stuck`: VẪN HIỆN (người dùng yêu cầu 2026-11-14), thu nhỏ cùng logo (scale 0,62 → chữ ~8–9px), nằm gọn trong hàng 72px còn lộ. Đã đo 2026-11-14: thẳng chữ "R" 320–1920px, không đè nút/ô tìm kiếm, không tràn ngang, CLS 0 |
 | `menus.php` | icon menu (ô chọn icon ở Giao diện → Menu, meta `_rhm_menu_icon`; class `icon-<tên>` vẫn dùng được) + nút `.submenu-toggle` |
 | `doctors.php` / `doctor-fields.php` | CPT `bac-si` (có `page-attributes`) + taxonomy `chuyen-khoa` (chỉ admin), field ACF (các tab hồ sơ + tab "Trang chủ": `degree`, `years`, `case_count`, `credentials`), `rhm_get_doctor()`, ảnh bác sĩ |
 | `branches.php` | CPT `chi-nhanh` "Chi nhánh" (chỉ dữ liệu, không có trang công khai) + taxonomy `danh-muc-chi-nhanh` + ảnh đại diện + field ACF `rhm_branch_address` / `rhm_branch_hotline` / `rhm_branch_map_url`: `rhm_get_branches( [ 'term' => slug ] )` (cache transient), `rhm_get_branch_field()`, cột Địa chỉ/Hotline trong admin. Footer đọc qua `rhm_get_footer_branches()` (`footer.php`) |
@@ -122,7 +126,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
 | `landing/` | Landing page theo chủ đề (Page Template + ACF Flexible Content `rhm_landing_sections`): `rhm_landing_templates()` (chủ đề → bundle CSS + layout được dùng; `rhm_page_style_bundle()` đọc từ đây), `rhm_landing_layouts()`, `rhm_landing_render()`; field 1 group/chủ đề ở `fields.php` + `layouts/<layout>.php`. Hướng dẫn: `docs/landing-pages.md` |
 | `plugins.php` | require các file `inc/plugin/*` |
-| `plugin/fluentform.php` | Fluent Forms: jQuery + JS "chạm mới tải", `rhm_render_fluent_form()` (form của theme), gỡ CSS Fluent khi trang chỉ có form của theme |
+| `plugin/fluentform.php` | Fluent Forms: jQuery + JS "chạm mới tải", `rhm_render_fluent_form()` (form của theme), gỡ CSS Fluent khi trang chỉ có form của theme, WebMCP: `rhm_fluent_webmcp_attrs()` gắn `toolname`/`tooldescription` vào `<form>` của mọi form Fluent (`rhm_fluent_webmcp_tool()`: form đặt lịch = `book_appointment`, khác = `contact_form_<id>`; filter `rhm_webmcp_fluent_tool`) |
 | `plugin/kk-star-ratings.php` | kk Star Ratings: `rhm_get_star_rating()` (luôn tồn tại, trả rỗng khi plugin tắt), chỉ giữ CSS/JS của plugin ở bài viết có sao |
 
 ## Quy ước quan trọng
@@ -167,6 +171,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 - Swift Performance AI (bật *Lazyload images*) ghi đè MỌI `<img>` thành `loading="lazy" fetchpriority="low"`, kể cả ảnh LCP. Ảnh LCP (hero slide 1, ảnh bài nổi bật danh mục) và logo phải nằm trong danh sách loại trừ ảnh của Swift (cấu hình trong admin, không sửa code plugin). Kiểm tra: HTML phải có đúng 1 `fetchpriority="high"`.
 - Fluent Forms được tải kiểu "chạm mới tải" (`inc/plugin/fluentform.php` + `src/js/fluent-lazy.js`); CSS Fluent bị gỡ, style riêng ở `_booking-form.css`.
 - Video YouTube chỉ kết nối sau khi bấm phát (`embed.js`); slider không tự chạy.
+- **WebMCP khai báo** (nhóm "Agentic browsing" của Lighthouse 13.4+, không tính vào 4 điểm chính): form = công cụ cho agent AI qua thuộc tính HTML, không JS. `<form>` cần `toolname` (snake_case, DUY NHẤT trên trang) + `tooldescription` (thiếu 1 trong 2 = lỗi schema); ô nhập cần `name` + `<label>` hoặc `toolparamdescription`. Form tìm kiếm: `rhm_search_tool_attrs()` (`inc/template-tags.php`) chỉ gắn `search_site` cho form tìm kiếm in ĐẦU TIÊN của trang (header), form ngăn kéo mobile không gắn để khỏi trùng tên. Form tự viết mới phải làm theo. Đo: Lighthouse thêm `--chrome-flags="--enable-features=WebMCPTesting,DevToolsWebMCPSupport,WebMCP"` (Chrome mặc định báo "không áp dụng"). ARD (`/.well-known/ard.json`) KHÔNG làm: chỉ dùng kê khai MCP server / A2A agent, site không có.
 - JS vanilla, không phụ thuộc jQuery; nạp `defer` ở footer.
 
 ## Landing page (Page + Page Template + ACF Flexible Content)

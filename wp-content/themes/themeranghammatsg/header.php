@@ -42,12 +42,13 @@ $rhm_current_url = get_pagenum_link( max( 1, (int) get_query_var( 'paged' ) ), f
 
 <header class="site-header" id="site-header">
 	<div class="header-bar site-container flex items-center gap-2.5 py-3 xs:gap-3 lg:min-h-[113px] lg:gap-3 lg:py-3 xl:gap-6">
-		<div class="site-branding order-1 min-w-0 flex-1 lg:flex-initial">
+		<div class="site-branding order-1 min-w-0 flex-1 lg:flex-initial<?php echo has_custom_logo() ? ' has-logo' : ''; ?>">
 			<?php if ( has_custom_logo() ) : ?>
 				<?php rhm_custom_logo(); ?>
 			<?php else : ?>
 				<a class="inline-block text-base leading-tight font-bold text-dark uppercase hover:text-primary xs:text-lg xl:text-2xl" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 			<?php endif; ?>
+			<?php rhm_header_locations(); // Dòng địa điểm dưới logo (inc/header-locations.php). ?>
 		</div>
 
 		<div class="header-search min-w-0 flex-1 max-lg:hidden lg:order-2 lg:ml-[clamp(8px,3vw,56px)] lg:max-w-[610px] lg:min-w-[180px]">

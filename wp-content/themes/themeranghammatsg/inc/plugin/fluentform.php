@@ -164,6 +164,50 @@ function rhm_fluent_track_render( $output, string $tag ) {
 add_filter( 'do_shortcode_tag', 'rhm_fluent_track_render', 10, 2 );
 
 /**
+ * Tên + mô tả công cụ WebMCP (agent AI) của 1 form Fluent. Form đặt lịch (popup / Customizer) = "book_appointment",
+ * form khác = "contact_form_<id>". Sửa từng form: filter 'rhm_webmcp_fluent_tool'.
+ *
+ * @return array{0:string, 1:string} [ toolname, tooldescription ].
+ */
+function rhm_fluent_webmcp_tool( int $form_id ): array {
+	$booking = array( rhm_booking_popup_form_id(), absint( get_theme_mod( 'rhm_booking_form_id', 0 ) ) );
+	$tool    = in_array( $form_id, $booking, true )
+		? array( 'book_appointment', __( 'Đặt lịch khám / tư vấn tại phòng khám Răng Hàm Mặt SG: gửi họ tên, số điện thoại và dịch vụ cần tư vấn; phòng khám sẽ gọi lại để xác nhận lịch.', 'themeranghammatsg' ) )
+		: array( 'contact_form_' . $form_id, __( 'Gửi yêu cầu liên hệ / đăng ký tư vấn tới phòng khám Răng Hàm Mặt SG.', 'themeranghammatsg' ) );
+
+	return (array) apply_filters( 'rhm_webmcp_fluent_tool', $tool, $form_id );
+}
+
+/**
+ * WebMCP khai báo: gắn toolname + tooldescription vào <form> của mọi form Fluent (shortcode do theme hay nội dung in ra).
+ * Chỉ thêm thuộc tính, không đổi markup hiển thị → không ảnh hưởng CLS / JS "chạm mới tải". Ô nhập đã có name + <label> của Fluent.
+ */
+function rhm_fluent_webmcp_attrs( $output, string $tag ) {
+	if ( 'fluentform' !== $tag || is_admin() || ! is_string( $output ) || '' === $output ) {
+		return $output;
+	}
+
+	$processor = new WP_HTML_Tag_Processor( $output );
+	while ( $processor->next_tag( 'form' ) ) {
+		$form_id = absint( $processor->get_attribute( 'data-form_id' ) );
+		if ( ! $form_id ) {
+			continue;
+		}
+		if ( null === $processor->get_attribute( 'toolname' ) ) {
+			[ $name, $description ] = rhm_fluent_webmcp_tool( $form_id ) + array( '', '' );
+			if ( '' !== $name && '' !== $description ) {
+				$processor->set_attribute( 'toolname', $name );
+				$processor->set_attribute( 'tooldescription', $description );
+			}
+		}
+		break;
+	}
+
+	return $processor->get_updated_html();
+}
+add_filter( 'do_shortcode_tag', 'rhm_fluent_webmcp_attrs', 10, 2 );
+
+/**
  * Bỏ 2 file CSS của Fluent (~9 kB gzip, chặn hiển thị) khi mọi form trên trang đều do theme in — form của theme đã có đủ
  * style trong partial _booking-form.css (nạp mọi trang qua footer.css, vì popup đặt lịch có ở mọi trang).
  * Trang có form Fluent khác (shortcode trong nội dung, widget…) vẫn giữ CSS của plugin.

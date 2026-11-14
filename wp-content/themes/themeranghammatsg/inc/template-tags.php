@@ -253,3 +253,21 @@ function rhm_get_picture( int $id, array $widths, array $attrs = array() ): stri
 
 	return '<picture>' . $html . '<img' . rhm_html_attrs( $img ) . '></picture>';
 }
+
+/**
+ * Thuộc tính WebMCP (công cụ cho agent AI) của form tìm kiếm: CHỈ form tìm kiếm in ra đầu tiên của trang nhận
+ * toolname="search_site" (header + ngăn kéo mobile cùng có form → toolname phải duy nhất trên trang). Form sau trả ''.
+ * Đã escape, in thẳng vào thẻ <form>.
+ */
+function rhm_search_tool_attrs(): string {
+	static $printed = false;
+	if ( $printed ) {
+		return '';
+	}
+	$printed = true;
+
+	return sprintf(
+		' toolname="search_site" tooldescription="%s"',
+		esc_attr__( 'Tìm bài viết, dịch vụ nha khoa và hồ sơ bác sĩ trên website phòng khám Răng Hàm Mặt SG theo từ khóa.', 'themeranghammatsg' )
+	);
+}

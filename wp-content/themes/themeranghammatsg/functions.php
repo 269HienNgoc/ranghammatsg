@@ -20,6 +20,7 @@ require_once RHM_THEME_DIR . '/inc/template-tags.php';
 require_once RHM_THEME_DIR . '/inc/external-links.php';
 require_once RHM_THEME_DIR . '/inc/menus.php';
 require_once RHM_THEME_DIR . '/inc/flag-links.php';
+require_once RHM_THEME_DIR . '/inc/header-locations.php';
 require_once RHM_THEME_DIR . '/inc/hero.php';
 require_once RHM_THEME_DIR . '/inc/quick-services.php';
 require_once RHM_THEME_DIR . '/inc/about.php';

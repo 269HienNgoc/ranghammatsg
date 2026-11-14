@@ -16,6 +16,7 @@
 @source "../../../searchform.php";
 @source "../../../inc/menus.php";
 @source "../../../inc/flag-links.php";
+@source "../../../inc/header-locations.php";
 @source "../../../inc/icons.php";
 @source "../../../inc/template-tags.php";
 
@@ -49,6 +50,44 @@
 
 	.drawer-logo .custom-logo {
 		@apply h-11 w-auto;
+	}
+
+	/* Dòng địa điểm dưới logo (inc/header-locations.php), thẳng mép trái với chữ của logo.
+	 * --logo-h = chiều cao logo, PHẢI khớp .site-branding .custom-logo ở trên + RHM_LOGO_HEIGHTS (inc/setup.php).
+	 * Đo trên file logo (1409×592): chữ "RĂNG HÀM MẶT" bắt đầu ở x = 1,095 × chiều cao, chữ kết thúc ở y = 73,5% chiều cao
+	 * (dưới đó là khoảng trống cạnh đáy huy hiệu tròn). Đổi logo khác bố cục → đo lại 2 hệ số này.
+	 * - Mobile: dòng nằm DƯỚI logo, nowrap được tràn sang phải xuống dưới nút Đặt lịch (đỉnh dòng = đáy logo ≥ đáy nút
+	 *   44px canh giữa hàng → không đè). Header cao thêm đúng 1 dòng; nội dung tĩnh nên CLS = 0.
+	 * - Desktop: kéo lên vào khoảng trống cạnh đáy huy hiệu → hàng logo không cao thêm (giữ min-h 113px + translateY của .is-stuck). */
+	.header-locations {
+		--logo-h: 50px;
+	}
+
+	.site-branding.has-logo .header-locations {
+		padding-left: calc(var(--logo-h) * 1.095);
+	}
+
+	@media (width >= 360px) {
+		.header-locations {
+			--logo-h: 60px;
+		}
+	}
+
+	@media (width >= 64rem) {
+		.header-locations {
+			--logo-h: 64px;
+		}
+
+		/* Chữ logo kết thúc ở 73,5% chiều cao → kéo dòng lên 26,5% − 4px khoảng cách. */
+		.site-branding.has-logo .header-locations {
+			margin-top: calc(var(--logo-h) * -0.265 + 4px);
+		}
+	}
+
+	@media (width >= 80rem) {
+		.header-locations {
+			--logo-h: 84px;
+		}
 	}
 
 	/* ---- Nút hamburger (3 vạch) ---- */
@@ -272,6 +311,23 @@
 }
 
 /*
+ * Mobile: dòng địa điểm (cao 15px = leading-[15px]) KHÔNG tính vào chiều cao hàng logo (margin-bottom âm) → nút Đặt lịch / ☰
+ * vẫn canh giữa theo LOGO như cũ, đáy nút (≤ 12 + (50 + 44) / 2 = 59px) luôn nằm trên dòng chữ (từ 62px) kể cả logo 50px < 360px.
+ * Chỗ cho dòng chữ bù bằng padding đáy của .header-bar (12px py-3 → 20px; dòng chữ 15px tràn vào đó, còn 5px dưới chữ).
+ * Ngoài @layer để thắng utility py-3.
+ * Bỏ qua khi dòng bị ẩn trên mobile (tùy chọn "Chỉ desktop" = max-lg:hidden).
+ */
+@media (width < 64rem) {
+	.header-locations {
+		margin-bottom: -15px;
+	}
+
+	.header-bar:has(> .site-branding > .header-locations:not(.max-lg\:hidden)) {
+		padding-bottom: 1.25rem;
+	}
+}
+
+/*
  * Header thu gọn khi cuộn xuống (desktop): .is-stuck do src/js/main.js gắn.
  * CHỈ dùng transform → kích thước bố cục của header không đổi, không đẩy phần tử nào (CLS = 0;
  * Chrome không tính dịch chuyển do transform là layout shift).
@@ -313,4 +369,6 @@
 	.site-header.is-stuck .header-hotline-note {
 		opacity: 0;
 	}
+
+	/* Dòng địa điểm (inc/header-locations.php) VẪN HIỆN khi header thu gọn: nằm trong .site-branding nên thu nhỏ cùng logo. */
 }
