@@ -1,5 +1,6 @@
 /**
  * Landing "Hệ thống phòng khám" (template-parts/landing/clinics.php): dải ảnh nhỏ ↔ slider ảnh lớn.
+ * Landing "Ảnh lớn + slider tab" (template-parts/landing/tab-slider.php): hàng tab ↔ slide (cùng cơ chế, nút = tab).
  * - Bấm ảnh nhỏ → slider (native scroll-snap, mỗi slide rộng hết khung) cuộn tới slide tương ứng.
  * - Slider cuộn (vuốt, nút ‹ › của _tiles.js, phím) → ảnh nhỏ của slide đang xem có aria-current="true" và nằm trong khung dải.
  * Nạp động từ carousel.js. Đọc layout trước, ghi sau, gom theo requestAnimationFrame → không forced reflow, INP thấp.

@@ -52,6 +52,7 @@ function rhm_landing_layouts(): array {
 		'icon-list'    => $layout( __( 'Danh sách có icon + ảnh (trái / phải / trên / dưới)', 'themeranghammatsg' ) ),
 		'photo-groups' => $layout( __( 'Nhóm ảnh 3 cột (tiêu đề + mô tả + hàng ảnh)', 'themeranghammatsg' ), false, true ),
 		'tab-slider'   => $layout( __( 'Ảnh lớn + slider tab (ảnh tròn, tiêu đề, danh sách, nút Tư vấn)', 'themeranghammatsg' ), false, true ),
+		'tab-slider'   => $layout( __( 'Ảnh lớn + slider tab (ảnh tròn, tiêu đề, danh sách, nút Tư vấn)', 'themeranghammatsg' ), false, true ),
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ), false, true ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),

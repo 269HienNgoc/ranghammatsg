@@ -1,7 +1,7 @@
 /**
  * Nút điều hướng cho ô ảnh cuộn ngang: bố cục và thao tác vuốt do CSS/native scroll xử lý.
  * Nạp động từ carousel.js khi có nút điều hướng; không tạo entry Vite mới.
- * Dùng ở: landing "Ô lưới ảnh", "Hệ thống phòng khám"; trang chủ "Trước – sau" (template-parts/sections/before-after.php).
+ * Dùng ở: landing "Ô lưới ảnh", "Hệ thống phòng khám", "Ảnh lớn + slider tab"; trang chủ "Trước – sau" (template-parts/sections/before-after.php).
  * Track = phần tử mà nút trước trỏ tới qua aria-controls (1 section có thể có nhiều track, vd landing "Hệ thống phòng khám"),
  * không có thì lấy [data-rhm-tiles-track] đầu tiên của section. Track trong khối đang ẩn: ResizeObserver cập nhật khi hiện.
  */
