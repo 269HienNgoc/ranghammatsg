@@ -45,9 +45,9 @@ $rhm_sizes = $rhm_desktop . ', (min-width: 640px) calc(30vw - 10px), calc(45vw -
 			<?php foreach ( $rhm_items as [ $rhm_image, $rhm_name, $rhm_url ] ) : ?>
 				<li class="w-[45%] shrink-0 snap-start sm:w-[30%] lg:w-auto">
 					<?php if ( '' !== $rhm_url ) : ?>
-						<a class="group block h-full overflow-hidden rounded-xl bg-mint shadow-card" href="<?php echo esc_url( $rhm_url ); ?>"<?php echo rhm_external_link_attrs( $rhm_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
+						<a class="group block h-full overflow-hidden rounded-lg bg-mint shadow-card" href="<?php echo esc_url( $rhm_url ); ?>"<?php echo rhm_external_link_attrs( $rhm_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>>
 					<?php else : ?>
-						<div class="h-full overflow-hidden rounded-xl bg-mint shadow-card">
+						<div class="h-full overflow-hidden rounded-lg bg-mint shadow-card">
 					<?php endif; ?>
 						<span class="relative block aspect-[16/10] overflow-hidden bg-soft">
 							<?php

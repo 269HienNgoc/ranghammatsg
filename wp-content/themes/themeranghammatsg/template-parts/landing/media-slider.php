@@ -64,8 +64,8 @@ $rhm_grid   = match ( $rhm_columns ) {
 	default => 'grid gap-5 lg:gap-6',
 };
 $rhm_card   = 'left' === $rhm_position
-	? 'overflow-hidden rounded-2xl border border-line bg-linear-to-l from-mint to-white p-5 shadow-card lg:p-6'
-	: 'overflow-hidden rounded-2xl border border-line bg-linear-to-r from-mint to-white p-5 shadow-card lg:p-6';
+	? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-5 shadow-card lg:p-6'
+	: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-5 shadow-card lg:p-6';
 // Cạnh nhau: khung cao hết thẻ (thẻ cùng hàng cao hơn → ảnh + chữ vẫn canh giữa theo chiều dọc).
 // 640px+: 2 cột bằng nhau; 1 cột từ 1024px: ảnh 1/3, chữ 2/3 (cột đầu lưới = phần tử đứng trước sau khi đảo order).
 $rhm_layout = match ( true ) {
@@ -100,7 +100,7 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 					<div class="<?php echo esc_attr( $rhm_images ? $rhm_layout : 'flex h-full flex-col' ); ?>">
 						<?php if ( $rhm_images ) : ?>
 							<div class="<?php echo esc_attr( $rhm_media ); ?>" data-rhm-tiles>
-								<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-lg [scrollbar-width:none]" aria-label="<?php echo esc_attr( $rhm_label ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
+								<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-md [scrollbar-width:none]" aria-label="<?php echo esc_attr( $rhm_label ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
 									<?php foreach ( $rhm_images as $rhm_index => $rhm_image ) : ?>
 										<div class="relative block aspect-[4/3] w-full shrink-0 snap-start overflow-hidden bg-soft"<?php echo $rhm_multi ? ' role="group" aria-roledescription="' . esc_attr__( 'ảnh', 'themeranghammatsg' ) . '" aria-label="' . esc_attr( ( $rhm_index + 1 ) . ' / ' . $rhm_count ) . '"' : ''; ?>>
 											<?php

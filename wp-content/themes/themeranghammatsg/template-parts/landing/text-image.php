@@ -30,7 +30,7 @@ $rhm_sizes = '(min-width: 1440px) 1408px, calc(100vw - 32px)';
 		<?php endif; ?>
 
 		<?php if ( $rhm_image ) : ?>
-			<div class="<?php echo esc_attr( '' !== $rhm_content ? 'mt-6 overflow-hidden rounded-2xl bg-soft shadow-card lg:mt-8' : 'overflow-hidden rounded-2xl bg-soft shadow-card' ); ?>">
+			<div class="<?php echo esc_attr( '' !== $rhm_content ? 'mt-6 overflow-hidden rounded-lg bg-soft shadow-card lg:mt-8' : 'overflow-hidden rounded-lg bg-soft shadow-card' ); ?>">
 				<?php
 				// Section đứng đầu trang → ảnh là LCP (fetchpriority=high), còn lại lazy.
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.

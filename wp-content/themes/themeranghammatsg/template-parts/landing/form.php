@@ -29,7 +29,7 @@ $rhm_ftitle  = rhm_landing_text( $rhm_data, 'form_title' );
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
-		<div class="grid items-center gap-6 rounded-3xl border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 lg:p-12">
+		<div class="grid items-center gap-6 rounded-xl border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 lg:p-12">
 			<div class="min-w-0">
 				<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'bar', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 
@@ -52,7 +52,7 @@ $rhm_ftitle  = rhm_landing_text( $rhm_data, 'form_title' );
 				<?php endif; ?>
 
 				<?php if ( $rhm_hotline ) : ?>
-					<a class="group mt-6 inline-flex items-center gap-3 rounded-2xl border border-line bg-white py-3 pr-6 pl-3 shadow-card transition-colors hover:border-primary" href="<?php echo esc_url( rhm_get_tel_href( $rhm_hotline ) ); ?>">
+					<a class="group mt-6 inline-flex items-center gap-3 rounded-lg border border-line bg-white py-3 pr-6 pl-3 shadow-card transition-colors hover:border-primary" href="<?php echo esc_url( rhm_get_tel_href( $rhm_hotline ) ); ?>">
 						<span class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-colors group-hover:bg-primary-dark">
 							<?php echo rhm_get_icon( 'phone', 'size-6' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 						</span>
@@ -64,14 +64,14 @@ $rhm_ftitle  = rhm_landing_text( $rhm_data, 'form_title' );
 				<?php endif; ?>
 			</div>
 
-			<div class="rhm-booking min-w-0 rounded-2xl border border-line bg-white p-5 shadow-card sm:p-8">
+			<div class="rhm-booking min-w-0 rounded-lg border border-line bg-white p-5 shadow-card sm:p-8">
 				<?php if ( '' !== $rhm_ftitle ) : ?>
 					<h3 class="mb-5 text-lg leading-snug font-bold text-teal-dark lg:text-xl"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_ftitle ); ?></h3>
 				<?php endif; ?>
 				<?php if ( '' !== trim( $rhm_form ) ) : ?>
 					<?php echo $rhm_form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML form do Fluent Forms in. ?>
 				<?php else : ?>
-					<p class="rounded-xl border border-dashed border-primary p-4 text-sm"><?php esc_html_e( 'Chưa có form: chọn form ở ô "Form Fluent Forms" của section này, hoặc nhập ID form đặt lịch mặc định tại Giao diện → Tùy biến → Thông tin phòng khám (Fluent Forms phải đang bật). Ghi chú này chỉ hiện với quản trị viên.', 'themeranghammatsg' ); ?></p>
+					<p class="rounded-lg border border-dashed border-primary p-4 text-sm"><?php esc_html_e( 'Chưa có form: chọn form ở ô "Form Fluent Forms" của section này, hoặc nhập ID form đặt lịch mặc định tại Giao diện → Tùy biến → Thông tin phòng khám (Fluent Forms phải đang bật). Ghi chú này chỉ hiện với quản trị viên.', 'themeranghammatsg' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>

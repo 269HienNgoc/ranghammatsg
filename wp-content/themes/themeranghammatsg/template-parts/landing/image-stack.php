@@ -30,7 +30,7 @@ $rhm_sizes = '(min-width: 1440px) 1408px, calc(100vw - 32px)';
 			<?php foreach ( $rhm_images as $rhm_index => $rhm_image ) : ?>
 				<?php $rhm_caption = rhm_landing_lines( array( 'caption' => (string) wp_get_attachment_caption( $rhm_image ) ), 'caption' ); ?>
 				<figure>
-					<div class="overflow-hidden rounded-2xl bg-soft shadow-card">
+					<div class="overflow-hidden rounded-lg bg-soft shadow-card">
 						<?php
 						// Chỉ ảnh đầu, khi section đứng đầu trang, mới là ảnh LCP; còn lại lazy.
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.

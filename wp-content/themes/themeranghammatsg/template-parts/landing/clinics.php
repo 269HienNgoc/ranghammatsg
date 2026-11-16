@@ -95,14 +95,14 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 			<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none]" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
 				<?php foreach ( $rhm_items as $rhm_index => [ $rhm_image, $rhm_name, $rhm_lines ] ) : ?>
 					<div class="flex w-full shrink-0 snap-start flex-col" role="group" aria-roledescription="<?php esc_attr_e( 'ảnh', 'themeranghammatsg' ); ?>" aria-label="<?php echo esc_attr( ( $rhm_index + 1 ) . ' / ' . $rhm_count . ': ' . $rhm_name ); ?>">
-						<span class="relative block aspect-[4/3] overflow-hidden rounded-xl bg-soft sm:aspect-video">
+						<span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-soft sm:aspect-video">
 							<?php
 							// Chỉ ảnh đầu, khi section đứng đầu trang, mới là ảnh LCP.
 							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
 							echo rhm_landing_picture( $rhm_image, $rhm_sizes, 'absolute inset-0 size-full object-cover', $args['is_first'] && 0 === $rhm_index );
 							?>
 						</span>
-						<div class="mt-4 flex-1 overflow-hidden rounded-xl border border-line bg-mint">
+						<div class="mt-4 flex-1 overflow-hidden rounded-lg border border-line bg-mint">
 							<h3 class="bg-deep px-4 py-2.5 text-lg leading-snug font-bold text-white lg:px-5"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_name ); ?></h3>
 							<?php if ( '' !== $rhm_lines ) : ?>
 								<div class="rhm-rich px-4 py-3 leading-relaxed text-body lg:px-5 lg:py-4"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
@@ -131,7 +131,7 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 		<?php if ( $rhm_multi ) : ?>
 			<div class="mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain p-1 lg:mt-8" data-rhm-showcase-thumbs>
 				<?php foreach ( $rhm_items as $rhm_index => [ $rhm_image, $rhm_name ] ) : ?>
-					<button type="button" class="relative block aspect-video w-[40%] shrink-0 cursor-pointer snap-start overflow-hidden rounded-lg bg-soft opacity-70 ring-primary transition-opacity hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-3 sm:w-[calc((100%-2.25rem)/4)] lg:w-[calc((100%-3.75rem)/6)]" aria-controls="<?php echo esc_attr( $rhm_track ); ?>"<?php echo $rhm_index ? '' : ' aria-current="true"'; ?>>
+					<button type="button" class="relative block aspect-video w-[40%] shrink-0 cursor-pointer snap-start overflow-hidden rounded-md bg-soft opacity-70 ring-primary transition-opacity hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-3 sm:w-[calc((100%-2.25rem)/4)] lg:w-[calc((100%-3.75rem)/6)]" aria-controls="<?php echo esc_attr( $rhm_track ); ?>"<?php echo $rhm_index ? '' : ' aria-current="true"'; ?>>
 						<?php
 						// Ảnh nhỏ chỉ minh họa, tên nằm ở chữ ẩn → alt rỗng (không đọc lặp).
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.

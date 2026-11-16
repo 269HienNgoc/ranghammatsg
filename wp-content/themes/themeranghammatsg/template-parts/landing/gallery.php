@@ -60,7 +60,7 @@ $rhm_sizes = '(min-width: 1440px) 405px, (min-width: 1024px) calc(33.33vw - 75px
 				<div class="<?php echo esc_attr( $rhm_center ); ?>">
 					<?php foreach ( $rhm_images as $rhm_index => $rhm_image ) : ?>
 						<figure class="swiper-slide w-[85%] px-2 py-2 sm:w-1/2 lg:w-1/3 lg:px-3">
-							<span class="relative block aspect-[4/3] overflow-hidden rounded-2xl bg-soft shadow-card">
+							<span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-soft shadow-card">
 								<?php
 								// Chỉ ảnh đầu của section đầu trang mới là ảnh LCP.
 								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.

@@ -44,7 +44,7 @@ $rhm_sizes = $rhm_side
 
 // Section đứng đầu trang → ảnh là LCP (fetchpriority=high), còn lại lazy. rhm_html_attrs escape từng thuộc tính.
 $rhm_image_html = $rhm_image
-	? '<div class="overflow-hidden rounded-2xl bg-soft shadow-card">' . rhm_landing_picture( $rhm_image, $rhm_sizes, 'block h-auto w-full', (bool) $args['is_first'] ) . '</div>'
+	? '<div class="overflow-hidden rounded-lg bg-soft shadow-card">' . rhm_landing_picture( $rhm_image, $rhm_sizes, 'block h-auto w-full', (bool) $args['is_first'] ) . '</div>'
 	: '';
 
 ob_start();

@@ -59,7 +59,7 @@ $rhm_desktop_sizes = '(min-width: 1440px) 453px, (min-width: 1024px) calc(33.33v
 					<ul class="-mx-4 mt-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto overscroll-x-contain px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:mt-5 lg:gap-6" aria-labelledby="<?php echo esc_attr( $rhm_item_id ); ?>"<?php echo $rhm_single ? '' : ' tabindex="0"'; ?>>
 						<?php foreach ( $rhm_images as $rhm_n => $rhm_image ) : ?>
 							<li class="<?php echo esc_attr( $rhm_single ? 'w-full shrink-0 sm:w-auto' : 'w-[80%] shrink-0 snap-start sm:w-auto' ); ?>">
-								<span class="relative block aspect-[4/3] overflow-hidden rounded-xl bg-soft shadow-card">
+								<span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-soft shadow-card">
 									<?php
 									// Chỉ ảnh đầu của item đầu, khi section đứng đầu trang, mới là ảnh LCP.
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.

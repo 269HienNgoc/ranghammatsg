@@ -29,7 +29,7 @@ $rhm_mobile_sizes = $rhm_full ? '100vw' : 'calc(100vw - 32px)';
 
 // Section đứng đầu trang → banner là ảnh LCP (fetchpriority=high, không lazy).
 $rhm_picture = rhm_landing_picture( $rhm_image, $rhm_sizes, 'block h-auto w-full', (bool) $args['is_first'], $rhm_mobile, $rhm_mobile_sizes );
-$rhm_frame   = $rhm_full ? 'block' : 'block overflow-hidden rounded-2xl shadow-card';
+$rhm_frame   = $rhm_full ? 'block' : 'block overflow-hidden rounded-lg shadow-card';
 ?>
 <div id="<?php echo esc_attr( $args['id'] ); ?>" class="pt-0 pb-6 lg:pb-8 lg:pt-0">
 	<div class="<?php echo esc_attr( $rhm_full ? '' : 'site-container' ); ?>">
