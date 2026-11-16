@@ -72,6 +72,10 @@ final class RHM_Demo_Landing {
 		foreach ( array( 'Ca Implant 1', 'Ca Implant 2', 'Ca Implant 3', 'Ca niềng răng 1', 'Ca niềng răng 2', 'Ca niềng răng 3' ) as $i => $title ) {
 			$list[ 'landing-group-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
 		}
+		// Section "Ô ảnh slider + chữ": ảnh 4:3 (khung slider 4:3).
+		foreach ( array( 'X-quang Vatech', 'X-quang Vatech – mặt bên', 'Phòng chụp X-quang', 'Ghế nha khoa' ) as $i => $title ) {
+			$list[ 'landing-device-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
+		}
 		// Section "Hệ thống phòng khám": ảnh ngang 16:9, 1 ảnh / slide.
 		foreach ( self::clinic_slides() as $i => $slide ) {
 			$list[ 'landing-clinic-' . ( $i + 1 ) ] = array( 1600, 900, $photo( $slide[0], $i % 2 ? 'teal' : 'primary' ) );
@@ -213,6 +217,23 @@ final class RHM_Demo_Landing {
 				'text'          => 'Hợp tác cùng các thương hiệu uy tín như Straumann, Osstem, Invisalign... với chính sách bảo hành minh bạch.',
 				'button_text'   => '',
 				'button_link'   => '',
+			),
+			// Ô ảnh slider + chữ: ảnh phải nhiều ảnh (slider) + ảnh trên 1 ảnh, 2 ô cùng hàng.
+			array(
+				'acf_fc_layout'  => 'media-slider',
+				'width'          => '5',
+				'title'          => 'Máy chụp X-quang Vatech',
+				'text'           => 'Cho hình ảnh sắc nét, hỗ trợ chẩn đoán chính xác.',
+				'images'         => array( $img['landing-device-1'], $img['landing-device-2'], $img['landing-device-3'] ),
+				'image_position' => 'right',
+			),
+			array(
+				'acf_fc_layout'  => 'media-slider',
+				'width'          => '5',
+				'title'          => 'Ghế nha khoa đồng bộ',
+				'text'           => 'Thiết kế công thái học, giúp khách hàng thoải mái trong suốt quá trình điều trị.',
+				'images'         => array( $img['landing-device-4'] ),
+				'image_position' => 'top',
 			),
 			array(
 				'acf_fc_layout'       => 'intro',
