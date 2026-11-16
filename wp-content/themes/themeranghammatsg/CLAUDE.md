@@ -4,7 +4,7 @@ Classic theme (không phải block theme) cho phòng khám Răng Hàm Mặt SG �
 Text domain `themeranghammatsg`; tiền tố hàm/hằng: `rhm_` / `RHM_` (`RHM_THEME_DIR`, `RHM_THEME_URI`).
 Gutenberg bị tắt cho mọi post type → nội dung soạn bằng Classic Editor.
 
-Plugin phụ thuộc: ACF PRO (field bác sĩ / bài viết), Fluent Forms (form đặt lịch), kk Star Ratings, Yoast SEO (schema).
+Plugin phụ thuộc: ACF PRO (field bác sĩ / bài viết), Fluent Forms (form đặt lịch), kk Star Ratings, Yoast SEO (schema; ô schema tự viết `inc/head-schema.php` in ngay dưới khối Yoast).
 
 ## Build
 
@@ -76,7 +76,12 @@ themeranghammatsg/
 └── package.json, vite.config.js, node_modules/   build (KHÔNG có trong zip theme)
 ```
 
-Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất **1.4.18**, 2026-11-14). Các bản gần đây:
+Đóng gói: tăng `Version` trong `style.css` → `npm run build` → zip thư mục theme (gốc zip là `themeranghammatsg/`), bỏ `src/`, `node_modules/`, `docs/`, `package*.json`, `vite.config.js`, `.gitignore`, `CLAUDE.md`, `AGENTS.md`. File zip lưu ở `docs/` gốc repo: `docs/themeranghammatsg-<version>.zip` (bản gần nhất **1.4.23**, 2026-11-14). Các bản gần đây:
+- 1.4.23: schema tùy chỉnh thành danh sách (nút "+ Thêm mới", mỗi schema có tên + bật/tắt, in thành 1 thẻ riêng kèm `<!-- Schema: tên -->`); dữ liệu ô cũ tự chuyển. Cần deploy kèm mu-plugin `0-rhm-head-order.php` mới (regex kéo theo comment tên).
+- 1.4.22: ô schema hết báo "Parse error on line 1" khi dán kèm thẻ `<script>` (lint JSON theo từng khối, báo đúng dòng).
+- 1.4.21: ô schema có tùy chọn nén/không nén (`rhm_head_schema_minify`), ô nhập kéo đổi chiều cao được (nhớ chiều cao); sửa mô tả section bị cắt (chữ `<script>` bị hiểu là thẻ HTML).
+- 1.4.20: schema tự viết in ngay dưới `<!-- / Yoast SEO plugin. -->` (cần deploy kèm mu-plugin `0-rhm-head-order.php` mới).
+- 1.4.19: ô schema JSON-LD tự viết in vào `<head>` mọi trang (`inc/head-schema.php`, Tùy biến → "Schema tùy chỉnh (head)").
 - 1.4.18: dòng địa điểm header VẪN HIỆN khi cuộn trên desktop (bỏ `opacity: 0` ở `.is-stuck`, thu nhỏ cùng logo).
 - 1.4.17: dòng địa điểm dưới logo header ("Biên Hòa · Cần Thơ · Sydney", `inc/header-locations.php`, Tùy biến → "Dòng địa điểm (Header)": nội dung, bật/tắt + chọn icon, dấu phân cách, màu, mobile/desktop). Header mobile cao thêm 8px.
 - 1.4.16: WebMCP khai báo cho agent AI (nhóm "Agentic browsing" của PSI): form Fluent có `toolname`/`tooldescription` (`book_appointment`, `contact_form_<id>`), form tìm kiếm header `search_site`.
@@ -85,11 +90,11 @@ themeranghammatsg/
 - 1.4.13: landing thêm `icon-list`.
 - 1.4.12: landing thêm `banner`, `text-image`, `image-stack`, `photo-groups`, `clinics`, `form` (+ không in popup đặt lịch khi trang landing có section `form` trùng form popup).
 
-Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng.
+Mu-plugin `wp-content/mu-plugins/0-rhm-head-order.php` nằm ngoài theme → deploy riêng. Nó đưa khối Yoast (từ comment mở tới `<!-- / Yoast SEO plugin. -->`) lên trước `<meta id="swift3-viewport">`, kéo theo các `<script class="rhm-head-schema">` (kèm comment `<!-- Schema: … -->` ngay trên) nằm ngay sau (schema tự viết, `inc/head-schema.php`). Bản trên server phải là bản đi cùng theme ≥ 1.4.23, nếu không schema tự viết bị bỏ lại dưới script của Swift.
 
 Tạo zip bằng Python `zipfile` (đường dẫn trong zip dùng `/`, giải nén trên server Linux không lỗi) — KHÔNG dùng `Compress-Archive` của Windows PowerShell 5.1 (ghi `\` vào đường dẫn). Kiểm tra trước khi zip: `php -l` mọi file PHP, `node --check assets/admin/customize-list.js`. Không ghi đè zip đã có: phiên bản mới = file mới. Plugin dữ liệu mẫu đóng gói tương tự: `docs/rhm-demo-data-<version>.zip`, gốc zip `rhm-demo-data/` (bản gần nhất 1.1.1).
 
-Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; loại `themeranghammatsg/dist/js/main.js` khỏi Delay JS của Swift (nếu không, popup đặt lịch và menu mobile chỉ chạy sau tương tác đầu tiên). Chi nhánh không tự hiện: chọn ở Tùy biến → Chân trang → "Chi nhánh hiển thị" (footer) và Tùy biến → "Chi nhánh (Trang chủ)" (section trang chủ); để trống thì cột/section bị ẩn.
+Sau khi upload theme lên server: upload kèm mu-plugin `0-rhm-head-order.php` nếu bản đó có thay đổi; xóa cache Swift + LiteSpeed + Cloudflare; loại `themeranghammatsg/dist/js/main.js` khỏi Delay JS của Swift (nếu không, popup đặt lịch và menu mobile chỉ chạy sau tương tác đầu tiên). Chi nhánh không tự hiện: chọn ở Tùy biến → Chân trang → "Chi nhánh hiển thị" (footer) và Tùy biến → "Chi nhánh (Trang chủ)" (section trang chủ); để trống thì cột/section bị ẩn.
 
 ### Các module trong `inc/`
 
@@ -122,6 +127,7 @@ Sau khi upload theme lên server: xóa cache Swift + LiteSpeed + Cloudflare; lo�
 | `news.php`, `quick-services.php`, `certificates.php`, `footer.php`, `contact.php`, `flag-links.php` | dữ liệu từng khối (đọc từ Customizer). Cột "Hệ thống đối tác" ở footer: chọn + sắp thứ tự chi nhánh (CPT) trong Tùy biến → Chân trang → "Chi nhánh hiển thị" (theme mod `rhm_footer_branch_ids`, `rhm_footer_branch_fields()` / `rhm_footer_branch_choices()`), `rhm_get_footer_branches()` trả địa chỉ theo đúng thứ tự đã chọn. `certificates.php`: Tùy biến "Chứng nhận (Landing page)" — hiện không còn hiển thị ở đâu (đã bỏ khỏi trang chủ và landing page; giữ code + theme mod để dùng lại nếu cần) |
 | `customizer.php`, `customize-list.php`, `class-rhm-customize-list-control.php`, `class-rhm-customize-icon-control.php` | panel Customizer + control repeater dạng list (JSON; field `[nhãn, kiểu, choices]`, kiểu `image` / `text` / `textarea` / `url` / `select` — `select` chỉ lưu giá trị có trong `choices`, JS ở `assets/admin/customize-list.js`) + control chọn icon (kiểu field `rhm-icon`) |
 | `schema.php` | bổ sung Person/bác sĩ vào graph Yoast (`wpseo_schema_graph`) |
+| `head-schema.php` | schema JSON-LD tự viết, toàn site: Tùy biến → **Schema tùy chỉnh (head)** = **danh sách schema** (nút "+ Thêm mới", control `rhm-schema-list` trong `class-rhm-customize-schema-list-control.php` + `assets/admin/customize-head-schema.{js,css}`). Theme mod `rhm_head_schemas` = chuỗi JSON `[{ name, code, enabled }]`, đọc bằng `rhm_get_head_schemas()`; site cũ (≤ 1.4.22, 1 ô `rhm_head_schema`) chưa có mod này → tự tách ô cũ thành "Schema 1, 2…" (cả trang ngoài lẫn default của setting; bấm Đăng là lưu sang danh sách, ô cũ để nguyên trong DB). Mỗi mục: tên, nội dung (CodeMirror JSON, có/không kèm `<script>`, **đúng 1 khối**), bật/tắt; khung thu gọn/mở, ↑↓, xóa; ô nội dung kéo đổi chiều cao (localStorage `rhmHeadSchemaHeight`). Lint JS theo khối (khớp `rhm_head_schema_raw_blocks()`, báo đúng dòng; lint mặc định của WP coi cả ô là 1 JSON → "Parse error on line 1") + notification error chặn Đăng; server `rhm_validate_head_schemas()` chặn JSON lỗi / > 1 khối / không phải object-mảng. In: mỗi mục bật = `<!-- Schema: <tên> -->` (tên làm sạch bởi `rhm_head_schema_comment_name()`, trống thì không in comment) + `<script type="application/ld+json" class="rhm-head-schema">` NGAY DƯỚI `<!-- / Yoast SEO plugin. -->` (hook `wpseo_head` 99; Yoast in cả khối ở -9999; Yoast tắt → `wp_head` 2); mu-plugin `0-rhm-head-order.php` kéo comment + thẻ theo khối Yoast. Decode rồi `wp_json_encode(… JSON_HEX_TAG)` → không chèn được HTML. `rhm_head_schema_minify` (mặc định bật = 1 dòng; tắt = `JSON_PRETTY_PRINT`). Mô tả section chứa `<head>`/`<script>` nên dùng `esc_html__`. Độc lập với `schema.php`; tránh khai báo trùng thực thể Yoast, dùng `@id` để nối (vd `"parentOrganization": {"@id": "<home>/#organization"}`). Không đưa `aggregateRating` giả; URL trong schema phải là tên miền production. Kiểm tra: Rich Results Test / validator.schema.org |
 | `svg-upload.php` | cho upload SVG, chặn SVG không an toàn |
 | `disable-comments.php` | tắt hoàn toàn bình luận/pingback |
 | `landing/` | Landing page theo chủ đề (Page Template + ACF Flexible Content `rhm_landing_sections`): `rhm_landing_templates()` (chủ đề → bundle CSS + layout được dùng; `rhm_page_style_bundle()` đọc từ đây), `rhm_landing_layouts()`, `rhm_landing_render()`; field 1 group/chủ đề ở `fields.php` + `layouts/<layout>.php`. Hướng dẫn: `docs/landing-pages.md` |

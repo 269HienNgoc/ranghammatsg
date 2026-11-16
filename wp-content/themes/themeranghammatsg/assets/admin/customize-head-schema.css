@@ -1,0 +1,158 @@
+/* Tùy biến → "Schema tùy chỉnh (head)": danh sách schema (type rhm-schema-list). JS: customize-head-schema.js. */
+.rhm-schema-list {
+	margin: 8px 0 0;
+	list-style: none;
+}
+
+.rhm-schema-item {
+	margin: 0 0 8px;
+	border: 1px solid #dcdcde;
+	border-left: 3px solid #2271b1;
+	background: #fff;
+}
+
+.rhm-schema-item.is-disabled {
+	border-left-color: #a7aaad;
+}
+
+.rhm-schema-item.has-error {
+	border-left-color: #d63638;
+}
+
+.rhm-schema-head {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 4px 4px 4px 0;
+}
+
+.rhm-schema-toggle {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: 4px;
+	min-width: 0;
+	padding: 6px 4px;
+	border: 0;
+	background: none;
+	color: #1d2327;
+	font-weight: 600;
+	text-align: left;
+	cursor: pointer;
+}
+
+.rhm-schema-toggle .dashicons {
+	flex: none;
+	transition: transform 0.15s;
+}
+
+.rhm-schema-item.is-open .rhm-schema-toggle .dashicons {
+	transform: rotate(90deg);
+}
+
+.rhm-schema-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.rhm-schema-item.is-disabled .rhm-schema-title {
+	color: #8c8f94;
+}
+
+.rhm-schema-badge {
+	display: none;
+	flex: none;
+	padding: 1px 6px;
+	border-radius: 9px;
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+.rhm-schema-badge--error {
+	background: #fcf0f1;
+	color: #b32d2e;
+}
+
+.rhm-schema-badge--off {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.rhm-schema-item.has-error .rhm-schema-badge--error,
+.rhm-schema-item.is-disabled .rhm-schema-badge--off {
+	display: inline-block;
+}
+
+.rhm-schema-enabled {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 2px;
+	margin-right: 2px;
+	font-size: 12px;
+}
+
+.rhm-schema-enabled input {
+	margin: 0;
+}
+
+.rhm-schema-btn {
+	flex: none;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #50575e;
+	cursor: pointer;
+}
+
+.rhm-schema-btn:hover:not(:disabled) {
+	color: #2271b1;
+}
+
+.rhm-schema-btn.dashicons-trash:hover:not(:disabled) {
+	color: #d63638;
+}
+
+.rhm-schema-btn:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.rhm-schema-body {
+	padding: 4px 10px 10px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.rhm-schema-field {
+	display: block;
+	margin-top: 8px;
+}
+
+.rhm-schema-label {
+	display: block;
+	margin-bottom: 4px;
+	font-weight: 600;
+}
+
+/* Ô nội dung kéo đổi chiều cao (góc dưới phải). box-sizing: height lưu (offsetHeight, gồm viền) = height đặt lại. */
+.rhm-schema-body .CodeMirror,
+.rhm-schema-code {
+	box-sizing: border-box;
+	height: 20em;
+	min-height: 8em;
+	max-height: 90vh;
+	border: 1px solid #dcdcde;
+	resize: vertical;
+	overflow: hidden;
+	font-size: 12px;
+}
+
+/* Textarea (khi người dùng tắt tô màu cú pháp trong Hồ sơ) cần cuộn được. */
+textarea.rhm-schema-code {
+	overflow: auto;
+	font-family: Consolas, Monaco, monospace;
+}

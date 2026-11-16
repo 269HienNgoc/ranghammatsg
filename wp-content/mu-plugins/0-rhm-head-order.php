@@ -19,11 +19,14 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Chuyển khối Yoast SEO lên ngay trước <meta id="swift3-viewport">. Không đủ 2 mốc hoặc regex lỗi → trả nguyên HTML.
+ * Các <script class="rhm-head-schema"> (kèm comment tên "<!-- Schema: … -->" ngay trên, nếu có) nằm ngay sau comment đóng
+ * của Yoast (schema tự viết của theme, inc/head-schema.php)
+ * được chuyển CÙNG khối → vẫn nằm ngay dưới "<!-- / Yoast SEO plugin. -->".
  */
 function rhm_head_order_move_yoast( string $html ): string {
 	$viewport = '<meta id="swift3-viewport"';
 	$position = strpos( $html, $viewport );
-	if ( false === $position || ! preg_match( '~<!-- This site is optimized with the Yoast SEO.*?<!-- / Yoast SEO[^>]*-->~s', $html, $match, PREG_OFFSET_CAPTURE ) ) {
+	if ( false === $position || ! preg_match( '~<!-- This site is optimized with the Yoast SEO.*?<!-- / Yoast SEO[^>]*-->(?:\s*(?:<!-- Schema: [^>]*?-->\s*)?<script type="application/ld\+json" class="rhm-head-schema">.*?</script>)*~s', $html, $match, PREG_OFFSET_CAPTURE ) ) {
 		return $html;
 	}
 
