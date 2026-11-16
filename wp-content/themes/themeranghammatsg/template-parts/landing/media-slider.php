@@ -45,7 +45,8 @@ $rhm_box = match ( true ) {
 	'left' === $rhm_position && $rhm_side => 'h-full overflow-hidden rounded-2xl border border-line bg-linear-to-l from-mint to-white p-5 shadow-card lg:p-6',
 	default                               => 'h-full overflow-hidden rounded-2xl border border-line bg-linear-to-r from-mint to-white p-5 shadow-card lg:p-6',
 };
-$rhm_layout = $rhm_side ? 'flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-center lg:gap-6' : 'flex flex-col gap-4 lg:gap-5';
+// Cạnh nhau: khung cao hết ô (ô cùng hàng cao hơn → ảnh + chữ vẫn canh giữa theo chiều dọc).
+$rhm_layout = $rhm_side ? 'flex h-full flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-center lg:gap-6' : 'flex flex-col gap-4 lg:gap-5';
 $rhm_media  = in_array( $rhm_position, array( 'right', 'bottom' ), true ) ? 'relative min-w-0 sm:order-last' : 'relative min-w-0';
 $rhm_arrow  = 'pointer-events-auto flex size-9 cursor-pointer items-center justify-center rounded-full border border-line bg-white/90 text-primary shadow-card transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-0';
 ?>
