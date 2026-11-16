@@ -14,11 +14,12 @@ $rhm_hotline = rhm_get_option( 'rhm_hotline' );
 $rhm_title   = (string) ( $args['title'] ?? '' );
 $rhm_text    = (string) ( $args['text'] ?? '' );
 $rhm_id      = (string) ( $args['id'] ?? '' );
+$rhm_color   = (string) sanitize_hex_color( (string) ( $args['title_color'] ?? '' ) ); // Màu tiêu đề do landing truyền ('' = trắng).
 ?>
 <section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="bg-primary py-12 text-white lg:py-16">
 	<div class="site-container flex flex-wrap items-center justify-between gap-6">
 		<div>
-			<h2 class="mb-2 text-2xl font-bold lg:text-3xl"><?php echo esc_html( '' !== $rhm_title ? $rhm_title : rhm_booking_cta_default( 'title' ) ); ?></h2>
+			<h2 class="mb-2 text-2xl font-bold lg:text-3xl"<?php echo '' !== $rhm_color ? ' style="color: ' . esc_attr( $rhm_color ) . '"' : ''; ?>><?php echo esc_html( '' !== $rhm_title ? $rhm_title : rhm_booking_cta_default( 'title' ) ); ?></h2>
 			<p class="text-white/90"><?php echo esc_html( '' !== $rhm_text ? $rhm_text : rhm_booking_cta_default( 'text' ) ); ?></p>
 		</div>
 		<div class="flex flex-wrap gap-3">

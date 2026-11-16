@@ -9,12 +9,13 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data  = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 $rhm_items = array();
 foreach ( rhm_landing_rows( $rhm_data, 'items' ) as $rhm_row ) {
 	$rhm_name = rhm_landing_text( $rhm_row, 'title' );
 	if ( '' !== $rhm_name ) {
-		$rhm_items[] = array( rhm_landing_icon( $rhm_row, 'icon' ), $rhm_name, rhm_landing_lines( $rhm_row, 'text' ) );
+		$rhm_items[] = array( rhm_landing_icon( $rhm_row, 'icon' ), $rhm_name, rhm_landing_rich( $rhm_row, 'text' ) );
 	}
 }
 if ( '' === $rhm_title || ! $rhm_items ) {
@@ -32,17 +33,17 @@ $rhm_sizes = '(min-width: 1440px) 461px, (min-width: 1024px) calc(33.33vw - 19px
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container grid gap-6 lg:grid-cols-3' : 'site-container' ); ?>">
 		<div class="rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:col-span-2 lg:p-8">
-			<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), rhm_landing_text( $rhm_data, 'description' ), 'bar' ); ?>
+			<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), rhm_landing_rich( $rhm_data, 'description' ), 'bar', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 			<ul class="<?php echo esc_attr( $rhm_cols ); ?>">
 				<?php foreach ( $rhm_items as [ $rhm_icon, $rhm_name, $rhm_lines ] ) : ?>
 					<li class="text-center">
 						<?php if ( $rhm_icon ) : ?>
 							<?php echo rhm_icon_svg( 'landing', $rhm_icon, 'mx-auto mb-3 size-12 text-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG trong theme. ?>
 						<?php endif; ?>
-						<h3 class="text-lg leading-snug font-bold text-primary"><?php echo esc_html( $rhm_name ); ?></h3>
-						<?php foreach ( $rhm_lines as $rhm_line ) : ?>
-							<p class="mt-2 text-sm leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-						<?php endforeach; ?>
+						<h3 class="text-lg leading-snug font-bold text-primary"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_name ); ?></h3>
+						<?php if ( '' !== $rhm_lines ) : ?>
+							<div class="rhm-rich mt-2 text-sm leading-relaxed text-body/85"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>

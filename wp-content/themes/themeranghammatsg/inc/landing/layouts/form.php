@@ -12,7 +12,7 @@ function rhm_landing_layout_form_fields( string $prefix ): array {
 	return array(
 		rhm_landing_field( $prefix, 'eyebrow', __( 'Dòng nhỏ trên tiêu đề', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 40 ), 'placeholder' => 'Đặt lịch online' ) ),
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 60 ), 'placeholder' => 'Đăng ký tư vấn miễn phí' ) ),
-		rhm_landing_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '', 'instructions' => __( 'Xuống dòng = đoạn mới.', 'themeranghammatsg' ) ) ),
+		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ) ),
 		rhm_landing_field(
 			$prefix,
 			'points',

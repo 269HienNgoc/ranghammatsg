@@ -12,7 +12,7 @@ function rhm_landing_layout_doctor_cards_fields( string $prefix ): array {
 	$item = $prefix . '_items';
 	return array(
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text', array( 'placeholder' => __( 'Đội ngũ bác sĩ chuyên môn cao', 'themeranghammatsg' ) ) ),
-		rhm_landing_field( $prefix, 'description', __( 'Mô tả ngắn', 'themeranghammatsg' ), 'textarea', array( 'rows' => 2, 'new_lines' => '' ) ),
+		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả ngắn', 'themeranghammatsg' ) ),
 		rhm_landing_field(
 			$prefix,
 			'items',
@@ -37,7 +37,7 @@ function rhm_landing_layout_doctor_cards_fields( string $prefix ): array {
 							'wrapper'       => array( 'width' => 40 ),
 						)
 					),
-					rhm_landing_field( $item, 'text', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '', 'wrapper' => array( 'width' => 60 ), 'instructions' => __( 'Để trống: dùng ô Tóm tắt của hồ sơ, không có thì dùng Chức danh.', 'themeranghammatsg' ) ) ),
+					rhm_landing_rich_field( $item, 'text', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 60 ), 'instructions' => __( 'Để trống: dùng ô Tóm tắt của hồ sơ, không có thì dùng Chức danh.', 'themeranghammatsg' ) ) ),
 				),
 			)
 		),

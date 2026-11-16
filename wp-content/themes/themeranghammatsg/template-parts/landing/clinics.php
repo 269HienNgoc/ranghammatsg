@@ -16,6 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data  = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 
 $rhm_items = array();
@@ -23,7 +24,7 @@ foreach ( rhm_landing_rows( $rhm_data, 'items' ) as $rhm_row ) {
 	$rhm_image = rhm_landing_image( $rhm_row, 'image' );
 	$rhm_name  = rhm_landing_text( $rhm_row, 'title' );
 	if ( $rhm_image && '' !== $rhm_name ) {
-		$rhm_items[] = array( $rhm_image, $rhm_name, rhm_landing_lines( $rhm_row, 'text' ) );
+		$rhm_items[] = array( $rhm_image, $rhm_name, rhm_landing_rich( $rhm_row, 'text' ) );
 	}
 }
 if ( '' === $rhm_title || ! $rhm_items ) {
@@ -60,11 +61,12 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 ?>
 <section id="<?php echo esc_attr( $rhm_id ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>" data-rhm-showcase>
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 
-		<?php foreach ( rhm_landing_lines( $rhm_data, 'description' ) as $rhm_line ) : ?>
-			<p class="mx-auto mb-3 max-w-4xl text-center leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-		<?php endforeach; ?>
+		<?php $rhm_rich = rhm_landing_rich( $rhm_data, 'description' ); ?>
+		<?php if ( '' !== $rhm_rich ) : ?>
+			<div class="rhm-rich mx-auto mb-3 max-w-4xl text-center leading-relaxed text-body/85"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+		<?php endif; ?>
 
 		<?php if ( $rhm_branches ) : ?>
 			<ul class="mt-5 mb-6 flex flex-wrap justify-center gap-3 lg:mb-8 lg:gap-4">
@@ -101,13 +103,9 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 							?>
 						</span>
 						<div class="mt-4 flex-1 overflow-hidden rounded-xl border border-line bg-mint">
-							<h3 class="bg-deep px-4 py-2.5 text-lg leading-snug font-bold text-white lg:px-5"><?php echo esc_html( $rhm_name ); ?></h3>
-							<?php if ( $rhm_lines ) : ?>
-								<div class="px-4 py-3 lg:px-5 lg:py-4">
-									<?php foreach ( $rhm_lines as $rhm_line ) : ?>
-										<p class="mt-2 leading-relaxed text-body first:mt-0"><?php echo esc_html( $rhm_line ); ?></p>
-									<?php endforeach; ?>
-								</div>
+							<h3 class="bg-deep px-4 py-2.5 text-lg leading-snug font-bold text-white lg:px-5"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_name ); ?></h3>
+							<?php if ( '' !== $rhm_lines ) : ?>
+								<div class="rhm-rich px-4 py-3 leading-relaxed text-body lg:px-5 lg:py-4"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
 							<?php endif; ?>
 						</div>
 					</div>

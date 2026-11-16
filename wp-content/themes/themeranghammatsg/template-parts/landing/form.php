@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data    = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_form_id = absint( $rhm_data['form_id'] ?? 0 ) ?: absint( get_theme_mod( 'rhm_booking_form_id', 0 ) );
 $rhm_form    = rhm_render_fluent_form( $rhm_form_id );
 $rhm_editor  = current_user_can( 'edit_theme_options' );
@@ -30,11 +31,12 @@ $rhm_ftitle  = rhm_landing_text( $rhm_data, 'form_title' );
 	<div class="site-container">
 		<div class="grid items-center gap-6 rounded-3xl border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 lg:p-12">
 			<div class="min-w-0">
-				<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'bar' ); ?>
+				<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'bar', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 
-				<?php foreach ( rhm_landing_lines( $rhm_data, 'description' ) as $rhm_line ) : ?>
-					<p class="mb-3 leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-				<?php endforeach; ?>
+				<?php $rhm_rich = rhm_landing_rich( $rhm_data, 'description' ); ?>
+				<?php if ( '' !== $rhm_rich ) : ?>
+					<div class="rhm-rich mb-3 leading-relaxed text-body/85"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+				<?php endif; ?>
 
 				<?php if ( $rhm_points ) : ?>
 					<ul class="mt-5 space-y-3">
@@ -64,7 +66,7 @@ $rhm_ftitle  = rhm_landing_text( $rhm_data, 'form_title' );
 
 			<div class="rhm-booking min-w-0 rounded-2xl border border-line bg-white p-5 shadow-card sm:p-8">
 				<?php if ( '' !== $rhm_ftitle ) : ?>
-					<h3 class="mb-5 text-lg leading-snug font-bold text-teal-dark lg:text-xl"><?php echo esc_html( $rhm_ftitle ); ?></h3>
+					<h3 class="mb-5 text-lg leading-snug font-bold text-teal-dark lg:text-xl"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_ftitle ); ?></h3>
 				<?php endif; ?>
 				<?php if ( '' !== trim( $rhm_form ) ) : ?>
 					<?php echo $rhm_form; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML form do Fluent Forms in. ?>

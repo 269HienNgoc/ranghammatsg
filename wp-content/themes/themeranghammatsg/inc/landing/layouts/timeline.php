@@ -26,7 +26,7 @@ function rhm_landing_layout_timeline_fields( string $prefix ): array {
 				'sub_fields'   => array(
 					rhm_landing_field( $item, 'year', __( 'Năm / thời điểm', 'themeranghammatsg' ), 'text', array( 'placeholder' => '2015', 'wrapper' => array( 'width' => 30 ) ) ),
 					rhm_landing_field( $item, 'title', __( 'Tiêu đề mốc (H3)', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 70 ) ) ),
-					rhm_landing_field( $item, 'text', __( 'Mô tả', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '' ) ),
+					rhm_landing_rich_field( $item, 'text', __( 'Mô tả', 'themeranghammatsg' ) ),
 				),
 			)
 		),

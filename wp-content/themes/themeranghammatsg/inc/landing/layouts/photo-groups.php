@@ -12,7 +12,7 @@ function rhm_landing_layout_photo_groups_fields( string $prefix ): array {
 	$item = $prefix . '_items';
 	return array(
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text' ),
-		rhm_landing_field( $prefix, 'description', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '', 'instructions' => __( 'Hiện canh giữa dưới tiêu đề. Xuống dòng = đoạn mới.', 'themeranghammatsg' ) ) ),
+		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), array( 'instructions' => __( 'Hiện canh giữa dưới tiêu đề.', 'themeranghammatsg' ) ) ),
 		rhm_landing_field(
 			$prefix,
 			'items',
@@ -26,7 +26,7 @@ function rhm_landing_layout_photo_groups_fields( string $prefix ): array {
 				'instructions' => __( 'Mỗi item = tiêu đề + mô tả + hàng ảnh bên dưới, các item xếp lần lượt từ trên xuống. Item thiếu tiêu đề hoặc không có ảnh sẽ bị bỏ qua.', 'themeranghammatsg' ),
 				'sub_fields'   => array(
 					rhm_landing_field( $item, 'title', __( 'Tiêu đề item (H3)', 'themeranghammatsg' ), 'text' ),
-					rhm_landing_field( $item, 'text', __( 'Mô tả item (tùy chọn)', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '' ) ),
+					rhm_landing_rich_field( $item, 'text', __( 'Mô tả item (tùy chọn)', 'themeranghammatsg' ) ),
 					rhm_landing_field(
 						$item,
 						'images',

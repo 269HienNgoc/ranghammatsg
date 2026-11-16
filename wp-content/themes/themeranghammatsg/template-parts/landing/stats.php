@@ -27,7 +27,7 @@ $rhm_cols = 3 === count( $rhm_items ) ? 'grid grid-cols-2 gap-3 sm:grid-cols-3 l
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8"<?php echo '' !== $rhm_title ? ' aria-labelledby="' . esc_attr( $rhm_head_id ) . '"' : ''; ?>>
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<ul class="<?php echo esc_attr( $rhm_cols ); ?>">
 			<?php foreach ( $rhm_items as [ $rhm_number, $rhm_label ] ) : ?>
 				<li class="rounded-2xl border border-line bg-white px-3 py-5 text-center shadow-card lg:py-7">

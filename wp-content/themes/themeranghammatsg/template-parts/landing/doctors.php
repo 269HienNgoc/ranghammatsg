@@ -13,8 +13,10 @@ get_template_part(
 	'template-parts/sections/doctors',
 	null,
 	array(
-		'id'      => $args['id'],
-		'eyebrow' => rhm_landing_text( $rhm_data, 'eyebrow' ),
-		'title'   => rhm_landing_text( $rhm_data, 'title' ),
+		'id'          => $args['id'],
+		'eyebrow'     => rhm_landing_text( $rhm_data, 'eyebrow' ),
+		'title'       => rhm_landing_text( $rhm_data, 'title' ),
+		'title_color' => rhm_landing_color( $rhm_data, 'title_color' ),
+		'h3_color'    => rhm_landing_color( $rhm_data, 'h3_color' ),
 	)
 );

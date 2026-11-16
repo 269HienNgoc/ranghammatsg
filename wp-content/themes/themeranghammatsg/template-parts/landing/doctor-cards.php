@@ -9,11 +9,12 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_rows = array();
 foreach ( rhm_landing_rows( $rhm_data, 'items' ) as $rhm_row ) {
 	$rhm_id = absint( $rhm_row['doctor'] ?? 0 );
 	if ( $rhm_id && 'bac-si' === get_post_type( $rhm_id ) && 'publish' === get_post_status( $rhm_id ) && ! isset( $rhm_rows[ $rhm_id ] ) ) {
-		$rhm_rows[ $rhm_id ] = rhm_landing_lines( $rhm_row, 'text' );
+		$rhm_rows[ $rhm_id ] = rhm_landing_rich( $rhm_row, 'text' );
 	}
 }
 if ( ! $rhm_rows ) {
@@ -33,9 +34,11 @@ foreach ( $rhm_rows as $rhm_id => $rhm_lines ) {
 	if ( ! $rhm_image ) {
 		continue;
 	}
-	if ( ! $rhm_lines ) {
+	if ( '' === $rhm_lines ) {
+		// Ô trống → Tóm tắt hồ sơ, không có thì Chức danh (chữ thuần: mỗi dòng 1 đoạn).
 		$rhm_excerpt = (string) get_post_field( 'post_excerpt', $rhm_id );
-		$rhm_lines   = rhm_landing_lines( array( 'x' => '' !== trim( $rhm_excerpt ) ? $rhm_excerpt : (string) rhm_get_doctor_field( 'position', $rhm_id ) ), 'x' );
+		$rhm_plain   = rhm_landing_lines( array( 'x' => '' !== trim( $rhm_excerpt ) ? $rhm_excerpt : (string) rhm_get_doctor_field( 'position', $rhm_id ) ), 'x' );
+		$rhm_lines   = implode( '', array_map( static fn( string $line ): string => '<p>' . esc_html( $line ) . '</p>', $rhm_plain ) );
 	}
 	$rhm_doctors[] = array(
 		'id'    => $rhm_id,
@@ -61,7 +64,7 @@ $rhm_sizes = $rhm_single
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_text( $rhm_data, 'description' ), 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_rich( $rhm_data, 'description' ), 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<div class="<?php echo esc_attr( $rhm_single ? 'mx-auto grid max-w-[692px] gap-6' : 'grid gap-6 lg:grid-cols-2' ); ?>">
 			<?php foreach ( $rhm_doctors as $rhm_doctor ) : ?>
 				<article class="grid grid-cols-1 items-center overflow-hidden rounded-2xl border border-line bg-white shadow-card sm:grid-cols-[40%_minmax(0,1fr)]" aria-labelledby="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>">
@@ -69,12 +72,12 @@ $rhm_sizes = $rhm_single
 						<?php rhm_doctor_image( $rhm_doctor['image'], $rhm_sizes, 'absolute inset-0 size-full object-cover object-top', $rhm_doctor['name'], false, 1 ); ?>
 					</a>
 					<div class="min-w-0 p-4 wrap-break-word sm:p-6 lg:p-8">
-						<h3 id="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>" class="text-base leading-snug font-bold text-primary uppercase sm:text-lg">
-							<a class="hover:text-primary-dark" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
+						<h3 id="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>" class="text-base leading-snug font-bold text-primary uppercase sm:text-lg"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>>
+							<a class="<?php echo esc_attr( '' !== $rhm_h3_attr ? 'hover:opacity-80' : 'hover:text-primary-dark' ); ?>" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
 						</h3>
-						<?php foreach ( $rhm_doctor['lines'] as $rhm_line ) : ?>
-							<p class="mt-2 text-sm leading-relaxed text-body/85 sm:mt-3"><?php echo esc_html( $rhm_line ); ?></p>
-						<?php endforeach; ?>
+						<?php if ( '' !== $rhm_doctor['lines'] ) : ?>
+							<div class="rhm-rich mt-2 text-sm leading-relaxed text-body/85 sm:mt-3"><?php echo $rhm_doctor['lines']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich() hoặc esc_html. ?></div>
+						<?php endif; ?>
 					</div>
 				</article>
 			<?php endforeach; ?>

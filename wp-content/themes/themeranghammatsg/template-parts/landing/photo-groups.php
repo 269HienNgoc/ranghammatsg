@@ -10,6 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data  = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 
 $rhm_items = array();
@@ -17,7 +18,7 @@ foreach ( rhm_landing_rows( $rhm_data, 'items' ) as $rhm_row ) {
 	$rhm_name   = rhm_landing_text( $rhm_row, 'title' );
 	$rhm_images = rhm_landing_gallery( $rhm_row, 'images' );
 	if ( '' !== $rhm_name && $rhm_images ) {
-		$rhm_items[] = array( $rhm_name, rhm_landing_lines( $rhm_row, 'text' ), $rhm_images );
+		$rhm_items[] = array( $rhm_name, rhm_landing_rich( $rhm_row, 'text' ), $rhm_images );
 	}
 }
 if ( '' === $rhm_title || ! $rhm_items ) {
@@ -32,10 +33,11 @@ $rhm_desktop_sizes = '(min-width: 1440px) 453px, (min-width: 1024px) calc(33.33v
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center' ); ?>
-		<?php foreach ( rhm_landing_lines( $rhm_data, 'description' ) as $rhm_line ) : ?>
-			<p class="mx-auto mb-3 max-w-4xl text-center leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-		<?php endforeach; ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
+		<?php $rhm_rich = rhm_landing_rich( $rhm_data, 'description' ); ?>
+		<?php if ( '' !== $rhm_rich ) : ?>
+			<div class="rhm-rich mx-auto mb-3 max-w-4xl text-center leading-relaxed text-body/85"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+		<?php endif; ?>
 
 		<div class="mt-6 space-y-10 lg:mt-8 lg:space-y-14">
 			<?php foreach ( $rhm_items as $rhm_index => [ $rhm_name, $rhm_lines, $rhm_images ] ) : ?>
@@ -45,10 +47,10 @@ $rhm_desktop_sizes = '(min-width: 1440px) 453px, (min-width: 1024px) calc(33.33v
 				$rhm_sizes   = $rhm_desktop_sizes . ( $rhm_single ? 'calc(100vw - 32px)' : 'calc(80vw - 26px)' );
 				?>
 				<div>
-					<h3 id="<?php echo esc_attr( $rhm_item_id ); ?>" class="border-l-4 border-primary pl-3 text-xl leading-snug font-bold text-primary lg:text-2xl"><?php echo esc_html( $rhm_name ); ?></h3>
-					<?php foreach ( $rhm_lines as $rhm_line ) : ?>
-						<p class="mt-3 leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-					<?php endforeach; ?>
+					<h3 id="<?php echo esc_attr( $rhm_item_id ); ?>" class="border-l-4 border-primary pl-3 text-xl leading-snug font-bold text-primary lg:text-2xl"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_name ); ?></h3>
+					<?php if ( '' !== $rhm_lines ) : ?>
+						<div class="rhm-rich mt-3 leading-relaxed text-body/85"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+					<?php endif; ?>
 
 					<?php
 					// Mobile cuộn ngang → tabindex="0" để bàn phím cuộn được (axe: scrollable-region-focusable).

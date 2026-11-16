@@ -47,7 +47,7 @@ $rhm_sizes = '(min-width: 1440px) 405px, (min-width: 1024px) calc(33.33vw - 75px
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), rhm_landing_text( $rhm_data, 'description' ), 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), rhm_landing_rich( $rhm_data, 'description' ), 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 
 		<div class="<?php echo esc_attr( $rhm_count > 1 ? 'js-carousel flex items-center md:gap-3 lg:gap-4' : 'flex items-center md:gap-3 lg:gap-4' ); ?>">
 			<?php if ( $rhm_count > 1 ) : ?>

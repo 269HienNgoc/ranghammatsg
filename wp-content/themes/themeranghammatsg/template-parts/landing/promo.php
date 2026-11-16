@@ -54,16 +54,17 @@ $rhm_head_id = $args['id'] . '-title';
 				);
 			}
 			?>
-			<h2 id="<?php echo esc_attr( $rhm_head_id ); ?>" class="text-lg leading-snug font-bold text-primary lg:text-xl">
+			<h2 id="<?php echo esc_attr( $rhm_head_id ); ?>" class="text-lg leading-snug font-bold text-primary lg:text-xl"<?php echo rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'title_color' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- đã escape trong hàm. ?>>
 				<?php if ( '' !== $rhm_url ) : ?>
 					<a class="after:absolute after:inset-0 hover:text-primary-dark" href="<?php echo esc_url( $rhm_url ); ?>"<?php echo rhm_external_link_attrs( $rhm_url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static attributes. ?>><?php echo esc_html( $rhm_title ); ?></a>
 				<?php else : ?>
 					<?php echo esc_html( $rhm_title ); ?>
 				<?php endif; ?>
 			</h2>
-			<?php foreach ( rhm_landing_lines( $rhm_data, 'subtitle' ) as $rhm_line ) : ?>
-				<p class="mt-2 text-sm leading-snug text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-			<?php endforeach; ?>
+			<?php $rhm_rich = rhm_landing_rich( $rhm_data, 'subtitle' ); ?>
+			<?php if ( '' !== $rhm_rich ) : ?>
+				<div class="rhm-rich mt-2 text-sm leading-snug text-body/85"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+			<?php endif; ?>
 		</div>
 	</div>
 </section>

@@ -45,7 +45,7 @@ function rhm_landing_layout_intro_fields( string $prefix ): array {
 			rhm_landing_field( $prefix, 'tab_callout', __( 'Ô nổi bật', 'themeranghammatsg' ), 'tab' ),
 			rhm_landing_icon_field( $prefix, 'callout_icon', array( 'wrapper' => array( 'width' => 30 ) ) ),
 			rhm_landing_field( $prefix, 'callout_title', __( 'Tiêu đề ô (H3)', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 70 ), 'instructions' => __( 'Để trống: không hiện ô nổi bật.', 'themeranghammatsg' ) ) ),
-			rhm_landing_field( $prefix, 'callout_text', __( 'Mô tả ô', 'themeranghammatsg' ), 'textarea', array( 'rows' => 2, 'new_lines' => '' ) ),
+			rhm_landing_rich_field( $prefix, 'callout_text', __( 'Mô tả ô', 'themeranghammatsg' ) ),
 			rhm_landing_field( $prefix, 'callout_button_text', __( 'Chữ nút ô', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 50 ), 'placeholder' => __( 'Tư vấn chi tiết', 'themeranghammatsg' ) ) ),
 			rhm_landing_field( $prefix, 'callout_button_link', __( 'Link nút ô', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 50 ), 'placeholder' => 'https://… hoặc #neo-section' ) ),
 			rhm_landing_field( $prefix, 'tab_settings', __( 'Cài đặt', 'themeranghammatsg' ), 'tab' ),

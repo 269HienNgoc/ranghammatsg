@@ -48,7 +48,7 @@ $rhm_sizes = '(max-width: 639px) ' . $rhm_mobile_sizes
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="flex items-start gap-3" data-rhm-tiles>
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<?php if ( $rhm_controls ) : ?>
 			<div class="<?php echo esc_attr( 'invisible ml-auto shrink-0 gap-2 ' . ( $rhm_count > 6 ? 'hidden sm:flex' : 'hidden lg:flex' ) ); ?>" data-rhm-tiles-controls>
 				<button type="button" class="flex size-8 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-primary transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-primary" aria-label="<?php esc_attr_e( 'Xem các ô trước', 'themeranghammatsg' ); ?>" aria-controls="<?php echo esc_attr( $rhm_track_id ); ?>" data-rhm-tiles-prev disabled>

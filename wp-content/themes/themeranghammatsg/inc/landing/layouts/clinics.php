@@ -13,7 +13,7 @@ function rhm_landing_layout_clinics_fields( string $prefix ): array {
 	$item   = $prefix . '_items';
 	return array(
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text', array( 'placeholder' => 'Hệ thống phòng khám' ) ),
-		rhm_landing_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ), 'textarea', array( 'rows' => 4, 'new_lines' => '', 'instructions' => __( 'Xuống dòng = đoạn mới. Hiện canh giữa dưới tiêu đề.', 'themeranghammatsg' ) ) ),
+		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ), array( 'instructions' => __( 'Hiện canh giữa dưới tiêu đề.', 'themeranghammatsg' ) ) ),
 		rhm_landing_field(
 			$prefix,
 			'branches',
@@ -44,7 +44,7 @@ function rhm_landing_layout_clinics_fields( string $prefix ): array {
 				'sub_fields'   => array(
 					rhm_landing_image_field( $item, 'image', __( 'Ảnh — khuyến nghị 1600 × 900 (16:9)', 'themeranghammatsg' ), array( 'preview_size' => 'thumbnail', 'wrapper' => array( 'width' => 30 ), 'instructions' => __( 'Desktop/tablet khung 16:9, mobile 4:3 (cắt 2 bên) → để chủ thể ở giữa ảnh. Nhập "Văn bản thay thế".', 'themeranghammatsg' ) ) ),
 					rhm_landing_field( $item, 'title', __( 'Tiêu đề ảnh', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 70 ), 'placeholder' => 'Tổng thể mặt tiền' ) ),
-					rhm_landing_field( $item, 'text', __( 'Chú thích', 'themeranghammatsg' ), 'textarea', array( 'rows' => 4, 'new_lines' => '', 'wrapper' => array( 'width' => 70 ) ) ),
+					rhm_landing_rich_field( $item, 'text', __( 'Chú thích', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 70 ) ) ),
 				),
 			)
 		),

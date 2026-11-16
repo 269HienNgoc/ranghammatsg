@@ -50,6 +50,34 @@
 	}
 
 	/*
+	 * Ô chữ có định dạng (rhm_landing_rich(): mô tả / nội dung section). Kiểu chữ (cỡ, màu, canh) đặt trên khối .rhm-rich;
+	 * màu / canh lề / gạch chân do content chọn là style inline nên luôn thắng. Link giữ màu chữ xung quanh (đủ tương phản cả nền tối).
+	 */
+	.rhm-rich > * + * {
+		margin-top: 0.75em;
+	}
+
+	.rhm-rich a {
+		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.rhm-rich a:hover {
+		text-decoration-thickness: 2px;
+	}
+
+	.rhm-rich ul {
+		padding-left: 1.25em;
+		list-style: disc;
+	}
+
+	.rhm-rich ol {
+		padding-left: 1.25em;
+		list-style: decimal;
+	}
+
+	/*
 	 * Chừa chỗ cột nút liên hệ nhanh (fixed, chiếm ~90px từ mép phải ≥ 1024px): mọi section TRỪ section đầu
 	 * (luôn tràn màn hình) lùi vào đều 2 bên 90px (+ lề 16px của .site-container = 106px) → tiêu đề vẫn đúng tâm.
 	 * Từ 1640px khung 1440px giữa màn hình đã không chạm cột nút → không lùi. hero.php đọc biến cho ảnh absolute.
@@ -96,7 +124,7 @@
 
 	.landing-title-center::before,
 	.landing-title-center::after {
-		@apply hidden h-0.5 w-10 shrink-0 rounded-full bg-primary/40 content-[''] lg:w-16;
+		@apply hidden h-0.5 w-10 shrink-0 rounded-full bg-current/40 content-[''] lg:w-16;
 	}
 
 	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu chữ + video). */

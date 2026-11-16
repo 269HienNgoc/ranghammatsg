@@ -13,7 +13,7 @@ function rhm_landing_layout_icon_list_fields( string $prefix ): array {
 	return array(
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 60 ) ) ),
 		rhm_landing_field( $prefix, 'eyebrow', __( 'Dòng nhỏ trên tiêu đề', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 40 ) ) ),
-		rhm_landing_field( $prefix, 'description', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), 'textarea', array( 'rows' => 3, 'new_lines' => '', 'instructions' => __( 'Hiện dưới tiêu đề, trước danh sách. Xuống dòng = đoạn mới.', 'themeranghammatsg' ) ) ),
+		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả (tùy chọn)', 'themeranghammatsg' ), array( 'instructions' => __( 'Hiện dưới tiêu đề, trước danh sách.', 'themeranghammatsg' ) ) ),
 		rhm_landing_icon_field(
 			$prefix,
 			'icon',
@@ -30,11 +30,11 @@ function rhm_landing_layout_icon_list_fields( string $prefix ): array {
 			'repeater',
 			array(
 				'max'          => 30,
-				'layout'       => 'table',
+				'layout'       => 'block',
 				'button_label' => __( 'Thêm dòng', 'themeranghammatsg' ),
 				'instructions' => __( 'Mỗi dòng 1 ý, kéo để sắp xếp. Dòng trống bị bỏ qua.', 'themeranghammatsg' ),
 				'sub_fields'   => array(
-					rhm_landing_field( $item, 'text', __( 'Nội dung', 'themeranghammatsg' ), 'textarea', array( 'rows' => 2, 'new_lines' => '', 'wrapper' => array( 'width' => 70 ) ) ),
+					rhm_landing_rich_field( $item, 'text', __( 'Nội dung', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 70 ) ) ),
 					rhm_landing_icon_field( $item, 'icon', array( 'label' => __( 'Icon riêng (tùy chọn)', 'themeranghammatsg' ), 'instructions' => '', 'wrapper' => array( 'width' => 30 ) ) ),
 				),
 			)

@@ -9,6 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data  = $args['data'] ?? array();
+$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 if ( '' === $rhm_title ) {
 	return;
@@ -54,7 +55,7 @@ $rhm_sizes = '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), 
 		<?php endif; ?>
 
 		<div class="min-w-0">
-			<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'plain' ); ?>
+			<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'plain', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 			<?php if ( '' !== $rhm_content ) : ?>
 				<div class="entry-content -mt-2 lg:text-lg"><?php echo $rhm_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_kses_post trong rhm_landing_html(). ?></div>
 			<?php endif; ?>
@@ -68,10 +69,11 @@ $rhm_sizes = '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), 
 						</span>
 					<?php endif; ?>
 					<div class="min-w-0">
-						<h3 class="text-base leading-snug font-bold text-primary uppercase lg:text-lg"><?php echo esc_html( $rhm_callout ); ?></h3>
-						<?php foreach ( rhm_landing_lines( $rhm_data, 'callout_text' ) as $rhm_line ) : ?>
-							<p class="mt-1.5 text-sm leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-						<?php endforeach; ?>
+						<h3 class="text-base leading-snug font-bold text-primary uppercase lg:text-lg"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_callout ); ?></h3>
+						<?php $rhm_rich = rhm_landing_rich( $rhm_data, 'callout_text' ); ?>
+						<?php if ( '' !== $rhm_rich ) : ?>
+							<div class="rhm-rich mt-1.5 text-sm leading-relaxed text-body/85"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+						<?php endif; ?>
 						<?php rhm_landing_button( $rhm_data, 'btn btn-primary mt-3 h-10 gap-2 rounded-full px-5 text-sm font-bold', 'callout_button' ); ?>
 					</div>
 				</div>

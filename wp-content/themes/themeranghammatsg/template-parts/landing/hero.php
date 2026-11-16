@@ -16,8 +16,8 @@ $rhm_data    = $args['data'] ?? array();
 $rhm_title   = rhm_landing_text( $rhm_data, 'title' ) ?: get_the_title();
 $rhm_image   = rhm_landing_image( $rhm_data, 'image' );
 $rhm_mobile  = rhm_landing_image( $rhm_data, 'image_mobile' );
-$rhm_lead    = rhm_landing_lines( $rhm_data, 'lead' );
-$rhm_lines   = rhm_landing_lines( $rhm_data, 'description' );
+$rhm_lead    = rhm_landing_rich( $rhm_data, 'lead' );
+$rhm_lines   = rhm_landing_rich( $rhm_data, 'description' );
 $rhm_eyebrow = rhm_landing_text( $rhm_data, 'eyebrow' );
 $rhm_booking = ! empty( $rhm_data['booking'] );
 $rhm_button  = rhm_landing_text( $rhm_data, 'button_text' ) && rhm_landing_url( $rhm_data, 'button_link' );
@@ -34,14 +34,14 @@ $rhm_heading = $args['is_first'] ? 'h1' : 'h2';
 			<?php if ( '' !== $rhm_eyebrow ) : ?>
 				<p class="mt-5 text-[13px] font-semibold tracking-wide text-dark uppercase lg:text-sm"><?php echo esc_html( $rhm_eyebrow ); ?></p>
 			<?php endif; ?>
-			<<?php echo esc_html( $rhm_heading ); ?> class="mt-4 text-[26px] leading-tight font-bold text-pretty text-primary uppercase sm:text-[32px] xl:text-[38px]"><?php echo esc_html( $rhm_title ); ?></<?php echo esc_html( $rhm_heading ); ?>>
+			<<?php echo esc_html( $rhm_heading ); ?> class="mt-4 text-[26px] leading-tight font-bold text-pretty text-primary uppercase sm:text-[32px] xl:text-[38px]"<?php echo rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'title_color' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- đã escape trong hàm. ?>><?php echo esc_html( $rhm_title ); ?></<?php echo esc_html( $rhm_heading ); ?>>
 
-			<?php foreach ( $rhm_lead as $rhm_line ) : ?>
-				<p class="mt-5 font-semibold leading-relaxed text-dark lg:text-lg"><?php echo esc_html( $rhm_line ); ?></p>
-			<?php endforeach; ?>
-			<?php foreach ( $rhm_lines as $rhm_line ) : ?>
-				<p class="mt-4 leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
-			<?php endforeach; ?>
+			<?php if ( '' !== $rhm_lead ) : ?>
+				<div class="rhm-rich mt-5 font-semibold leading-relaxed text-dark lg:text-lg"><?php echo $rhm_lead; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+			<?php endif; ?>
+			<?php if ( '' !== $rhm_lines ) : ?>
+				<div class="rhm-rich mt-4 leading-relaxed text-body/85"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+			<?php endif; ?>
 
 			<?php if ( $rhm_booking || $rhm_button ) : ?>
 				<div class="mt-7 flex flex-wrap gap-3">

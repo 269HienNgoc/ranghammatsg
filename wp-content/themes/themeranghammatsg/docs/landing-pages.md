@@ -48,6 +48,18 @@ Thứ tự theo thiết kế: Banner → Dải điểm nổi bật → Thẻ gi�
 Các section **Ô …** có ô "Độ rộng ô": Toàn trang, 1/2, 2/5 (hẹp), 3/5 (rộng). Các ô **liền nhau** trong danh sách tự xếp chung 1 hàng
 khi tổng vừa 1 hàng: 1/2 + 1/2, 2/5 + 3/5, 3/5 + 2/5. Ô không vừa phần còn lại sẽ xuống hàng mới. Mobile: mọi ô xếp dọc.
 
+### Định dạng chữ trong mô tả / nội dung
+
+Các ô **mô tả, nội dung, chú thích** (mô tả section, đoạn nổi bật của banner, mô tả thẻ / mốc / item, chú thích ảnh hệ thống phòng khám, nội dung ô…)
+có thanh công cụ (bấm vào ô để hiện): **đậm**, *nghiêng*, gạch chân, **màu chữ** (bảng màu thương hiệu + "Tùy chỉnh…" chọn mã màu bất kỳ),
+gắn / bỏ link, canh trái / giữa / phải / đều, xóa định dạng. Enter = đoạn mới, Shift + Enter = xuống dòng. Link ra trang khác tự mở tab mới.
+
+- Tiêu đề (H2/H3), dòng nhỏ trên tiêu đề và chữ nút vẫn là chữ thường (giữ thiết kế đồng nhất).
+- **Màu tiêu đề**: mỗi section có tiêu đề có ô "Màu tiêu đề" (ngay bên phải ô Tiêu đề) — bảng màu thương hiệu hoặc mã màu bất kỳ, đổi màu cả tiêu đề chính (H1/H2) của section; để trống = màu mặc định. Section có tiêu đề con (thẻ, mốc, item, ảnh phòng khám, ô nổi bật, tiêu đề trên form, tên bác sĩ) có thêm ô **"Màu tiêu đề con (H3)"** cạnh đó: 1 màu áp cho mọi tiêu đề con của section.
+- Vẫn là chữ thường, mỗi dòng 1 ý: "Lợi ích" của Form đăng ký, nhãn của Ô lưới ảnh nhỏ; mô tả ảnh của "Ảnh lớn xếp dọc" là chú thích ảnh trong thư viện Media.
+- Dán nội dung từ Word / web khác: tiêu đề, ảnh, bảng… bị bỏ khi hiển thị, chỉ giữ đoạn văn + định dạng ở trên.
+- Màu chữ nhạt (vàng, trắng, xám nhạt) trên nền trắng khó đọc và làm giảm điểm Accessibility của PageSpeed. "Trắng" / "Vàng" chỉ dùng trên nền tối.
+
 ### Icon
 
 Icon nét màu xanh lấy từ `assets/icons/landing/` của theme (đội ngũ, răng, khiên, tim, mục tiêu, mắt, kim cương, heo đất, giấy phép,

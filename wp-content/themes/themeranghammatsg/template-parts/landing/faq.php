@@ -26,7 +26,7 @@ $rhm_head_id = $args['id'] . '-title';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container max-w-[868px]">
-		<?php rhm_landing_heading( $rhm_head_id, rhm_landing_text( $rhm_data, 'title' ) ?: __( 'Câu hỏi thường gặp', 'themeranghammatsg' ), '', '', 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, rhm_landing_text( $rhm_data, 'title' ) ?: __( 'Câu hỏi thường gặp', 'themeranghammatsg' ), '', '', 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white shadow-card">
 			<?php foreach ( $rhm_items as $rhm_index => [ $rhm_question, $rhm_answer ] ) : ?>
 				<details id="<?php echo esc_attr( $args['id'] . '-q' . ( $rhm_index + 1 ) ); ?>" class="group">

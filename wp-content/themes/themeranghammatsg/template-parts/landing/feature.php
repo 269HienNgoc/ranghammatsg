@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 $rhm_data  = $args['data'] ?? array();
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 $rhm_image = rhm_landing_image( $rhm_data, 'image' );
-$rhm_lines = rhm_landing_lines( $rhm_data, 'text' );
+$rhm_lines = rhm_landing_rich( $rhm_data, 'text' );
 if ( '' === $rhm_title || ( ! $rhm_image && ! $rhm_lines ) ) {
 	return;
 }
@@ -19,7 +19,7 @@ if ( '' === $rhm_title || ( ! $rhm_image && ! $rhm_lines ) ) {
 $rhm_head_id = $args['id'] . '-title';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
-	<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box' ); ?>
+	<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 	<div class="<?php echo esc_attr( $rhm_image ? 'grid items-center gap-4 sm:grid-cols-[40%_minmax(0,1fr)] lg:gap-6' : '' ); ?>">
 		<?php if ( $rhm_image ) : ?>
 			<div class="overflow-hidden rounded-lg bg-soft">
@@ -32,9 +32,9 @@ $rhm_head_id = $args['id'] . '-title';
 			</div>
 		<?php endif; ?>
 		<div class="min-w-0">
-			<?php foreach ( $rhm_lines as $rhm_line ) : ?>
-				<p class="mb-3 text-sm leading-relaxed text-body/85 lg:text-[15px]"><?php echo esc_html( $rhm_line ); ?></p>
-			<?php endforeach; ?>
+			<?php if ( '' !== $rhm_lines ) : ?>
+				<div class="rhm-rich mb-3 text-sm leading-relaxed text-body/85 lg:text-[15px]"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
+			<?php endif; ?>
 			<?php rhm_landing_button( $rhm_data, 'btn btn-primary mt-2 h-10 gap-2 rounded-full px-5 text-sm font-bold' ); ?>
 		</div>
 	</div>

@@ -23,37 +23,39 @@ const RHM_LANDING_FIELD = 'rhm_landing_sections';
 const RHM_LANDING_SPANS = array( 10, 5, 4, 6 );
 
 /**
- * Thư viện layout: key => [ label, boxed ].
+ * Thư viện layout: key => [ label, boxed, h3 ].
  * boxed = section dạng ô có nền, xếp được cạnh nhau theo ô Độ rộng.
+ * h3    = section có tiêu đề con H3 → có thêm ô "Màu tiêu đề con (H3)" (h3_color, 1 màu cho mọi H3 của section).
  *
- * @return array<string, array{label:string, boxed:bool}>
+ * @return array<string, array{label:string, boxed:bool, h3:bool}>
  */
 function rhm_landing_layouts(): array {
-	$layout = static fn( string $label, bool $boxed = false ): array => array(
+	$layout = static fn( string $label, bool $boxed = false, bool $h3 = false ): array => array(
 		'label' => $label,
 		'boxed' => $boxed,
+		'h3'    => $h3,
 	);
 	return array(
 		'hero'         => $layout( __( 'Banner đầu trang (H1)', 'themeranghammatsg' ) ),
 		'banner'       => $layout( __( 'Banner ảnh (desktop 1920×650, mobile 828×620)', 'themeranghammatsg' ) ),
 		'highlights'   => $layout( __( 'Dải điểm nổi bật (icon + nhãn)', 'themeranghammatsg' ) ),
-		'cards'        => $layout( __( 'Thẻ giá trị (sứ mệnh, tầm nhìn…) + ảnh', 'themeranghammatsg' ) ),
+		'cards'        => $layout( __( 'Thẻ giá trị (sứ mệnh, tầm nhìn…) + ảnh', 'themeranghammatsg' ), false, true ),
 		'services'     => $layout( __( 'Danh sách dịch vụ (ảnh + tên)', 'themeranghammatsg' ) ),
-		'doctor-cards' => $layout( __( 'Bác sĩ tiêu biểu (thẻ ngang)', 'themeranghammatsg' ) ),
+		'doctor-cards' => $layout( __( 'Bác sĩ tiêu biểu (thẻ ngang)', 'themeranghammatsg' ), false, true ),
 		'feature'      => $layout( __( 'Ô thông tin: ảnh + chữ', 'themeranghammatsg' ), true ),
 		'tiles'        => $layout( __( 'Ô lưới ảnh nhỏ (thiết bị, công nghệ…)', 'themeranghammatsg' ), true ),
 		'promo'        => $layout( __( 'Ô banner nổi bật (ảnh + tiêu đề + logo)', 'themeranghammatsg' ), true ),
-		'intro'        => $layout( __( 'Ảnh lớn + chữ + ô nổi bật', 'themeranghammatsg' ) ),
+		'intro'        => $layout( __( 'Ảnh lớn + chữ + ô nổi bật', 'themeranghammatsg' ), false, true ),
 		'text-image'   => $layout( __( 'Tiêu đề + nội dung dài + ảnh lớn bên dưới', 'themeranghammatsg' ) ),
 		'image-stack'  => $layout( __( 'Ảnh lớn xếp dọc (kèm mô tả ảnh)', 'themeranghammatsg' ) ),
 		'icon-list'    => $layout( __( 'Danh sách có icon + ảnh (trái / phải / trên / dưới)', 'themeranghammatsg' ) ),
-		'photo-groups' => $layout( __( 'Nhóm ảnh 3 cột (tiêu đề + mô tả + hàng ảnh)', 'themeranghammatsg' ) ),
+		'photo-groups' => $layout( __( 'Nhóm ảnh 3 cột (tiêu đề + mô tả + hàng ảnh)', 'themeranghammatsg' ), false, true ),
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
-		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ) ),
+		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ), false, true ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
-		'clinics'      => $layout( __( 'Hệ thống phòng khám (chi nhánh + ảnh theo nhóm)', 'themeranghammatsg' ) ),
-		'doctors'      => $layout( __( 'Đội ngũ bác sĩ (slider như trang chủ)', 'themeranghammatsg' ) ),
-		'form'         => $layout( __( 'Form đăng ký (Fluent Forms)', 'themeranghammatsg' ) ),
+		'clinics'      => $layout( __( 'Hệ thống phòng khám (chi nhánh + ảnh theo nhóm)', 'themeranghammatsg' ), false, true ),
+		'doctors'      => $layout( __( 'Đội ngũ bác sĩ (slider như trang chủ)', 'themeranghammatsg' ), false, true ),
+		'form'         => $layout( __( 'Form đăng ký (Fluent Forms)', 'themeranghammatsg' ), false, true ),
 		'faq'          => $layout( __( 'Câu hỏi thường gặp', 'themeranghammatsg' ) ),
 		'editor'       => $layout( __( 'Nội dung trình soạn thảo', 'themeranghammatsg' ) ),
 		'booking'      => $layout( __( 'Kêu gọi đặt lịch', 'themeranghammatsg' ) ),
@@ -342,6 +344,75 @@ function rhm_landing_html( array $data, string $key ): string {
 	return '' === $html ? '' : rhm_external_links( wp_kses_post( $html ) );
 }
 
+/**
+ * Thẻ được giữ trong ô chữ có định dạng (rhm_landing_rich_field): đoạn, xuống dòng, đậm, nghiêng, gạch chân, màu/canh lề
+ * (style — WP chỉ giữ thuộc tính CSS an toàn: color, text-align, text-decoration…), link, danh sách.
+ * Không có heading/ảnh/iframe → dán nội dung từ nơi khác không phá cấu trúc H1/H2 của trang.
+ */
+function rhm_landing_rich_allowed_html(): array {
+	$style = array( 'style' => true );
+	return array(
+		'p'      => $style,
+		'br'     => array(),
+		'strong' => array(),
+		'b'      => array(),
+		'em'     => array(),
+		'i'      => array(),
+		'u'      => array(),
+		'span'   => $style,
+		'a'      => array(
+			'href'   => true,
+			'title'  => true,
+			'target' => true,
+			'rel'    => true,
+			'style'  => true,
+		),
+		'ul'     => $style,
+		'ol'     => $style,
+		'li'     => $style,
+	);
+}
+
+/**
+ * HTML của ô chữ có định dạng (đã qua acf_the_content → có <p>), lọc theo rhm_landing_rich_allowed_html()
+ * + link external có target/rel. In trong khối .rhm-rich (page-about.css: khoảng cách đoạn, kiểu link). '' nếu trống.
+ */
+function rhm_landing_rich( array $data, string $key ): string {
+	$html = preg_replace( '#<(script|style)\b[^>]*>.*?</\1>#is', '', (string) ( $data[ $key ] ?? '' ) ) ?? '';
+	$html = trim( wp_kses( $html, rhm_landing_rich_allowed_html() ) );
+	// safecss của WP còn cho position, width, margin… → chỉ giữ màu, canh lề, gạch chân (đúng các nút của toolbar).
+	$html = preg_replace_callback(
+		'/\sstyle="([^"]*)"/i',
+		static function ( array $m ): string {
+			$keep = array();
+			foreach ( explode( ';', $m[1] ) as $rule ) {
+				$prop = strtolower( trim( strstr( $rule, ':', true ) ?: '' ) );
+				if ( in_array( $prop, array( 'color', 'text-align', 'text-decoration', 'text-decoration-line' ), true ) ) {
+					$keep[] = trim( $rule );
+				}
+			}
+			return $keep ? ' style="' . implode( '; ', $keep ) . '"' : '';
+		},
+		$html
+	) ?? '';
+	// Ô chỉ còn thẻ rỗng / &nbsp; (xóa hết chữ trong trình soạn thảo) → coi như trống.
+	if ( '' === trim( html_entity_decode( wp_strip_all_tags( $html ) ), " \t\n\r\0\x0B\xC2\xA0" ) ) {
+		return '';
+	}
+	return rhm_external_links( $html );
+}
+
+/** Màu hex hợp lệ (field color_picker, vd title_color), '' nếu trống / không hợp lệ. */
+function rhm_landing_color( array $data, string $key ): string {
+	return (string) sanitize_hex_color( trim( (string) ( $data[ $key ] ?? '' ) ) );
+}
+
+/** Thuộc tính style màu chữ cho tiêu đề (' style="color: #…"'), '' nếu không có màu. */
+function rhm_landing_color_attr( string $color ): string {
+	$color = (string) sanitize_hex_color( $color );
+	return '' !== $color ? ' style="color: ' . esc_attr( $color ) . '"' : '';
+}
+
 /** Alt ảnh: alt của attachment → tiêu đề attachment. */
 function rhm_landing_image_alt( int $id ): string {
 	$alt = trim( (string) get_post_meta( $id, '_wp_attachment_image_alt', true ) );
@@ -380,9 +451,11 @@ function rhm_landing_box_sizes( int $span, float $fraction, ?float $mobile_fract
 
 /**
  * Cụm tiêu đề section: dòng nhỏ (eyebrow) + H2 (id = $id) + mô tả.
+ * $description: HTML đã lọc bằng rhm_landing_rich() (in nguyên).
  * $style: 'center' (canh giữa, 2 vạch hai bên) | 'bar' (vạch dọc bên trái) | 'box' (vạch dọc, cỡ nhỏ — trong ô) | 'plain'.
+ * $color: màu H2 do content chọn (rhm_landing_color( $data, 'title_color' )), '' = màu thiết kế. Vạch 2 bên kiểu center theo màu chữ.
  */
-function rhm_landing_heading( string $id, string $title, string $eyebrow = '', string $description = '', string $style = 'center' ): void {
+function rhm_landing_heading( string $id, string $title, string $eyebrow = '', string $description = '', string $style = 'center', string $color = '' ): void {
 	if ( '' === $title ) {
 		return;
 	}
@@ -402,9 +475,9 @@ function rhm_landing_heading( string $id, string $title, string $eyebrow = '', s
 		<?php if ( '' !== $eyebrow ) : ?>
 			<p class="mb-2 text-[13px] font-semibold tracking-wide text-dark uppercase lg:text-sm"><?php echo esc_html( $eyebrow ); ?></p>
 		<?php endif; ?>
-		<h2 id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $h2 ); ?>"><?php echo esc_html( $title ); ?></h2>
+		<h2 id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $h2 ); ?>"<?php echo rhm_landing_color_attr( $color ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- đã escape trong hàm. ?>><?php echo esc_html( $title ); ?></h2>
 		<?php if ( '' !== $description ) : ?>
-			<p class="mt-3 leading-relaxed text-body/85"><?php echo esc_html( $description ); ?></p>
+			<div class="rhm-rich mt-3 leading-relaxed text-body/85"><?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- đã lọc bằng rhm_landing_rich(). ?></div>
 		<?php endif; ?>
 	</div>
 	<?php

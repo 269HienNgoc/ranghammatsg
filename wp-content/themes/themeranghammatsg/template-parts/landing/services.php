@@ -40,7 +40,7 @@ $rhm_sizes = $rhm_desktop . ', (min-width: 640px) calc(30vw - 10px), calc(45vw -
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">
-		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_text( $rhm_data, 'description' ), 'center' ); ?>
+		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_rich( $rhm_data, 'description' ), 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<ul class="<?php echo esc_attr( '-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 lg:mx-0 lg:gap-4 lg:overflow-visible lg:px-0 lg:pb-0 ' . $rhm_grid ); ?>">
 			<?php foreach ( $rhm_items as [ $rhm_image, $rhm_name, $rhm_url ] ) : ?>
 				<li class="w-[45%] shrink-0 snap-start sm:w-[30%] lg:w-auto">

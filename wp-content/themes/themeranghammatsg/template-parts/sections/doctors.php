@@ -48,6 +48,8 @@ $rhm_title_id = '' !== $rhm_id ? $rhm_id . '-title' : 'doctors-title';
 $rhm_eyebrow  = (string) ( $args['eyebrow'] ?? '' ) ?: rhm_home_doctors_text( 'eyebrow', $rhm_prefix );
 $rhm_title    = (string) ( $args['title'] ?? '' ) ?: rhm_home_doctors_text( 'title', $rhm_prefix );
 $rhm_all_text = rhm_home_doctors_text( 'all_text', $rhm_prefix );
+$rhm_color    = (string) sanitize_hex_color( (string) ( $args['title_color'] ?? '' ) ); // Màu tiêu đề do landing truyền ('' = màu thiết kế).
+$rhm_h3_color = (string) sanitize_hex_color( (string) ( $args['h3_color'] ?? '' ) ); // Màu tên bác sĩ (H3) do landing truyền.
 $rhm_all_link = rhm_home_doctors_text( 'all_link', $rhm_prefix );
 // Id tên bác sĩ có tiền tố section → 1 bác sĩ nằm ở 2 slider cùng trang không trùng id (bản gốc không id: giữ "doctor-<id>-name").
 $rhm_name_id  = static fn( int $doctor_id ): string => ( '' !== $rhm_id ? $rhm_id . '-' : '' ) . 'doctor-' . $doctor_id . '-name';
@@ -70,7 +72,7 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 					<?php echo esc_html( $rhm_eyebrow ); ?>
 				</p>
 			<?php endif; ?>
-			<h2 id="<?php echo esc_attr( $rhm_title_id ); ?>" class="text-[28px] leading-tight font-bold text-dark lg:text-4xl"><?php echo esc_html( $rhm_title ); ?></h2>
+			<h2 id="<?php echo esc_attr( $rhm_title_id ); ?>" class="text-[28px] leading-tight font-bold text-dark lg:text-4xl"<?php echo '' !== $rhm_color ? ' style="color: ' . esc_attr( $rhm_color ) . '"' : ''; ?>><?php echo esc_html( $rhm_title ); ?></h2>
 		</div>
 
 		<div class="order-3 flex items-center justify-center gap-3 lg:order-none lg:mb-5">
@@ -107,8 +109,8 @@ $rhm_sizes = '(min-width: 1280px) 428px, (min-width: 1024px) 328px, (min-width: 
 									<?php if ( $rhm_doctor['degree'] ) : ?>
 										<p class="text-base font-semibold text-dark lg:text-lg"><?php echo esc_html( $rhm_doctor['degree'] ); ?></p>
 									<?php endif; ?>
-									<h3 id="<?php echo esc_attr( $rhm_name_id( $rhm_doctor['id'] ) ); ?>" class="mt-1 text-[26px] leading-tight font-bold text-primary uppercase lg:text-[40px]">
-										<a class="hover:text-primary-dark" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
+									<h3 id="<?php echo esc_attr( $rhm_name_id( $rhm_doctor['id'] ) ); ?>" class="mt-1 text-[26px] leading-tight font-bold text-primary uppercase lg:text-[40px]"<?php echo '' !== $rhm_h3_color ? ' style="color: ' . esc_attr( $rhm_h3_color ) . '"' : ''; ?>>
+										<a class="<?php echo esc_attr( '' !== $rhm_h3_color ? 'hover:opacity-80' : 'hover:text-primary-dark' ); ?>" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>"><?php echo esc_html( $rhm_doctor['name'] ); ?></a>
 									</h3>
 ~
 									<?php if ( $rhm_doctor['position'] ) : ?>
