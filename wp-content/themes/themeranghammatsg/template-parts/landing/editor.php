@@ -15,8 +15,9 @@ if ( '' === trim( (string) get_post_field( 'post_content', get_the_ID() ) ) ) {
 
 $rhm_data   = $args['data'] ?? array();
 $rhm_narrow = ! isset( $rhm_data['narrow'] ) || (bool) $rhm_data['narrow'];
+// Cột hẹp 868px, thu thêm 2 × --rhm-cta-gutter khi không đứng đầu (chừa cột nút liên hệ nhanh, page-about.css; utility max-w đè rule của khung).
 ?>
-<div id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $rhm_narrow ? 'site-container max-w-[868px] py-10 lg:py-14' : 'site-container py-10 lg:py-14' ); ?>">
+<div id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( $rhm_narrow ? 'site-container max-w-[min(868px,100%-2*var(--rhm-cta-gutter,0px))] py-10 lg:py-14' : 'site-container py-10 lg:py-14' ); ?>">
 	<article id="post-<?php the_ID(); ?>" <?php post_class( 'entry-content' ); ?>>
 		<?php
 		the_content();

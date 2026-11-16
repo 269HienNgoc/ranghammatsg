@@ -119,7 +119,7 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 				// Nút ‹ › canh giữa theo chiều cao ẢNH (lớp phủ cùng khung tỉ lệ với ảnh), không theo cả slide.
 				// ≥ 1024px lùi vào 96px: cột nút liên hệ nhanh (fixed, cách mép phải màn hình ~88px) không che nút ›.
 				?>
-				<div class="pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video lg:px-24" data-rhm-tiles-controls>
+				<div class="<?php echo esc_attr( $args['is_first'] ? 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video lg:px-24' : 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video' ); ?>" data-rhm-tiles-controls>
 					<button type="button" class="<?php echo esc_attr( $rhm_arrow ); ?>" aria-label="<?php esc_attr_e( 'Ảnh trước', 'themeranghammatsg' ); ?>" aria-controls="<?php echo esc_attr( $rhm_track ); ?>" data-rhm-tiles-prev disabled>
 						<?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 					</button>

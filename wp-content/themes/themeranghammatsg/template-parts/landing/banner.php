@@ -22,7 +22,9 @@ $rhm_full   = 'container' !== ( $rhm_data['layout'] ?? 'full' );
 
 // sizes: tràn màn hình = 100vw. Trong khung = khung 1408px (≥ 1440px) hoặc 100vw − lề 2 × 16px.
 // Nhánh mobile (< 768px) dùng ảnh 828px: 100vw (tràn) | 100vw − 32px (trong khung).
-$rhm_sizes        = $rhm_full ? '100vw' : '(min-width: 1440px) 1408px, calc(100vw - 32px)';
+// Không đứng đầu trang: 1024–1639px section lùi vào 90px mỗi bên (chừa cột nút liên hệ nhanh, page-about.css) → 100vw − 180px.
+$rhm_full_sizes   = $args['is_first'] ? '100vw' : '(min-width: 1024px) and (max-width: 1639px) calc(100vw - 180px), 100vw';
+$rhm_sizes        = $rhm_full ? $rhm_full_sizes : '(min-width: 1440px) 1408px, calc(100vw - 32px)';
 $rhm_mobile_sizes = $rhm_full ? '100vw' : 'calc(100vw - 32px)';
 
 // Section đứng đầu trang → banner là ảnh LCP (fetchpriority=high, không lazy).

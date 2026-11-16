@@ -70,7 +70,7 @@ $rhm_desc      = rhm_landing_lines( $rhm_data, 'description' );
 				<?php if ( 'left' === $rhm_position ) : ?>
 					<?php echo $rhm_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML dựng ở trên. ?>
 				<?php endif; ?>
-				<div class="<?php echo esc_attr( 'left' === $rhm_position ? 'min-w-0 lg:pr-24' : 'min-w-0' ); ?>">
+				<div class="<?php echo esc_attr( 'left' === $rhm_position && $args['is_first'] ? 'min-w-0 lg:pr-24' : 'min-w-0' ); ?>">
 					<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), '', 'bar' ); ?>
 					<?php foreach ( $rhm_desc as $rhm_line ) : ?>
 						<p class="mb-4 leading-relaxed text-body/85"><?php echo esc_html( $rhm_line ); ?></p>
@@ -89,7 +89,7 @@ $rhm_desc      = rhm_landing_lines( $rhm_data, 'description' );
 			<?php if ( $rhm_image && 'top' === $rhm_position ) : ?>
 				<div class="mt-6 lg:mt-8"><?php echo $rhm_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML dựng ở trên. ?></div>
 			<?php endif; ?>
-			<div class="mt-6 lg:mt-8 lg:pr-24"><?php echo $rhm_list_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML dựng ở trên. ?></div>
+			<div class="<?php echo esc_attr( $args['is_first'] ? 'mt-6 lg:mt-8 lg:pr-24' : 'mt-6 lg:mt-8' ); ?>"><?php echo $rhm_list_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML dựng ở trên. ?></div>
 			<?php if ( $rhm_image && 'bottom' === $rhm_position ) : ?>
 				<div class="mt-6 lg:mt-8"><?php echo $rhm_image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML dựng ở trên. ?></div>
 			<?php endif; ?>

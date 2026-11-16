@@ -49,6 +49,31 @@
 		@apply bg-linear-to-b from-[#f2faf7] via-white to-[#f2faf7] pb-6 lg:pb-10;
 	}
 
+	/*
+	 * Chừa chỗ cột nút liên hệ nhanh (fixed, chiếm ~90px từ mép phải ≥ 1024px): mọi section TRỪ section đầu
+	 * (luôn tràn màn hình) lùi vào đều 2 bên 90px (+ lề 16px của .site-container = 106px) → tiêu đề vẫn đúng tâm.
+	 * Từ 1640px khung 1440px giữa màn hình đã không chạm cột nút → không lùi. hero.php đọc biến cho ảnh absolute.
+	 */
+	.rhm-landing > * {
+		--rhm-cta-gutter: 0px;
+	}
+
+	@media (64rem <= width < 102.5rem) {
+		.rhm-landing > :not(:first-child) {
+			--rhm-cta-gutter: 5.625rem;
+		}
+
+		/* Gốc section (chỉ có py-*): đệm 2 bên → nền dải màu vẫn tràn, nội dung thu vào. */
+		.rhm-landing > :not(:first-child, .site-container) {
+			padding-inline: var(--rhm-cta-gutter);
+		}
+
+		/* Con trực tiếp là .site-container (hàng ô feature/tiles/promo, editor): thu max-width, giữ khung hẹp max-w-[868px]. */
+		.rhm-landing > .site-container:not(:first-child) {
+			max-width: min(var(--container-site), 100% - 2 * var(--rhm-cta-gutter));
+		}
+	}
+
 	/* Banner: nền mint; ảnh desktop phủ nửa phải, mép trái mờ dần vào nền (mask, không thêm phần tử). */
 	.landing-hero {
 		@apply bg-linear-to-br from-mint via-[#f5fbf9] to-white;
