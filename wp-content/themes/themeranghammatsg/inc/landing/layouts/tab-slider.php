@@ -30,7 +30,7 @@ function rhm_landing_layout_tab_slider_fields( string $prefix ): array {
 	return array(
 		rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H2)', 'themeranghammatsg' ), 'text', array( 'placeholder' => 'Các loại dán sứ Veneer trên thị trường' ) ),
 		rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ), array( 'instructions' => __( 'Tùy chọn, hiện canh giữa dưới tiêu đề.', 'themeranghammatsg' ) ) ),
-		rhm_landing_image_field( $prefix, 'image', __( 'Ảnh lớn — khuyến nghị PNG/WebP nền trong, khoảng 800 × 1000', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 40 ), 'instructions' => __( 'Giữ nguyên tỉ lệ file. Mobile hiện trên slider. Trống → slider rộng hết khung. Nhập "Văn bản thay thế".', 'themeranghammatsg' ) ) ),
+		rhm_landing_image_field( $prefix, 'image', __( 'Ảnh lớn — khuyến nghị ảnh dọc khoảng 800 × 1000', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 40 ), 'instructions' => __( 'Máy tính: ảnh được cắt cho cao bằng khung slider (để chủ thể ở giữa, không để chữ trong ảnh). Mobile: hiện đủ ảnh, nằm trên slider. Trống → slider rộng hết khung. Nhập "Văn bản thay thế".', 'themeranghammatsg' ) ) ),
 		$position( $prefix, __( 'Vị trí ảnh lớn (desktop)', 'themeranghammatsg' ), __( 'Mobile ảnh luôn nằm trên slider.', 'themeranghammatsg' ), 30 ),
 		rhm_landing_field( $prefix, 'button_text', __( 'Chữ nút', 'themeranghammatsg' ), 'text', array( 'wrapper' => array( 'width' => 30 ), 'placeholder' => 'Tư vấn', 'instructions' => __( 'Nút mở popup đặt lịch. Trống → "Tư vấn".', 'themeranghammatsg' ) ) ),
 		rhm_landing_field(
