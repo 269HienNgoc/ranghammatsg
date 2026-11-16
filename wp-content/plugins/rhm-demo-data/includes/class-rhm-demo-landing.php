@@ -76,11 +76,26 @@ final class RHM_Demo_Landing {
 		foreach ( array( 'X-quang Vatech', 'X-quang Vatech – mặt bên', 'Phòng chụp X-quang', 'Ghế nha khoa' ) as $i => $title ) {
 			$list[ 'landing-device-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
 		}
+		// Section "Ảnh lớn + slider tab": ảnh lớn dọc (người mẫu) + ảnh vuông cho ảnh tròn từng slide.
+		$list['landing-tabs-model'] = array( 800, 1000, array( 'style' => 'portrait', 'from' => 'mint', 'to' => 'primary', 'title' => 'Nụ cười Veneer', 'alt' => 'Khách hàng mỉm cười sau khi dán sứ Veneer' ) );
+		foreach ( self::tab_slides() as $i => $slide ) {
+			$list[ 'landing-tabs-' . ( $i + 1 ) ] = array( 600, 600, $photo( $slide[0], $i % 2 ? 'teal' : 'deep', 'primary' ) );
+		}
 		// Section "Hệ thống phòng khám": ảnh ngang 16:9, 1 ảnh / slide.
 		foreach ( self::clinic_slides() as $i => $slide ) {
 			$list[ 'landing-clinic-' . ( $i + 1 ) ] = array( 1600, 900, $photo( $slide[0], $i % 2 ? 'teal' : 'primary' ) );
 		}
 		return $list;
+	}
+
+	/** Slide section "Ảnh lớn + slider tab": [tiêu đề, danh sách (mỗi dòng 1 ý)]; slide 2 ảnh tròn bên phải. */
+	private static function tab_slides(): array {
+		return array(
+			array( 'Veneer Emax', "Được chế tác từ gốm thủy tinh Lithium Disilicate.\nĐộ trong mờ tự nhiên và đặc tính thấu quang cao tương tự răng thật.\nKhả năng tương thích cao, không gây kích ứng nướu." ),
+			array( 'Veneer Lisi Press', "Sứ ép nguyên khối của GC (Nhật Bản).\nĐộ bền uốn cao, hạn chế nứt vỡ khi ăn nhai.\nMàu sắc ổn định theo thời gian." ),
+			array( 'Veneer Lisi Press Ultra Thin', "Mặt dán siêu mỏng, chỉ khoảng 0,2 – 0,3 mm.\nMài răng tối thiểu hoặc không cần mài.\nPhù hợp răng thưa nhẹ, răng ố vàng." ),
+			array( 'Veneer Lumineers', "Mặt dán mỏng như kính áp tròng.\nThời gian thực hiện nhanh, chỉ 2 lần hẹn.\nCó thể tháo bỏ khi cần." ),
+		);
 	}
 
 	/** Slide section "Hệ thống phòng khám": [tiêu đề, chú thích]. */
@@ -335,6 +350,25 @@ final class RHM_Demo_Landing {
 				),
 				'image'          => $img['landing-list-wide'],
 				'image_position' => 'bottom',
+			),
+			array(
+				'acf_fc_layout'  => 'tab-slider',
+				'title'          => 'Các loại dán sứ Veneer trên thị trường',
+				'description'    => '',
+				'image'          => $img['landing-tabs-model'],
+				'image_position' => 'left',
+				'button_text'    => 'Tư vấn',
+				'items'          => array_map(
+					static fn( int $i, array $slide ): array => array(
+						'tab'            => '',
+						'title'          => $slide[0],
+						'image'          => $img[ 'landing-tabs-' . ( $i + 1 ) ],
+						'image_position' => 1 === $i ? 'right' : 'left',
+						'points'         => $slide[1],
+					),
+					array_keys( self::tab_slides() ),
+					self::tab_slides()
+				),
 			),
 			array(
 				'acf_fc_layout' => 'photo-groups',
