@@ -45,7 +45,7 @@ function rhm_landing_layouts(): array {
 		'feature'      => $layout( __( 'Ô thông tin: ảnh + chữ', 'themeranghammatsg' ), true ),
 		'tiles'        => $layout( __( 'Ô lưới ảnh nhỏ (thiết bị, công nghệ…)', 'themeranghammatsg' ), true ),
 		'promo'        => $layout( __( 'Ô banner nổi bật (ảnh + tiêu đề + logo)', 'themeranghammatsg' ), true ),
-		'media-slider' => $layout( __( 'Ô ảnh slider + chữ (trái / phải / trên / dưới)', 'themeranghammatsg' ), true ),
+		'media-slider' => $layout( __( 'Ảnh slider + chữ, nhiều item (trái / phải / trên / dưới)', 'themeranghammatsg' ), false, true ),
 		'intro'        => $layout( __( 'Ảnh lớn + chữ + ô nổi bật', 'themeranghammatsg' ), false, true ),
 		'text-image'   => $layout( __( 'Tiêu đề + nội dung dài + ảnh lớn bên dưới', 'themeranghammatsg' ) ),
 		'image-stack'  => $layout( __( 'Ảnh lớn xếp dọc (kèm mô tả ảnh)', 'themeranghammatsg' ) ),
