@@ -56,10 +56,11 @@ if ( $rhm_multi ) {
 }
 
 // Ảnh lớn: khung W = 1408px (≥ 1440px) | 100vw − 32px, 2 cột cách 32px.
-// ≥ 1536px cột ảnh 2/5: (1408 − 32) × 0,4 = 550px. 1024–1535px cột ảnh 1/3: (100vw − 64) / 3 → calc(33.33vw − 21px)
-// (section không đứng đầu còn bị chừa 2 × 90px cho cột nút liên hệ nhanh → dư nhẹ, chấp nhận).
-// < 1024px ảnh trên slider, tối đa max-w-md 448px.
-$rhm_sizes = '(min-width: 1536px) 550px, (min-width: 1024px) calc(33.33vw - 21px), (min-width: 480px) 448px, calc(100vw - 32px)';
+// ≥ 1536px cột ảnh 2/5: (1408 − 32) × 0,4 = 550px.
+// 1024–1535px cột ảnh 1/3 (260–400px) nhưng khung cao = thẻ slider (~360px) + object-cover: ảnh ngang 4:3 cần rộng
+// ≈ 360 × 4/3 = 480px > cột → lấy 480px (ảnh dọc thì dư, chấp nhận).
+// < 1024px ảnh trên slider, giữ tỉ lệ, tối đa max-w-md 448px.
+$rhm_sizes = '(min-width: 1536px) 550px, (min-width: 1024px) 480px, (min-width: 480px) 448px, calc(100vw - 32px)';
 // Ảnh tròn cố định theo breakpoint, khớp class size-40 sm:size-48 lg:size-40 xl:size-48 2xl:size-56 bên dưới.
 $rhm_round_sizes = '(min-width: 1536px) 224px, (min-width: 1280px) 192px, (min-width: 1024px) 160px, (min-width: 640px) 192px, 160px';
 
@@ -73,18 +74,23 @@ $rhm_desc  = rhm_landing_rich( $rhm_data, 'description' );
 			<div class="rhm-rich mx-auto -mt-2 mb-6 max-w-4xl text-center leading-relaxed text-body/85 lg:mb-8"><?php echo $rhm_desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
 		<?php endif; ?>
 
-		<?php // Ảnh lớn luôn đứng trước trong DOM → mobile ảnh trên; desktop ảnh phải = lg:order-last + đảo tỉ lệ cột. ?>
-		<div class="<?php echo esc_attr( ! $rhm_image ? 'mx-auto max-w-5xl' : ( $rhm_right ? 'grid items-center gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8 2xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : 'grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8 2xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]' ) ); ?>">
+		<?php
+		// Ảnh lớn luôn đứng trước trong DOM → mobile ảnh trên; desktop ảnh phải = lg:order-last + đảo tỉ lệ cột.
+		// ≥ 1024px hàng stretch: khung ảnh cao ĐÚNG bằng thẻ slider (ảnh absolute + object-cover, không góp chiều cao)
+		// → mép trên/dưới 2 khối thẳng hàng, cân đối (người dùng yêu cầu 2026-11-16). < 1024px ảnh giữ nguyên tỉ lệ file.
+		?>
+		<div class="<?php echo esc_attr( ! $rhm_image ? 'mx-auto max-w-5xl' : ( $rhm_right ? 'grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8 2xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : 'grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-8 2xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]' ) ); ?>">
 			<?php if ( $rhm_image ) : ?>
-				<div class="<?php echo esc_attr( $rhm_right ? 'mx-auto w-full max-w-md lg:order-last lg:max-w-none' : 'mx-auto w-full max-w-md lg:max-w-none' ); ?>">
+				<div class="<?php echo esc_attr( $rhm_right ? 'relative mx-auto w-full max-w-md overflow-hidden rounded-xl bg-soft shadow-card lg:order-last lg:min-h-80 lg:max-w-none' : 'relative mx-auto w-full max-w-md overflow-hidden rounded-xl bg-soft shadow-card lg:min-h-80 lg:max-w-none' ); ?>">
 					<?php
 					// Section đứng đầu trang → ảnh lớn là LCP (fetchpriority=high), còn lại lazy. rhm_html_attrs escape từng thuộc tính.
-					echo rhm_landing_picture( $rhm_image, $rhm_sizes, 'block h-auto w-full', (bool) $args['is_first'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo rhm_landing_picture( $rhm_image, $rhm_sizes, 'block h-auto w-full lg:absolute lg:inset-0 lg:size-full lg:object-cover', (bool) $args['is_first'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 				</div>
 			<?php endif; ?>
 
-			<div class="min-w-0 overflow-hidden rounded-xl border border-line bg-white shadow-card">
+			<?php // Thẻ flex-col: khi khung ảnh (lg:min-h-80) cao hơn nội dung, vùng slide giãn ra, nội dung canh giữa dọc. ?>
+			<div class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-white shadow-card">
 				<?php if ( $rhm_multi ) : ?>
 					<div class="flex overflow-x-auto overscroll-x-contain bg-soft [scrollbar-width:none]" role="group" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-showcase-thumbs>
 						<?php foreach ( $rhm_items as $rhm_index => $rhm_item ) : ?>
@@ -93,8 +99,8 @@ $rhm_desc  = rhm_landing_rich( $rhm_data, 'description' );
 					</div>
 				<?php endif; ?>
 
-				<div class="relative" data-rhm-tiles>
-					<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none]" role="region" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
+				<div class="relative flex flex-1 flex-col" data-rhm-tiles>
+					<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex flex-1 snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none]" role="region" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
 						<?php foreach ( $rhm_items as $rhm_index => $rhm_item ) : ?>
 							<?php
 							// Ảnh tròn phải: đảo thứ tự + tỉ lệ cột từ sm (mobile luôn ảnh trên). lg (cột thẻ hẹp nhất) ảnh nhỏ lại size-40.
