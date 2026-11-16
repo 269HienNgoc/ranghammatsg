@@ -233,22 +233,26 @@ final class RHM_Demo_Landing {
 				'button_text'   => '',
 				'button_link'   => '',
 			),
-			// Ô ảnh slider + chữ: ảnh phải nhiều ảnh (slider) + ảnh trên 1 ảnh, 2 ô cùng hàng.
+			// Ảnh slider + chữ (nhiều item): 2 cột, ảnh phải; item 1 có 3 ảnh (slider), item 2 có 1 ảnh.
 			array(
 				'acf_fc_layout'  => 'media-slider',
-				'width'          => '5',
-				'title'          => 'Máy chụp X-quang Vatech',
-				'text'           => 'Cho hình ảnh sắc nét, hỗ trợ chẩn đoán chính xác.',
-				'images'         => array( $img['landing-device-1'], $img['landing-device-2'], $img['landing-device-3'] ),
+				'title'          => 'Trang thiết bị hiện đại',
+				'eyebrow'        => '',
+				'description'    => 'Đầu tư thiết bị chẩn đoán và điều trị thế hệ mới, giúp kết quả chính xác và nhẹ nhàng hơn.',
+				'columns'        => '2',
 				'image_position' => 'right',
-			),
-			array(
-				'acf_fc_layout'  => 'media-slider',
-				'width'          => '5',
-				'title'          => 'Ghế nha khoa đồng bộ',
-				'text'           => 'Thiết kế công thái học, giúp khách hàng thoải mái trong suốt quá trình điều trị.',
-				'images'         => array( $img['landing-device-4'] ),
-				'image_position' => 'top',
+				'items'          => array(
+					array(
+						'images' => array( $img['landing-device-1'], $img['landing-device-2'], $img['landing-device-3'] ),
+						'title'  => 'Máy chụp X-quang Vatech',
+						'text'   => 'Cho hình ảnh sắc nét, hỗ trợ chẩn đoán chính xác.',
+					),
+					array(
+						'images' => array( $img['landing-device-4'] ),
+						'title'  => 'Ghế nha khoa đồng bộ',
+						'text'   => 'Thiết kế công thái học, giúp khách hàng thoải mái trong suốt quá trình điều trị.',
+					),
+				),
 			),
 			array(
 				'acf_fc_layout'       => 'intro',
