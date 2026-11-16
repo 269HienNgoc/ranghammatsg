@@ -84,7 +84,7 @@ $rhm_desc  = rhm_landing_rich( $rhm_data, 'description' );
 				</div>
 			<?php endif; ?>
 
-			<div class="min-w-0 overflow-hidden rounded-3xl border border-line bg-white shadow-card">
+			<div class="min-w-0 overflow-hidden rounded-xl border border-line bg-white shadow-card">
 				<?php if ( $rhm_multi ) : ?>
 					<div class="flex overflow-x-auto overscroll-x-contain bg-soft [scrollbar-width:none]" role="group" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-showcase-thumbs>
 						<?php foreach ( $rhm_items as $rhm_index => $rhm_item ) : ?>

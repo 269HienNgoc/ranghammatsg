@@ -33,7 +33,7 @@ $rhm_sizes = '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), 
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container grid items-center gap-6 lg:grid-cols-2 lg:gap-8' : 'site-container max-w-[868px]' ); ?>">
 		<?php if ( $rhm_image ) : ?>
-			<div class="<?php echo esc_attr( $rhm_right ? 'relative aspect-[4/3] overflow-hidden rounded-2xl bg-soft shadow-card lg:order-last' : 'relative aspect-[4/3] overflow-hidden rounded-2xl bg-soft shadow-card' ); ?>">
+			<div class="<?php echo esc_attr( $rhm_right ? 'relative aspect-[4/3] overflow-hidden rounded-lg bg-soft shadow-card lg:order-last' : 'relative aspect-[4/3] overflow-hidden rounded-lg bg-soft shadow-card' ); ?>">
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
 				echo rhm_landing_picture( $rhm_image, $rhm_sizes, 'absolute inset-0 size-full object-cover', (bool) $args['is_first'] );
@@ -62,7 +62,7 @@ $rhm_sizes = '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), 
 			<?php rhm_landing_button( $rhm_data, 'btn btn-primary mt-6 h-11 gap-2 rounded-full px-6 text-sm font-bold' ); ?>
 
 			<?php if ( '' !== $rhm_callout ) : ?>
-				<div class="mt-6 flex items-center gap-4 rounded-2xl border border-line bg-linear-to-br from-mint to-white p-5 shadow-card lg:mt-8 lg:gap-6 lg:p-6">
+				<div class="mt-6 flex items-center gap-4 rounded-lg border border-line bg-linear-to-br from-mint to-white p-5 shadow-card lg:mt-8 lg:gap-6 lg:p-6">
 					<?php if ( $rhm_c_icon ) : ?>
 						<span class="flex size-16 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-card lg:size-20">
 							<?php echo rhm_icon_svg( 'landing', $rhm_c_icon, 'size-9 lg:size-11' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG trong theme. ?>

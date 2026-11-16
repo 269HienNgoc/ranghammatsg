@@ -67,7 +67,7 @@ $rhm_sizes = $rhm_single
 		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', rhm_landing_rich( $rhm_data, 'description' ), 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<div class="<?php echo esc_attr( $rhm_single ? 'mx-auto grid max-w-[692px] gap-6' : 'grid gap-6 lg:grid-cols-2' ); ?>">
 			<?php foreach ( $rhm_doctors as $rhm_doctor ) : ?>
-				<article class="grid grid-cols-1 items-center overflow-hidden rounded-2xl border border-line bg-white shadow-card sm:grid-cols-[40%_minmax(0,1fr)]" aria-labelledby="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>">
+				<article class="grid grid-cols-1 items-center overflow-hidden rounded-lg border border-line bg-white shadow-card sm:grid-cols-[40%_minmax(0,1fr)]" aria-labelledby="<?php echo esc_attr( $args['id'] . '-doctor-' . $rhm_doctor['id'] ); ?>">
 					<a class="relative block aspect-square w-full min-w-0 self-start overflow-hidden bg-soft" href="<?php echo esc_url( $rhm_doctor['url'] ); ?>" tabindex="-1" aria-hidden="true">
 						<?php rhm_doctor_image( $rhm_doctor['image'], $rhm_sizes, 'absolute inset-0 size-full object-cover object-top', $rhm_doctor['name'], false, 1 ); ?>
 					</a>

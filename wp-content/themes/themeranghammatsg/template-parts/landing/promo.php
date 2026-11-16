@@ -21,7 +21,7 @@ $rhm_logo    = $rhm_logo && wp_get_attachment_url( $rhm_logo ) ? $rhm_logo : 0; 
 $rhm_url     = rhm_landing_url( $rhm_data, 'link' );
 $rhm_head_id = $args['id'] . '-title';
 ?>
-<section id="<?php echo esc_attr( $args['id'] ); ?>" class="relative h-full overflow-hidden rounded-2xl border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card transition-shadow hover:shadow-lg lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
+<section id="<?php echo esc_attr( $args['id'] ); ?>" class="relative h-full overflow-hidden rounded-lg border border-line bg-linear-to-br from-mint via-white to-mint p-5 shadow-card transition-shadow hover:shadow-lg lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'grid h-full content-center items-center gap-4 sm:grid-cols-[45%_minmax(0,1fr)] lg:gap-6' : 'flex h-full flex-col justify-center' ); ?>">
 		<?php if ( $rhm_image ) : ?>
 			<div>

@@ -18,11 +18,11 @@ if ( '' === $rhm_title || ( ! $rhm_image && ! $rhm_lines ) ) {
 
 $rhm_head_id = $args['id'] . '-title';
 ?>
-<section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
+<section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-lg border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 	<div class="<?php echo esc_attr( $rhm_image ? 'grid items-center gap-4 sm:grid-cols-[40%_minmax(0,1fr)] lg:gap-6' : '' ); ?>">
 		<?php if ( $rhm_image ) : ?>
-			<div class="overflow-hidden rounded-lg bg-soft">
+			<div class="overflow-hidden rounded-md bg-soft">
 				<?php
 				// < 640px xếp dọc: ảnh rộng hết ô = màn hình − lề khung 32 − đệm ô 40 − viền 2 = 100vw − 74px.
 				// ≥ 640px: ảnh 40% phần nội dung ô (trừ phần khoảng cách 16/24px chia đôi).

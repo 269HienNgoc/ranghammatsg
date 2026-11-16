@@ -30,7 +30,7 @@ $rhm_cols = 3 === count( $rhm_items ) ? 'grid grid-cols-2 gap-3 sm:grid-cols-3 l
 		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'center', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<ul class="<?php echo esc_attr( $rhm_cols ); ?>">
 			<?php foreach ( $rhm_items as [ $rhm_number, $rhm_label ] ) : ?>
-				<li class="rounded-2xl border border-line bg-white px-3 py-5 text-center shadow-card lg:py-7">
+				<li class="rounded-lg border border-line bg-white px-3 py-5 text-center shadow-card lg:py-7">
 					<p class="text-[28px] leading-tight font-bold text-primary lg:text-4xl"><?php echo esc_html( $rhm_number ); ?></p>
 					<?php if ( '' !== $rhm_label ) : ?>
 						<p class="mt-1 text-sm leading-snug text-muted lg:text-base"><?php echo esc_html( $rhm_label ); ?></p>

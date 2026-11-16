@@ -30,7 +30,7 @@ $rhm_cols = match ( count( $rhm_items ) ) {
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="<?php echo esc_attr( 'hero' === $args['prev'] ? 'relative z-10 pb-6 lg:-mt-8 lg:pb-8' : 'py-6 lg:py-8' ); ?>" aria-label="<?php esc_attr_e( 'Điểm nổi bật', 'themeranghammatsg' ); ?>">
 	<ul class="site-container <?php echo esc_attr( $rhm_cols ); ?>">
 		<?php foreach ( $rhm_items as [ $rhm_icon, $rhm_label ] ) : ?>
-			<li class="flex min-h-16 items-center justify-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-center shadow-card lg:min-h-20 lg:gap-4 lg:px-5">
+			<li class="flex min-h-16 items-center justify-center gap-3 rounded-lg border border-line bg-white px-3 py-3 text-center shadow-card lg:min-h-20 lg:gap-4 lg:px-5">
 				<?php if ( $rhm_icon ) : ?>
 					<?php echo rhm_icon_svg( 'landing', $rhm_icon, 'size-8 shrink-0 text-primary lg:size-10' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG trong theme. ?>
 				<?php endif; ?>

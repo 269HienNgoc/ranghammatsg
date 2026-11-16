@@ -32,7 +32,7 @@ $rhm_sizes = '(min-width: 1440px) 461px, (min-width: 1024px) calc(33.33vw - 19px
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container grid gap-6 lg:grid-cols-3' : 'site-container' ); ?>">
-		<div class="rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:col-span-2 lg:p-8">
+		<div class="rounded-lg border border-line bg-white/80 p-5 shadow-card lg:col-span-2 lg:p-8">
 			<?php rhm_landing_heading( $rhm_head_id, $rhm_title, rhm_landing_text( $rhm_data, 'eyebrow' ), rhm_landing_rich( $rhm_data, 'description' ), 'bar', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 			<ul class="<?php echo esc_attr( $rhm_cols ); ?>">
 				<?php foreach ( $rhm_items as [ $rhm_icon, $rhm_name, $rhm_lines ] ) : ?>
@@ -50,7 +50,7 @@ $rhm_sizes = '(min-width: 1440px) 461px, (min-width: 1024px) calc(33.33vw - 19px
 		</div>
 
 		<?php if ( $rhm_image ) : ?>
-			<div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-soft shadow-card lg:aspect-auto">
+			<div class="relative aspect-[4/3] overflow-hidden rounded-lg bg-soft shadow-card lg:aspect-auto">
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
 				echo rhm_landing_picture( $rhm_image, $rhm_sizes, 'absolute inset-0 size-full object-cover', (bool) $args['is_first'] );

@@ -46,7 +46,7 @@ $rhm_sizes = '(max-width: 639px) ' . $rhm_mobile_sizes
 	. ', (max-width: 1023px) calc(16.67vw - 37px), '
 	. rhm_landing_box_sizes( $rhm_span, $rhm_wide ? 1 / 6 : 1 / 3, null, $rhm_wide ? 28 : 26 );
 ?>
-<section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-2xl border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
+<section id="<?php echo esc_attr( $args['id'] ); ?>" class="h-full rounded-lg border border-line bg-white/80 p-5 shadow-card lg:p-6" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="flex items-start gap-3" data-rhm-tiles>
 		<?php rhm_landing_heading( $rhm_head_id, $rhm_title, '', '', 'box', rhm_landing_color( $rhm_data, 'title_color' ) ); ?>
 		<?php if ( $rhm_controls ) : ?>
@@ -62,7 +62,7 @@ $rhm_sizes = '(max-width: 639px) ' . $rhm_mobile_sizes
 	</div>
 	<ul id="<?php echo esc_attr( $rhm_track_id ); ?>" class="<?php echo esc_attr( 'flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-2 sm:grid sm:auto-cols-[calc((100%-2.5rem)/6)] sm:grid-flow-col lg:gap-3 ' . ( $rhm_wide ? 'lg:auto-cols-[calc((100%-3.75rem)/6)]' : 'lg:auto-cols-[calc((100%-1.5rem)/3)]' ) ); ?>" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>" data-rhm-tiles-track<?php echo $rhm_count > 2 ? ' tabindex="0"' : ''; ?>>
 		<?php foreach ( $rhm_items as [ $rhm_image, $rhm_label ] ) : ?>
-			<li class="min-w-0 flex-[1_0_45%] snap-start rounded-lg border border-line bg-white p-2 text-center wrap-break-word">
+			<li class="min-w-0 flex-[1_0_45%] snap-start rounded-md border border-line bg-white p-2 text-center wrap-break-word">
 				<span class="relative block aspect-square">
 					<?php
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
