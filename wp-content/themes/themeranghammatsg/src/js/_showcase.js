@@ -1,6 +1,7 @@
 /**
  * Landing "Hệ thống phòng khám" (template-parts/landing/clinics.php): dải ảnh nhỏ ↔ slider ảnh lớn.
  * Landing "Ảnh lớn + slider tab" (template-parts/landing/tab-slider.php): hàng tab ↔ slide (cùng cơ chế, nút = tab).
+ * Landing "Chặng đường phát triển" (template-parts/landing/timeline.php): hàng năm ↔ slide nội dung (nút = năm).
  * - Bấm ảnh nhỏ → slider (native scroll-snap, mỗi slide rộng hết khung) cuộn tới slide tương ứng.
  * - Slider cuộn (vuốt, nút ‹ › của _tiles.js, phím) → ảnh nhỏ của slide đang xem có aria-current="true" và nằm trong khung dải.
  * - Track có [data-rhm-autoheight] (tab-slider): chiều cao track = slide đang xem (CSS transition height). Template để slide 2+ cao 0
@@ -46,6 +47,9 @@ document.querySelectorAll( '[data-rhm-showcase-thumbs]' ).forEach( ( strip ) => 
 		}
 		thumbs[ current ].removeAttribute( 'aria-current' );
 		thumbs[ index ].setAttribute( 'aria-current', 'true' );
+		// Slide đang xem có data-current (timeline: CSS làm mờ slide khác → slide mới hiện rõ dần).
+		slides[ current ]?.removeAttribute( 'data-current' );
+		slides[ index ]?.setAttribute( 'data-current', '' );
 		current = index;
 		fit();
 
@@ -123,7 +127,9 @@ document.querySelectorAll( '[data-rhm-showcase-thumbs]' ).forEach( ( strip ) => 
 	track.addEventListener(
 		'pointerdown',
 		( event ) => {
-			start = 'mouse' === event.pointerType ? null : { id: event.pointerId, x: event.clientX, y: event.clientY };
+			// Vuốt trên slider ảnh lồng trong slide (timeline > 3 ảnh) chỉ cuộn ảnh, không đổi slide.
+			const inner = event.target.closest( '[data-rhm-tiles-track]' );
+			start = 'mouse' === event.pointerType || ( inner && inner !== track ) ? null : { id: event.pointerId, x: event.clientX, y: event.clientY };
 		},
 		{ passive: true }
 	);

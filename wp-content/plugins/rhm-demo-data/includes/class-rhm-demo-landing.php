@@ -72,6 +72,10 @@ final class RHM_Demo_Landing {
 		foreach ( array( 'Ca Implant 1', 'Ca Implant 2', 'Ca Implant 3', 'Ca niềng răng 1', 'Ca niềng răng 2', 'Ca niềng răng 3' ) as $i => $title ) {
 			$list[ 'landing-group-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
 		}
+		// Section "Chặng đường phát triển": ảnh 4:3 riêng, có chú thích (caption) để thấy chú thích dưới ảnh.
+		foreach ( array( 'Khai trương chi nhánh Quận 5', 'Khai trương chi nhánh Gò Vấp', 'Lễ nhận danh hiệu 2023', 'Ký kết chuyển giao công nghệ', 'Đạt chứng nhận ISO 9001', 'Đối tác Invisalign' ) as $i => $title ) {
+			$list[ 'landing-timeline-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) + array( 'caption' => $title ) );
+		}
 		// Section "Ô ảnh slider + chữ": ảnh 4:3 (khung slider 4:3).
 		foreach ( array( 'X-quang Vatech', 'X-quang Vatech – mặt bên', 'Phòng chụp X-quang', 'Ghế nha khoa' ) as $i => $title ) {
 			$list[ 'landing-device-' . ( $i + 1 ) ] = array( 1200, 900, $photo( $title, $i % 2 ? 'teal' : 'primary', 'deep' ) );
@@ -304,11 +308,18 @@ final class RHM_Demo_Landing {
 				'acf_fc_layout' => 'timeline',
 				'eyebrow'       => 'Hành trình',
 				'title'         => 'Chặng đường phát triển',
+				'description'   => 'Hơn 15 năm đồng hành cùng nụ cười khách hàng, từ phòng khám nhỏ đến hệ thống nha khoa nhiều chi nhánh.',
+				// Mốc 0 / 2 / 3 ảnh (lưới) và 5 ảnh (slider) để xem đủ các dạng hiển thị; ảnh landing-timeline-* có chú thích.
 				'items'         => array(
-					array( 'year' => '2010', 'title' => 'Thành lập phòng khám', 'text' => 'Khởi đầu với 3 ghế nha và đội ngũ 5 bác sĩ tại TP.HCM.' ),
-					array( 'year' => '2015', 'title' => 'Mở rộng dịch vụ Implant', 'text' => 'Đầu tư CT Cone Beam, triển khai cấy ghép Implant và All-on-4.' ),
-					array( 'year' => '2020', 'title' => 'Mở chi nhánh miền Tây', 'text' => 'Có mặt tại Cần Thơ, Mỹ Tho và Rạch Giá.' ),
-					array( 'year' => '2025', 'title' => 'Invisalign Diamond Provider', 'text' => 'Đạt hạng Diamond trong hệ thống chỉnh nha Invisalign.' ),
+					array( 'year' => '2010', 'title' => 'Thành lập phòng khám', 'text' => 'Khởi đầu với 3 ghế nha và đội ngũ 5 bác sĩ tại TP.HCM.', 'images' => array() ),
+					array( 'year' => '2015 - 2019', 'title' => 'Mở rộng hệ thống', 'text' => 'Mở thêm 2 chi nhánh tại Quận 5 và Gò Vấp, đầu tư CT Cone Beam.', 'images' => array( $img['landing-timeline-1'], $img['landing-timeline-2'] ) ),
+					array(
+						'year'   => '2023',
+						'title'  => 'Nhiều thành tựu quan trọng',
+						'text'   => '<p>Không ngừng nâng chuẩn chuyên môn qua hợp tác với các tổ chức uy tín:</p><ul><li>Được vinh danh Top 10 Nha khoa uy tín Việt Nam 2023.</li><li>Nhận chuyển giao công nghệ trồng răng toàn hàm.</li><li>Đạt chứng nhận ISO 9001:2015 về quản lý chất lượng.</li></ul>',
+						'images' => array( $img['landing-timeline-3'], $img['landing-timeline-4'], $img['landing-timeline-5'] ),
+					),
+					array( 'year' => '2025', 'title' => 'Invisalign Diamond Provider', 'text' => 'Đạt hạng Diamond trong hệ thống chỉnh nha Invisalign.', 'images' => array( $img['landing-timeline-6'], $img['landing-group-1'], $img['landing-group-2'], $img['landing-group-3'], $img['landing-group-4'] ) ),
 				),
 			),
 			array(

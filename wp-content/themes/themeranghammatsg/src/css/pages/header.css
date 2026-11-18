@@ -130,7 +130,7 @@
 	}
 
 	.main-nav a {
-		@apply flex min-h-12 flex-1 items-center gap-1.5 px-2 py-3 text-[15px] font-medium text-dark uppercase hover:text-primary lg:min-h-0 lg:gap-1 lg:px-0 lg:py-[17px] lg:text-xs lg:whitespace-nowrap xl:gap-1.5 xl:text-sm;
+		@apply flex min-h-12 flex-1 items-center gap-1.5 px-2 py-3 text-[15px] font-medium text-dark uppercase hover:text-primary lg:min-h-0 lg:gap-1 lg:px-0 lg:py-2 lg:text-xs lg:whitespace-nowrap xl:gap-1.5 xl:text-sm;
 	}
 
 	.main-nav .current-menu-item > a,

@@ -127,6 +127,117 @@
 		@apply hidden h-0.5 w-10 shrink-0 rounded-full bg-current/40 content-[''] lg:w-16;
 	}
 
+	/*
+	 * Timeline ngang (template-parts/landing/timeline.php). Trạng thái tính từ aria-current (nút năm, _showcase.js gắn)
+	 * và data-current (slide): năm đã qua = nút đứng trước nút aria-current (:has(~ …)). Chỉ transform / opacity.
+	 * Đường kẻ ở y = 16px; nhãn canh tâm vào đường, năm đã qua trượt xuống dưới đường.
+	 */
+	/* Nhãn nằm trong luồng ngang (không absolute) → ô năm rộng tối thiểu bằng nhãn, nhãn dài ("2015 - 2022") không đè ô bên cạnh. */
+	.rhm-timeline-year {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		height: 4.25rem;
+		padding-inline: 0.25rem;
+		cursor: pointer;
+	}
+
+	/* Đoạn đường tiến trình của từng năm: đã qua = cả ô, đang chọn = nửa trái (tới tâm), chưa tới = 0 → chạy mượt khi đổi năm. */
+	.rhm-timeline-year::after {
+		position: absolute;
+		inset-inline: 0;
+		top: 15px;
+		z-index: 0;
+		height: 2px;
+		background: var(--color-primary);
+		content: '';
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s ease-in-out;
+	}
+
+	.rhm-timeline-year:has(~ [aria-current='true'])::after {
+		transform: scaleX(1);
+	}
+
+	.rhm-timeline-year[aria-current='true']::after {
+		transform: scaleX(0.5);
+	}
+
+	.rhm-timeline-dot {
+		position: absolute;
+		top: 16px;
+		left: 50%;
+		z-index: 1;
+		width: 0.875rem;
+		height: 0.875rem;
+		margin: -0.4375rem 0 0 -0.4375rem;
+		border-radius: 9999px;
+		background: var(--color-primary);
+		box-shadow: 0 0 0 3px var(--color-mint);
+		transform: scale(0);
+		transition: transform 0.4s ease-in-out;
+	}
+
+	.rhm-timeline-year:has(~ [aria-current='true']) .rhm-timeline-dot {
+		transform: scale(1);
+	}
+
+	.rhm-timeline-label {
+		@apply rounded-full px-3 py-0.5 text-sm leading-normal font-semibold whitespace-nowrap text-muted sm:text-base lg:px-4 lg:text-lg;
+		position: relative;
+		z-index: 1;
+		margin-top: 16px;
+		translate: 0 -50%;
+		transition:
+			transform 0.4s ease-in-out,
+			color 0.4s ease-in-out,
+			background-color 0.4s ease-in-out;
+	}
+
+	.rhm-timeline-year:has(~ [aria-current='true']) .rhm-timeline-label {
+		transform: translateY(2rem);
+	}
+
+	.rhm-timeline-year:hover .rhm-timeline-label {
+		@apply text-primary;
+	}
+
+	.rhm-timeline-year:not([aria-current='true'], :has(~ [aria-current='true'])):hover .rhm-timeline-label {
+		@apply bg-mint;
+	}
+
+	.rhm-timeline-year[aria-current='true'] .rhm-timeline-label {
+		@apply bg-primary text-white;
+	}
+
+	.rhm-timeline-year:focus-visible {
+		outline: none;
+	}
+
+	.rhm-timeline-year:focus-visible .rhm-timeline-label {
+		@apply outline-2 outline-offset-2 outline-primary;
+	}
+
+	/* Slide không phải đang xem mờ đi → slide mới hiện rõ dần khi chuyển. Chỉ sau khi JS chạy (data-ready). */
+	.rhm-timeline-track > * {
+		transition: opacity 0.5s ease-in-out;
+	}
+
+	.rhm-timeline-track[data-ready] > :not([data-current]) {
+		opacity: 0.2;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.rhm-timeline-year::after,
+		.rhm-timeline-dot,
+		.rhm-timeline-label,
+		.rhm-timeline-track > * {
+			transition: none;
+		}
+	}
+
 	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu chữ + video). */
 	.embed-player {
 		@apply absolute inset-0 size-full border-0 bg-black;

@@ -48,14 +48,14 @@ if ( $rhm_multi ) {
 	rhm_landing_enqueue_module( 'carousel' );
 }
 
-// Ảnh lớn rộng hết khung W = 1248px (≥ 1280px) hoặc 100vw − 32px.
+// Ảnh lớn: ≥ 1024px slider tối đa 960px (khung nội dung ở 1024 = 992px > 960) → 960px; 640–1023px rộng hết khung 100vw − 32px.
 // ≥ 640px khung 16:9 = tỉ lệ ảnh khuyến nghị → tải theo độ rộng khung.
 // < 640px khung 4:3 phủ ảnh 16:9 (object-cover): độ rộng ảnh cần = cao khung × 16/9 = (100vw − 32) × 4/3 → calc(133.33vw − 43px).
-$rhm_sizes = '(min-width: 1280px) 1248px, (min-width: 640px) calc(100vw - 32px), calc(133.33vw - 43px)';
+$rhm_sizes = '(min-width: 1024px) 960px, (min-width: 640px) calc(100vw - 32px), calc(133.33vw - 43px)';
 // Ảnh nhỏ 16:9: dải có đệm 4px mỗi bên (chừa chỗ viền ô đang xem), ô cách 12px.
-// ≥ 1024px 6 ô: (W − 8 − 60) / 6 → 223px | calc(16.67vw − 17px). 640–1023px 4 ô: (W − 8 − 36) / 4 → calc(25vw − 19px).
+// ≥ 1024px 6 ô trong dải 960px: (960 − 8 − 60) / 6 ≈ 149px. 640–1023px 4 ô: (W − 8 − 36) / 4 → calc(25vw − 19px).
 // < 640px ô 40%: 0,4 × (100vw − 40) → calc(40vw − 16px).
-$rhm_thumb_sizes = '(min-width: 1280px) 197px, (min-width: 1024px) calc(16.67vw - 17px), (min-width: 640px) calc(25vw - 19px), calc(40vw - 16px)';
+$rhm_thumb_sizes = '(min-width: 1024px) 149px, (min-width: 640px) calc(25vw - 19px), calc(40vw - 16px)';
 
 $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justify-center rounded-full border border-line bg-white/90 text-primary shadow-card transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-0 lg:size-11';
 ?>
@@ -91,6 +91,8 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 			</ul>
 		<?php endif; ?>
 
+		<?php // ≥ 1024px: slider + dải ảnh nhỏ thu vào giữa, tối đa 960px (ảnh 16:9 cao 540px, vừa màn hình laptop); < 1024px rộng hết khung. ?>
+		<div class="lg:mx-auto lg:max-w-[60rem]">
 		<div class="relative" data-rhm-tiles>
 			<div id="<?php echo esc_attr( $rhm_track ); ?>" class="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none]" aria-label="<?php echo esc_attr( $rhm_title ); ?>" data-rhm-tiles-track<?php echo $rhm_multi ? ' tabindex="0"' : ''; ?>>
 				<?php foreach ( $rhm_items as $rhm_index => [ $rhm_image, $rhm_name, $rhm_lines ] ) : ?>
@@ -115,9 +117,10 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 			<?php if ( $rhm_multi ) : ?>
 				<?php
 				// Nút ‹ › canh giữa theo chiều cao ẢNH (lớp phủ cùng khung tỉ lệ với ảnh), không theo cả slide.
-				// ≥ 1024px lùi vào 96px: cột nút liên hệ nhanh (fixed, cách mép phải màn hình ~88px) không che nút ›.
+				// Section đứng đầu: 1024–1279px lùi vào 96px để cột nút liên hệ nhanh (fixed, ~88px từ mép phải) không che nút ›;
+				// từ 1280px slider 960px canh giữa đã cách mép phải màn hình ≥ 160px → không cần lùi (xl:px-2).
 				?>
-				<div class="<?php echo esc_attr( $args['is_first'] ? 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video lg:px-24' : 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video' ); ?>" data-rhm-tiles-controls>
+				<div class="<?php echo esc_attr( $args['is_first'] ? 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video lg:px-24 xl:px-2' : 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 sm:aspect-video' ); ?>" data-rhm-tiles-controls>
 					<button type="button" class="<?php echo esc_attr( $rhm_arrow ); ?>" aria-label="<?php esc_attr_e( 'Ảnh trước', 'themeranghammatsg' ); ?>" aria-controls="<?php echo esc_attr( $rhm_track ); ?>" data-rhm-tiles-prev disabled>
 						<?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 					</button>
@@ -129,7 +132,7 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 		</div>
 
 		<?php if ( $rhm_multi ) : ?>
-			<div class="mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain p-1 lg:mt-8" data-rhm-showcase-thumbs>
+			<div class="mt-2 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain p-1 lg:mt-2.5" data-rhm-showcase-thumbs>
 				<?php foreach ( $rhm_items as $rhm_index => [ $rhm_image, $rhm_name ] ) : ?>
 					<button type="button" class="relative block aspect-video w-[40%] shrink-0 cursor-pointer snap-start overflow-hidden rounded-md bg-soft opacity-70 ring-primary transition-opacity hover:opacity-100 aria-[current=true]:opacity-100 aria-[current=true]:ring-3 sm:w-[calc((100%-2.25rem)/4)] lg:w-[calc((100%-3.75rem)/6)]" aria-controls="<?php echo esc_attr( $rhm_track ); ?>"<?php echo $rhm_index ? '' : ' aria-current="true"'; ?>>
 						<?php
@@ -147,5 +150,6 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
+		</div>
 	</div>
 </section>
