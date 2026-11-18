@@ -27,8 +27,8 @@ if ( $rhm_video ) {
 	rhm_landing_enqueue_module( 'embed' );
 }
 
-// Cột ảnh: khung 1408px, 2 cột cách 32px → 688px; 1024–1439px: (100vw − 32 − 32) / 2; dưới 1024px: 1 cột.
-$rhm_sizes = '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), calc(100vw - 32px)';
+// Cột ảnh: khung 1248px, 2 cột cách 32px → 608px; 1024–1279px: (100vw − 32 − 32) / 2; dưới 1024px: 1 cột.
+$rhm_sizes = '(min-width: 1280px) 608px, (min-width: 1024px) calc(50vw - 32px), calc(100vw - 32px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container grid items-center gap-6 lg:grid-cols-2 lg:gap-8' : 'site-container max-w-[868px]' ); ?>">

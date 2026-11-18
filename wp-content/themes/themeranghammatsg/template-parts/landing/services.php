@@ -30,11 +30,11 @@ $rhm_grid    = match ( true ) {
 	4 === $rhm_count => 'lg:grid lg:grid-cols-4',
 	default          => 'lg:grid lg:grid-cols-5',
 };
-// Ảnh = độ rộng thẻ. ≥ 1024px lưới N cột cách 16px trong khung 1408px; < 1024px thẻ 45% (sm 30%) của 100vw − 32px.
+// Ảnh = độ rộng thẻ. ≥ 1024px lưới N cột cách 16px trong khung 1248px; < 1024px thẻ 45% (sm 30%) của 100vw − 32px.
 $rhm_desktop = match ( true ) {
-	$rhm_count <= 3 => '(min-width: 1440px) 459px, (min-width: 1024px) calc(33.33vw - 21px)',
-	4 === $rhm_count => '(min-width: 1440px) 340px, (min-width: 1024px) calc(25vw - 20px)',
-	default          => '(min-width: 1440px) 269px, (min-width: 1024px) calc(20vw - 19px)',
+	$rhm_count <= 3 => '(min-width: 1280px) 406px, (min-width: 1024px) calc(33.33vw - 21px)',
+	4 === $rhm_count => '(min-width: 1280px) 300px, (min-width: 1024px) calc(25vw - 20px)',
+	default          => '(min-width: 1280px) 237px, (min-width: 1024px) calc(20vw - 19px)',
 };
 $rhm_sizes = $rhm_desktop . ', (min-width: 640px) calc(30vw - 10px), calc(45vw - 14px)';
 ?>

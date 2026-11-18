@@ -7,8 +7,8 @@ if ( ! $args['items'] ) {
 if ( file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 	wp_enqueue_script_module( 'rhm-embed', RHM_THEME_URI . '/dist/js/embed.js', array(), rhm_asset_version( 'dist/js/embed.js' ) );
 }
-// Khung 1408px, hai cột cách 24px = 692px; mobile 1 cột.
-$rhm_sizes = '(min-width: 1440px) 692px, (min-width: 768px) calc((100vw - 56px) / 2), calc(100vw - 32px)';
+// Khung 1248px, hai cột cách 24px = 612px; mobile 1 cột.
+$rhm_sizes = '(min-width: 1280px) 612px, (min-width: 768px) calc((100vw - 56px) / 2), calc(100vw - 32px)';
 ?>
 <section class="doctor-section" aria-labelledby="<?php echo esc_attr( $args['id'] ); ?>">
 	<div class="site-container">

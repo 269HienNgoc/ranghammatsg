@@ -27,8 +27,8 @@ $rhm_head_id = $args['id'] . '-title';
 $rhm_count   = count( $rhm_items );
 // Có ảnh: khối thẻ 2/3, tối đa 3 thẻ/hàng. Không ảnh: 4 thẻ/hàng khi số thẻ chia hết cho 4.
 $rhm_cols = ( ! $rhm_image && 0 === $rhm_count % 4 ) ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-4' : 'grid gap-6 sm:grid-cols-3';
-// Ảnh: cột 1/3 của khung 1408px, cách 24px → (1408 − 24) / 3 ≈ 461px; 1024–1439px: (100vw − 32 − 24) / 3; mobile: 100vw − 32px.
-$rhm_sizes = '(min-width: 1440px) 461px, (min-width: 1024px) calc(33.33vw - 19px), calc(100vw - 32px)';
+// Ảnh: cột 1/3 của khung 1248px, cách 24px → (1248 − 24) / 3 = 408px; 1024–1279px: (100vw − 32 − 24) / 3; mobile: 100vw − 32px.
+$rhm_sizes = '(min-width: 1280px) 408px, (min-width: 1024px) calc(33.33vw - 19px), calc(100vw - 32px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="<?php echo esc_attr( $rhm_image ? 'site-container grid gap-6 lg:grid-cols-3' : 'site-container' ); ?>">

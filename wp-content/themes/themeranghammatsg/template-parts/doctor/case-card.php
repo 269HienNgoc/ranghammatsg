@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 $rhm_item = $args['item'];
 // Trong khung 4:3: trái 1/2, phải 1/2 trừ gap 8px; border/padding của card thêm 18px.
-$rhm_sizes = '(min-width: 1440px) 214px, (min-width: 1024px) calc((100vw - 158px) / 6), (min-width: 640px) calc(25vw - 29px), calc(42.5vw - 35px)';
+$rhm_sizes = '(min-width: 1280px) 187px, (min-width: 1024px) calc((100vw - 158px) / 6), (min-width: 640px) calc(25vw - 29px), calc(42.5vw - 35px)';
 ?>
 <article class="doctor-case">
 	<div class="doctor-case__images">

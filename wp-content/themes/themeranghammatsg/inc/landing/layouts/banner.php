@@ -52,7 +52,7 @@ function rhm_landing_layout_banner_fields( string $prefix ): array {
 				),
 				'default_value' => 'full',
 				'wrapper'       => array( 'width' => 40 ),
-				'instructions'  => __( 'Trong khung: rộng tối đa 1408px, bo góc.', 'themeranghammatsg' ),
+				'instructions'  => __( 'Trong khung: rộng tối đa 1248px, bo góc.', 'themeranghammatsg' ),
 			)
 		),
 	);

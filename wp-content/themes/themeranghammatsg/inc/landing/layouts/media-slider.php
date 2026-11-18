@@ -51,6 +51,27 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 		),
 		rhm_landing_field(
 			$prefix,
+			'image_width',
+			__( 'Độ rộng ảnh (so với thẻ)', 'themeranghammatsg' ),
+			'button_group',
+			array(
+				'choices'           => array(
+					'33' => '1/3',
+					'40' => '2/5',
+					'50' => '1/2',
+					'60' => '3/5',
+					'67' => '2/3',
+				),
+				'default_value'     => '60',
+				'instructions'      => __( 'Phần bề ngang thẻ dành cho ảnh, phần còn lại cho chữ. Chỉ khi ảnh Trái/Phải, từ màn hình ≥ 640px (Trên/Dưới: ảnh luôn rộng hết thẻ). 3 cột nên chọn 1/2 trở xuống để chữ không quá hẹp.', 'themeranghammatsg' ),
+				'conditional_logic' => array(
+					array( array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'left' ) ),
+					array( array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'right' ) ),
+				),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
 			'items',
 			__( 'Item', 'themeranghammatsg' ),
 			'repeater',

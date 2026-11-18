@@ -2,7 +2,7 @@
 /**
  * Landing – Ảnh slider + chữ (nhiều item): tiêu đề section (H2, canh giữa) + mô tả → lưới item (1/2/3 cột từ 1024px).
  * Mỗi item = thẻ nền gradient mint → trắng: slider ảnh + tiêu đề (H3) + nội dung. Vị trí ảnh chung cho mọi item
- * (image_position, mặc định phải); < 640px luôn ảnh trên, chữ dưới.
+ * (image_position, mặc định phải) và độ rộng ảnh khi trái/phải (image_width, mặc định 3/5); < 640px luôn ảnh trên, chữ dưới.
  * Field: inc/landing/layouts/media-slider.php. Thiếu tiêu đề section hoặc không có item hợp lệ → không hiện.
  *
  * Hiệu năng / truy cập:
@@ -42,21 +42,43 @@ $rhm_columns  = in_array( $rhm_columns, array( 1, 2, 3 ), true ) ? $rhm_columns 
 $rhm_id       = $args['id'];
 $rhm_head_id  = $rhm_id . '-title';
 
-// sizes: khung W = 1408px (≥ 1440px) | 100vw − 32px. Thẻ: viền 1 + đệm 20 (lg 24) mỗi bên → nội dung = thẻ − 42 (lg − 50).
-// Cạnh nhau: ảnh = (nội dung − khoảng cách cột 16 | lg 24) / 2. Lưới thẻ cách 24px, nhiều cột chỉ từ 1024px.
-// < 640px xếp dọc: 100vw − 32 − 42 = 100vw − 74px. 640–1023px: thẻ rộng hết khung → cạnh nhau (100vw − 74 − 16) / 2 = 50vw − 45px.
-// 1 cột: thẻ = W → cạnh nhau từ 1024px ảnh 1/3 (dải ngang như thiết kế): (1408 − 74) / 3 = 445 | 33.33vw − 35; trên/dưới 1358 | 100vw − 82.
-// 2 cột: thẻ = (W − 24) / 2 = 692 | 50vw − 28 → cạnh nhau 309 | 25vw − 51; trên/dưới 642 | 50vw − 78.
-// 3 cột: thẻ = (W − 48) / 3 = 453 | 33.33vw − 27 → cạnh nhau 190 | 16.67vw − 50; trên/dưới 403 | 33.33vw − 77.
-// 1024–1639px dư nhẹ do chừa chỗ cột nút liên hệ nhanh (giống các section khác).
-$rhm_sizes = match ( $rhm_columns . ( $rhm_side ? 'side' : 'stack' ) ) {
-	'1side'  => '(max-width: 639px) calc(100vw - 74px), (min-width: 1440px) 445px, (min-width: 1024px) calc(33.33vw - 35px), calc(50vw - 45px)',
-	'2side'  => '(max-width: 639px) calc(100vw - 74px), (min-width: 1440px) 309px, (min-width: 1024px) calc(25vw - 51px), calc(50vw - 45px)',
-	'3side'  => '(max-width: 639px) calc(100vw - 74px), (min-width: 1440px) 190px, (min-width: 1024px) calc(16.67vw - 50px), calc(50vw - 45px)',
-	'2stack' => '(min-width: 1440px) 642px, (min-width: 1024px) calc(50vw - 78px), calc(100vw - 74px)',
-	'3stack' => '(min-width: 1440px) 403px, (min-width: 1024px) calc(33.33vw - 77px), calc(100vw - 74px)',
-	default  => '(min-width: 1440px) 1358px, (min-width: 1024px) calc(100vw - 82px), calc(100vw - 74px)',
+// Độ rộng ảnh khi cạnh nhau (field image_width, mặc định 3/5): [phần ảnh, lưới ảnh trái, lưới ảnh phải].
+// Cột đầu lưới = phần tử đứng trước sau khi đảo order (ảnh phải → chữ trước). Class viết nguyên văn để Tailwind quét được.
+$rhm_ratio = match ( (string) ( $rhm_data['image_width'] ?? '60' ) ) {
+	'33'    => array( 1 / 3, 'sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]', 'sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]' ),
+	'40'    => array( 0.4, 'sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]', 'sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' ),
+	'50'    => array( 0.5, 'sm:grid-cols-2', 'sm:grid-cols-2' ),
+	'67'    => array( 2 / 3, 'sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]', 'sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]' ),
+	default => array( 0.6, 'sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]', 'sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]' ),
 };
+$rhm_frac  = round( $rhm_ratio[0], 4 );
+
+// sizes: khung W = 1248px (≥ 1280px) | 100vw − 32px. Thẻ: viền 1 + đệm 20 (lg 24) mỗi bên → nội dung = thẻ − 42 (lg − 50).
+// Cạnh nhau: ảnh = (nội dung − khoảng cách cột 16 | lg 24) × phần ảnh. Lưới thẻ cách 24px, nhiều cột chỉ từ 1024px.
+// < 640px xếp dọc: 100vw − 32 − 42 = 100vw − 74px. 640–1023px: thẻ rộng hết khung → cạnh nhau (100vw − 74 − 16) × phần ảnh.
+// 1 cột: thẻ = W → cạnh nhau (1248 − 50 − 24) = 1174 | 100vw − 106; trên/dưới 1198 | 100vw − 82.
+// 2 cột: thẻ = (W − 24) / 2 = 612 | 50vw − 28 → cạnh nhau 538 | 50vw − 102; trên/dưới 562 | 50vw − 78.
+// 3 cột: thẻ = (W − 48) / 3 = 400 | 33.33vw − 27 → cạnh nhau 326 | 33.33vw − 101; trên/dưới 350 | 33.33vw − 77.
+// 1024–1479px dư nhẹ do chừa chỗ cột nút liên hệ nhanh (giống các section khác).
+if ( $rhm_side ) {
+	[ $rhm_px, $rhm_vw ] = match ( $rhm_columns ) {
+		2       => array( 538, '50vw - 102px' ),
+		3       => array( 326, '33.33vw - 101px' ),
+		default => array( 1174, '100vw - 106px' ),
+	};
+	$rhm_sizes = sprintf(
+		'(max-width: 639px) calc(100vw - 74px), (min-width: 1280px) %1$dpx, (min-width: 1024px) calc((%2$s) * %3$s), calc((100vw - 90px) * %3$s)',
+		(int) ceil( $rhm_px * $rhm_ratio[0] ),
+		$rhm_vw,
+		$rhm_frac
+	);
+} else {
+	$rhm_sizes = match ( $rhm_columns ) {
+		2       => '(min-width: 1280px) 562px, (min-width: 1024px) calc(50vw - 78px), calc(100vw - 74px)',
+		3       => '(min-width: 1280px) 350px, (min-width: 1024px) calc(33.33vw - 77px), calc(100vw - 74px)',
+		default => '(min-width: 1280px) 1198px, (min-width: 1024px) calc(100vw - 82px), calc(100vw - 74px)',
+	};
+}
 
 $rhm_grid   = match ( $rhm_columns ) {
 	2       => 'grid gap-5 lg:grid-cols-2 lg:gap-6',
@@ -67,13 +89,10 @@ $rhm_card   = 'left' === $rhm_position
 	? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-5 shadow-card lg:p-6'
 	: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-5 shadow-card lg:p-6';
 // Cạnh nhau: khung cao hết thẻ (thẻ cùng hàng cao hơn → ảnh + chữ vẫn canh giữa theo chiều dọc).
-// 640px+: 2 cột bằng nhau; 1 cột từ 1024px: ảnh 1/3, chữ 2/3 (cột đầu lưới = phần tử đứng trước sau khi đảo order).
-$rhm_layout = match ( true ) {
-	! $rhm_side                                 => 'flex h-full flex-col gap-4 lg:gap-5',
-	1 === $rhm_columns && 'left' === $rhm_position => 'flex h-full flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-center lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-6',
-	1 === $rhm_columns                          => 'flex h-full flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-center lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-6',
-	default                                     => 'flex h-full flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-center lg:gap-6',
-};
+// 640px+: ảnh / chữ theo $rhm_ratio, mọi số cột.
+$rhm_layout = $rhm_side
+	? 'flex h-full flex-col gap-4 sm:grid sm:items-center lg:gap-6 ' . ( 'left' === $rhm_position ? $rhm_ratio[1] : $rhm_ratio[2] )
+	: 'flex h-full flex-col gap-4 lg:gap-5';
 $rhm_media  = in_array( $rhm_position, array( 'right', 'bottom' ), true ) ? 'relative min-w-0 sm:order-last' : 'relative min-w-0';
 $rhm_arrow  = 'pointer-events-auto flex size-9 cursor-pointer items-center justify-center rounded-full border border-line bg-white/90 text-primary shadow-card transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-0';
 $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );

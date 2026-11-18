@@ -60,14 +60,14 @@ $rhm_current_url = get_pagenum_link( max( 1, (int) get_query_var( 'paged' ) ), f
 		</div>
 
 		<div class="header-booking order-3 shrink-0 lg:order-4">
-			<?php rhm_booking_button( 'h-11 gap-2 rounded-xl border-0 bg-linear-to-b from-primary-light to-primary px-3.5 text-[15px] font-semibold max-[359px]:px-3 max-[359px]:text-sm whitespace-nowrap shadow-[0_4px_12px_rgb(11_122_85/0.25)] hover:from-primary-dark hover:to-primary-dark lg:h-[52px] lg:rounded-lg lg:text-base lg:font-medium xl:px-5 xl:text-[17px] 2xl:px-7 2xl:text-xl', 'size-5 shrink-0 max-[389px]:hidden lg:hidden' ); ?>
+			<?php rhm_booking_button( 'h-11 gap-2 rounded-xl border-0 bg-linear-to-b from-primary-light to-primary px-3.5 text-[15px] font-semibold max-[359px]:px-3 max-[359px]:text-sm whitespace-nowrap shadow-[0_4px_12px_rgb(11_122_85/0.25)] hover:from-primary-dark hover:to-primary-dark lg:h-[52px] lg:rounded-lg lg:text-base lg:font-medium xl:px-5 xl:text-[17px]', 'size-5 shrink-0 max-[389px]:hidden lg:hidden' ); ?>
 		</div>
 
 		<?php if ( $rhm_hotline ) : ?>
 			<a class="header-hotline order-2 hidden shrink-0 items-center gap-2 text-dark hover:text-primary xs:flex lg:order-5 lg:gap-2.5" href="<?php echo esc_url( rhm_get_tel_href( $rhm_hotline ) ); ?>">
 				<?php echo rhm_get_icon( 'phone', 'size-[26px] shrink-0 text-primary lg:size-9 lg:text-current' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 				<span class="flex flex-col leading-tight whitespace-nowrap">
-					<span class="text-base font-bold lg:text-xl 2xl:text-2xl"><?php echo esc_html( $rhm_hotline ); ?></span>
+					<span class="text-base font-bold lg:text-xl"><?php echo esc_html( $rhm_hotline ); ?></span>
 					<?php if ( $rhm_hotline_note ) : ?>
 						<span class="header-hotline-note hidden text-[13px] text-muted xl:block"><?php echo esc_html( $rhm_hotline_note ); ?></span>
 					<?php endif; ?>

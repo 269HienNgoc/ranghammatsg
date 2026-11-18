@@ -12,8 +12,8 @@ if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 }
 // Mỗi slide có đệm phải 16px; desktop 3 ảnh hoạt động/ca hoặc 4 văn bằng/bác sĩ, tablet 2, mobile 85%.
 $rhm_sizes = in_array( $rhm_variant, array( 'documents', 'doctors' ), true )
-	? '(min-width: 1440px) 336px, (min-width: 1024px) calc(25vw - 24px), (min-width: 640px) calc(50vw - 32px), calc(85vw - 43px)'
-	: '(min-width: 1440px) 453px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc(50vw - 32px), calc(85vw - 43px)';
+	? '(min-width: 1280px) 296px, (min-width: 1024px) calc(25vw - 24px), (min-width: 640px) calc(50vw - 32px), calc(85vw - 43px)'
+	: '(min-width: 1280px) 400px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc(50vw - 32px), calc(85vw - 43px)';
 ?>
 <div class="doctor-carousel doctor-carousel--<?php echo esc_attr( $rhm_variant ); ?><?php echo $rhm_count > 1 ? ' js-carousel' : ''; ?>" data-count="<?php echo esc_attr( $rhm_count ); ?>">
 	<div class="swiper">

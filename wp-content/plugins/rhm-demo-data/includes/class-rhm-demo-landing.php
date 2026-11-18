@@ -99,6 +99,24 @@ final class RHM_Demo_Landing {
 	}
 
 	/** Slide section "Hệ thống phòng khám": [tiêu đề, chú thích]. */
+	/**
+	 * Dòng bảng giá Implant mẫu: [ tên, [ [ giá, giá gốc ] × 3 cột ] ] — ô [ '', '' ] = không có gói đó.
+	 *
+	 * @return array<int, array{0: string, 1: array<int, array{0: string, 1: string}>}>
+	 */
+	private static function price_rows(): array {
+		$none = array( '', '' );
+		return array(
+			array( 'Implant DIO (Hàn Quốc - Bảo hành 7 năm)', array( array( '15.000.000', '' ), array( '117.000.000', '130.000.000' ), array( '153.000.000', '170.000.000' ) ) ),
+			array( 'Implant Dentium (Hàn Quốc - Bảo hành 10 năm)', array( array( '20.000.000', '' ), $none, $none ) ),
+			array( 'Implant Dentium Superline (Mỹ - Bảo hành 15 năm)', array( array( '25.000.000', '' ), $none, $none ) ),
+			array( 'Implant MIS C1 (Đức/Israel - Bảo hành 20 năm)', array( array( '25.500.000', '30.000.000' ), array( '189.000.000', '210.000.000' ), array( '243.000.000', '270.000.000' ) ) ),
+			array( 'Implant ETK (Pháp - Bảo hành 20 năm)', array( array( '26.400.000', '33.000.000' ), $none, $none ) ),
+			array( 'Implant Nobel Biocare (Thụy Điển/Mỹ - Bảo hành 20 năm)', array( array( '29.750.000', '35.000.000' ), array( '225.000.000', '250.000.000' ), array( '288.000.000', '320.000.000' ) ) ),
+			array( 'Implant Straumann SLActive (Thụy Sĩ - Bảo hành 20 năm)', array( array( '37.800.000', '42.000.000' ), array( '252.000.000', '280.000.000' ), array( '306.000.000', '340.000.000' ) ) ),
+		);
+	}
+
 	private static function clinic_slides(): array {
 		return array(
 			array( 'Tổng thể mặt tiền', 'Ba chi nhánh nằm tại các tuyến đường lớn của TP.HCM, dễ tìm, có chỗ gửi xe rộng. Mặt tiền nhận diện thống nhất, lối vào bằng phẳng thuận tiện cho người cao tuổi và trẻ nhỏ.' ),
@@ -241,6 +259,7 @@ final class RHM_Demo_Landing {
 				'description'    => 'Đầu tư thiết bị chẩn đoán và điều trị thế hệ mới, giúp kết quả chính xác và nhẹ nhàng hơn.',
 				'columns'        => '2',
 				'image_position' => 'right',
+				'image_width'    => '60',
 				'items'          => array(
 					array(
 						'images' => array( $img['landing-device-1'], $img['landing-device-2'], $img['landing-device-3'] ),
@@ -426,6 +445,48 @@ final class RHM_Demo_Landing {
 				'form_title'    => 'Để lại thông tin, chúng tôi gọi lại ngay',
 				'anchor'        => 'dang-ky', // Banner mẫu + nút đặt lịch trỏ #dang-ky.
 			),
+			// Bảng giá 5 cột (tên + 3 giá + nút) → mobile dạng thẻ; ô trống = dịch vụ không có gói đó.
+			array(
+				'acf_fc_layout' => 'price-table',
+				'title'         => 'Bảng giá trồng răng Implant',
+				'eyebrow'       => '',
+				'description'   => 'Giá đã bao gồm trụ, khớp nối và mão sứ. Chương trình ưu đãi áp dụng đến hết tháng.',
+				'first_column'  => 'Trụ Implant',
+				'columns'       => array(
+					array( 'title' => 'Trụ lẻ', 'note' => 'Đơn vị: VNĐ' ),
+					array( 'title' => 'Toàn hàm All On 4', 'note' => 'Đơn vị: VNĐ' ),
+					array( 'title' => 'Toàn hàm All On 6', 'note' => 'Đơn vị: VNĐ' ),
+				),
+				'rows'          => array_map(
+					static fn( array $r ): array => array(
+						'name'  => $r[0],
+						'cells' => array_map( static fn( array $c ): array => array( 'price' => $c[0], 'old_price' => $c[1] ), $r[1] ),
+					),
+					self::price_rows()
+				),
+				'button'        => true,
+				'button_text'   => 'Tư vấn',
+				'mobile_cards'  => true,
+				'note'          => '<p>* Giá có thể thay đổi tùy tình trạng xương hàm, bác sĩ sẽ báo giá chính xác sau khi thăm khám.</p>',
+			),
+			// Bảng giá 3 cột (tên + 1 giá + nút) → < 4 cột: luôn dạng bảng trên mobile.
+			array(
+				'acf_fc_layout' => 'price-table',
+				'title'         => 'Bảng giá dịch vụ tổng quát',
+				'eyebrow'       => '',
+				'description'   => '',
+				'first_column'  => 'Dịch vụ',
+				'columns'       => array( array( 'title' => 'Chi phí', 'note' => 'Đơn vị: VNĐ' ) ),
+				'rows'          => array(
+					array( 'name' => 'Khám và tư vấn', 'cells' => array( array( 'price' => 'Miễn phí', 'old_price' => '' ) ) ),
+					array( 'name' => 'Cạo vôi răng', 'cells' => array( array( 'price' => '300.000', 'old_price' => '' ) ) ),
+					array( 'name' => 'Tẩy trắng răng tại phòng khám', 'cells' => array( array( 'price' => '2.000.000', 'old_price' => '2.500.000' ) ) ),
+				),
+				'button'        => true,
+				'button_text'   => '',
+				'mobile_cards'  => true,
+				'note'          => '',
+			),
 			array(
 				'acf_fc_layout' => 'faq',
 				'title'         => '',
@@ -597,6 +658,16 @@ HTML;
 					$put( $name, (string) count( $value ), $prefix . $sub );
 					foreach ( array_values( $value ) as $j => $item ) {
 						foreach ( $item as $item_sub => $item_value ) {
+							// Repeater trong repeater (vd bảng giá: rows → cells): số dòng + field con cấp 2.
+							if ( is_array( $item_value ) && $item_value && is_array( reset( $item_value ) ) ) {
+								$put( "{$name}_{$j}_{$item_sub}", (string) count( $item_value ), $prefix . $sub . '_' . $item_sub );
+								foreach ( array_values( $item_value ) as $k => $child ) {
+									foreach ( $child as $child_sub => $child_value ) {
+										$put( "{$name}_{$j}_{$item_sub}_{$k}_{$child_sub}", $scalar( $child_value ), $prefix . $sub . '_' . $item_sub . '_' . $child_sub );
+									}
+								}
+								continue;
+							}
 							// Gallery trong repeater: mảng ID dạng chuỗi (rỗng → '').
 							$item_value = is_array( $item_value ) ? ( $item_value ? array_map( 'strval', $item_value ) : '' ) : $scalar( $item_value );
 							$put( "{$name}_{$j}_{$item_sub}", $item_value, $prefix . $sub . '_' . $item_sub );

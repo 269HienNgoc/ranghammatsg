@@ -26,7 +26,7 @@ function rhm_landing_layout_text_image_fields( string $prefix ): array {
 			$prefix,
 			'image',
 			__( 'Ảnh lớn bên dưới — khuyến nghị rộng 1600px', 'themeranghammatsg' ),
-			array( 'instructions' => __( 'Rộng hết khung nội dung (tối đa 1408px), giữ nguyên tỉ lệ ảnh, không cắt. Ảnh ngang (vd 1600 × 700 hoặc 1600 × 900) hiển thị đẹp nhất. Nhập "Văn bản thay thế".', 'themeranghammatsg' ) )
+			array( 'instructions' => __( 'Rộng hết khung nội dung (tối đa 1248px), giữ nguyên tỉ lệ ảnh, không cắt. Ảnh ngang (vd 1600 × 700 hoặc 1600 × 900) hiển thị đẹp nhất. Nhập "Văn bản thay thế".', 'themeranghammatsg' ) )
 		),
 	);
 }

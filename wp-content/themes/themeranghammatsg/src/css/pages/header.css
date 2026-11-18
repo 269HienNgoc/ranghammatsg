@@ -118,7 +118,7 @@
 	 * hoặc khi bấm nút mũi tên (cảm ứng, bàn phím).
 	 * ===================================================================== */
 	.main-nav {
-		@apply flex flex-col lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-1 xl:gap-x-3 2xl:gap-x-4;
+		@apply flex flex-col lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-1 xl:gap-x-3;
 	}
 
 	.main-nav li {
@@ -130,7 +130,7 @@
 	}
 
 	.main-nav a {
-		@apply flex min-h-12 flex-1 items-center gap-1.5 px-2 py-3 text-[15px] font-medium text-dark uppercase hover:text-primary lg:min-h-0 lg:gap-1 lg:px-0 lg:py-[17px] lg:text-xs lg:whitespace-nowrap xl:gap-1.5 xl:text-sm 2xl:text-base;
+		@apply flex min-h-12 flex-1 items-center gap-1.5 px-2 py-3 text-[15px] font-medium text-dark uppercase hover:text-primary lg:min-h-0 lg:gap-1 lg:px-0 lg:py-[17px] lg:text-xs lg:whitespace-nowrap xl:gap-1.5 xl:text-sm;
 	}
 
 	.main-nav .current-menu-item > a,

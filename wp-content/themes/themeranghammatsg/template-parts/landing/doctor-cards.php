@@ -57,10 +57,10 @@ $rhm_head_id = $args['id'] . '-title';
 $rhm_single  = 1 === count( $rhm_doctors );
 // Mobile: ảnh rộng cả thẻ, trừ lề khung 32px + viền 2px. Từ 640px: ảnh = 40% phần trong thẻ.
 // Một thẻ: tối đa 692px từ viewport 724px → ảnh (692 − 2) × 40% = 276px.
-// Nhiều thẻ: từ 1024px chia 2 cột, gap 24px → ảnh ((100vw − 32 − 24) / 2 − 2) × 40%; khung tối đa 1440px.
+// Nhiều thẻ: từ 1024px chia 2 cột, gap 24px → ảnh ((100vw − 32 − 24) / 2 − 2) × 40%; khung tối đa 1280px.
 $rhm_sizes = $rhm_single
 	? '(min-width: 724px) 276px, (min-width: 640px) calc(40vw - 14px), calc(100vw - 34px)'
-	: '(min-width: 1440px) 276px, (min-width: 1024px) calc(20vw - 12px), (min-width: 640px) calc(40vw - 14px), calc(100vw - 34px)';
+	: '(min-width: 1280px) 244px, (min-width: 1024px) calc(20vw - 12px), (min-width: 640px) calc(40vw - 14px), calc(100vw - 34px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">

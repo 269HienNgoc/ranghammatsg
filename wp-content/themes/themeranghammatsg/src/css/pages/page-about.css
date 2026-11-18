@@ -80,13 +80,13 @@
 	/*
 	 * Chừa chỗ cột nút liên hệ nhanh (fixed, chiếm ~90px từ mép phải ≥ 1024px): mọi section TRỪ section đầu
 	 * (luôn tràn màn hình) lùi vào đều 2 bên 90px (+ lề 16px của .site-container = 106px) → tiêu đề vẫn đúng tâm.
-	 * Từ 1640px khung 1440px giữa màn hình đã không chạm cột nút → không lùi. hero.php đọc biến cho ảnh absolute.
+	 * Từ 1480px khung 1280px giữa màn hình đã không chạm cột nút → không lùi. hero.php đọc biến cho ảnh absolute.
 	 */
 	.rhm-landing > * {
 		--rhm-cta-gutter: 0px;
 	}
 
-	@media (64rem <= width < 102.5rem) {
+	@media (64rem <= width < 92.5rem) {
 		.rhm-landing > :not(:first-child) {
 			--rhm-cta-gutter: 5.625rem;
 		}
@@ -130,5 +130,118 @@
 	/* Iframe YouTube / <video> do src/js/embed.js tạo khi bấm ▶ (section Giới thiệu chữ + video). */
 	.embed-player {
 		@apply absolute inset-0 size-full border-0 bg-black;
+	}
+}
+
+/*
+ * Nền section tùy chọn – "Chữ sáng" (rhm_landing_apply_background(): data-rhm-bg="dark" trên thẻ gốc section).
+ * Ngoài @layer → thắng utility text-*. Đổi biến màu của Tailwind (text-dark/body/muted, border-line đọc var) thay vì từng class;
+ * text-primary (tiêu đề H2/H3, chữ nhấn) → trắng. Trong khối nền sáng (thẻ bg-white*, bg-soft, bg-mint, gradient from-mint,
+ * form .rhm-booking) trả lại màu gốc (lưu ở --rhm-* trên .rhm-landing). Màu chọn tay (style inline: title_color, màu chữ TinyMCE) vẫn thắng.
+ */
+.rhm-landing {
+	--rhm-dark: var(--color-dark);
+	--rhm-body: var(--color-body);
+	--rhm-muted: var(--color-muted);
+	--rhm-line: var(--color-line);
+}
+
+.rhm-landing [data-rhm-bg="dark"] {
+	--color-dark: #fff;
+	--color-body: #fff;
+	--color-muted: rgb(255 255 255 / 0.8);
+	--color-line: rgb(255 255 255 / 0.3);
+	color: #fff;
+}
+
+.rhm-landing [data-rhm-bg="dark"] .text-primary:not(:is([class*="bg-white"], .bg-soft, .bg-mint, [class*="from-mint"], .rhm-booking), :is([class*="bg-white"], .bg-soft, .bg-mint, [class*="from-mint"], .rhm-booking) *) {
+	color: #fff;
+}
+
+.rhm-landing [data-rhm-bg="dark"] :is([class*="bg-white"], .bg-soft, .bg-mint, [class*="from-mint"], .rhm-booking) {
+	--color-dark: var(--rhm-dark);
+	--color-body: var(--rhm-body);
+	--color-muted: var(--rhm-muted);
+	--color-line: var(--rhm-line);
+	color: var(--color-body);
+}
+
+/*
+ * Bảng giá – mobile dạng thẻ (template-parts/landing/price-table.php, bảng ≥ 4 cột + công tắc "Mobile dạng thẻ").
+ * Cùng 1 <table>, < 768px mỗi <tr> thành 1 thẻ: thanh đầu = tên (th), mỗi ô = nhãn cột (data-label) trái — giá phải,
+ * ô trống ẩn, thanh cuối = nút. Ngoài @layer → thắng utility của chế độ bảng (text-center, even:bg-mint…).
+ */
+@media (width < 48rem) {
+	.price-table--cards,
+	.price-table--cards tbody,
+	.price-table--cards tr,
+	.price-table--cards th,
+	.price-table--cards td {
+		display: block;
+	}
+
+	.price-table--cards thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.price-table--cards tbody {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.price-table--cards tr {
+		overflow: hidden;
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-xl);
+		background: var(--color-white);
+		box-shadow: var(--shadow-card);
+	}
+
+	/* Thanh đầu / cuối thẻ theo "Nền tiêu đề cột" (biến đặt inline trên <table>), mặc định màu primary + chữ trắng. */
+	.price-table--cards th[scope="row"] {
+		padding: 0.875rem 1rem;
+		background: var(--rhm-head-bg, var(--color-primary));
+		color: var(--rhm-head-fg, var(--color-white));
+		font-weight: 600;
+		text-align: center;
+	}
+
+	.price-table--cards td[data-label] {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.75rem 1rem;
+		text-align: right;
+		white-space: normal;
+	}
+
+	.price-table--cards td[data-label]:nth-child(odd) {
+		background: color-mix(in oklab, var(--color-mint) 60%, transparent);
+	}
+
+	/* Nhãn không bị chữ dài bên phải ép xuống dòng (tối đa 45% thẻ, nhãn dài hơn mới xuống dòng). */
+	.price-table--cards td[data-label]::before {
+		content: attr(data-label);
+		flex-shrink: 0;
+		max-width: 45%;
+		color: var(--color-dark);
+		font-weight: 500;
+		text-align: left;
+		text-transform: uppercase;
+	}
+
+	.price-table--cards td.is-empty {
+		display: none;
+	}
+
+	.price-table--cards .price-table__action {
+		padding: 0.75rem 1rem;
+		background: var(--rhm-head-bg, var(--color-primary));
 	}
 }

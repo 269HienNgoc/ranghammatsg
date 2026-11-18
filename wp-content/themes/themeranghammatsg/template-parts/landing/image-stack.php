@@ -19,8 +19,8 @@ if ( '' === $rhm_title || ! $rhm_images ) {
 }
 
 $rhm_head_id = $args['id'] . '-title';
-// Ảnh rộng hết khung: 1408px (≥ 1440px), còn lại 100vw − lề 2 × 16px. width/height = kích thước file → giữ tỉ lệ, CLS = 0.
-$rhm_sizes = '(min-width: 1440px) 1408px, calc(100vw - 32px)';
+// Ảnh rộng hết khung: 1248px (≥ 1280px), còn lại 100vw − lề 2 × 16px. width/height = kích thước file → giữ tỉ lệ, CLS = 0.
+$rhm_sizes = '(min-width: 1280px) 1248px, calc(100vw - 32px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">

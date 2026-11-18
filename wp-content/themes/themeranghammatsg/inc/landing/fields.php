@@ -263,9 +263,117 @@ function rhm_landing_add_title_color( string $prefix, array $fields, bool $h3 = 
 	return $fields;
 }
 
-/** Field chung cuối mọi layout: công tắc Hiện/Ẩn + neo (id) của section. */
+/**
+ * Nhóm chọn nền (accordion, đóng sẵn): kiểu nền (mặc định | màu đơn | gradient thẳng | gradient tròn), tối đa 3 màu
+ * (có độ trong suốt, gradient chia đều), góc (gradient thẳng), tâm X/Y + hình (gradient tròn) + 1 công tắc màu chữ.
+ * - Mặc định ($name 'bg'): "Nền section" — MỌI layout qua rhm_landing_common_fields(), công tắc "Chữ sáng" (bg_light_text).
+ * - Dùng lại cho phần tử khác với tên khác (vd bảng giá: 'head_bg' = nền hàng tiêu đề cột, $dark_text → công tắc "Chữ tối"
+ *   head_bg_dark_text vì nền mặc định là màu đậm).
+ * Field: <name>_type, _color_1..3, _angle, _shape, _pos_x, _pos_y, _light_text | _dark_text.
+ * Đọc: rhm_landing_background( $data, $name ) (inc/landing/landing.php); nền section in qua rhm_landing_apply_background().
+ */
+function rhm_landing_background_fields( string $prefix, string $name = 'bg', string $label = '', bool $dark_text = false ): array {
+	$label = '' !== $label ? $label : __( 'Nền section', 'themeranghammatsg' );
+	$key  = static fn( string $name ): string => 'field_rhm_landing_' . $prefix . '_' . $name;
+	$when = static function ( array $types ) use ( $key, $name ): array {
+		return array_map( static fn( string $type ): array => array( array( 'field' => $key( $name . '_type' ), 'operator' => '==', 'value' => $type ) ), $types );
+	};
+	$any      = $when( array( 'solid', 'linear', 'radial' ) );
+	$gradient = $when( array( 'linear', 'radial' ) );
+
+	// 3 ô màu cùng 1 hàng; gradient luôn chia đều các màu (không cho chọn vị trí từng màu — người dùng muốn đơn giản).
+	$color = static fn( string $name, string $label, array $cond ): array => rhm_landing_field(
+		$prefix,
+		$name,
+		$label,
+		'color_picker',
+		array(
+			'wrapper'           => array( 'width' => 33 ),
+			'return_format'     => 'string',
+			'enable_opacity'    => 1,
+			'conditional_logic' => $cond,
+		)
+	);
+	$range = static fn( string $name, string $label, int $max, int $default, string $append, array $cond, int $width, string $help = '' ): array => rhm_landing_field(
+		$prefix,
+		$name,
+		$label,
+		'range',
+		array(
+			'wrapper'           => array( 'width' => $width ),
+			'min'               => 0,
+			'max'               => $max,
+			'step'              => 1,
+			'default_value'     => $default,
+			'append'            => $append,
+			'conditional_logic' => $cond,
+			'instructions'      => $help,
+		)
+	);
+
+	return array(
+		rhm_landing_field( $prefix, $name . '_accordion', $label, 'accordion', array( 'open' => 0, 'multi_expand' => 1 ) ),
+		rhm_landing_field(
+			$prefix,
+			$name . '_type',
+			__( 'Kiểu nền', 'themeranghammatsg' ),
+			'button_group',
+			array(
+				'choices'       => array(
+					''       => __( 'Mặc định', 'themeranghammatsg' ),
+					'solid'  => __( 'Màu đơn', 'themeranghammatsg' ),
+					'linear' => __( 'Gradient thẳng', 'themeranghammatsg' ),
+					'radial' => __( 'Gradient tròn', 'themeranghammatsg' ),
+				),
+				'default_value' => '',
+				'allow_null'    => 0,
+				'wrapper'       => array( 'width' => 75 ),
+				'instructions'  => __( 'Màu có ô độ trong suốt. Gradient chia đều các màu.', 'themeranghammatsg' ),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			$name . ( $dark_text ? '_dark_text' : '_light_text' ),
+			$dark_text ? __( 'Chữ tối', 'themeranghammatsg' ) : __( 'Chữ sáng', 'themeranghammatsg' ),
+			'true_false',
+			array(
+				'ui'                => 1,
+				'ui_on_text'        => __( 'Bật', 'themeranghammatsg' ),
+				'ui_off_text'       => __( 'Tắt', 'themeranghammatsg' ),
+				'wrapper'           => array( 'width' => 25 ),
+				'conditional_logic' => $any,
+				'instructions'      => $dark_text ? __( 'Bật khi nền sáng (mặc định chữ trắng).', 'themeranghammatsg' ) : __( 'Bật khi nền tối.', 'themeranghammatsg' ),
+			)
+		),
+		$color( $name . '_color_1', __( 'Màu 1', 'themeranghammatsg' ), $any ),
+		$color( $name . '_color_2', __( 'Màu 2', 'themeranghammatsg' ), $gradient ),
+		$color( $name . '_color_3', __( 'Màu 3', 'themeranghammatsg' ), $gradient ),
+		$range( $name . '_angle', __( 'Góc', 'themeranghammatsg' ), 360, 180, '°', $when( array( 'linear' ) ), 100, __( '90° trái → phải, 180° trên → dưới, 135° chéo.', 'themeranghammatsg' ) ),
+		rhm_landing_field(
+			$prefix,
+			$name . '_shape',
+			__( 'Hình', 'themeranghammatsg' ),
+			'button_group',
+			array(
+				'choices'           => array(
+					'ellipse' => __( 'Elip', 'themeranghammatsg' ),
+					'circle'  => __( 'Tròn', 'themeranghammatsg' ),
+				),
+				'default_value'     => 'ellipse',
+				'wrapper'           => array( 'width' => 34 ),
+				'conditional_logic' => $when( array( 'radial' ) ),
+			)
+		),
+		$range( $name . '_pos_x', __( 'Tâm X (trái → phải)', 'themeranghammatsg' ), 100, 50, '%', $when( array( 'radial' ) ), 33 ),
+		$range( $name . '_pos_y', __( 'Tâm Y (trên → dưới)', 'themeranghammatsg' ), 100, 50, '%', $when( array( 'radial' ) ), 33 ),
+		rhm_landing_field( $prefix, $name . '_accordion_end', '', 'accordion', array( 'endpoint' => 1 ) ),
+	);
+}
+
+/** Field chung cuối mọi layout: nhóm "Nền section", công tắc Hiện/Ẩn + neo (id) của section. */
 function rhm_landing_common_fields( string $prefix ): array {
 	return array(
+		...rhm_landing_background_fields( $prefix ),
 		rhm_landing_field(
 			$prefix,
 			'show',

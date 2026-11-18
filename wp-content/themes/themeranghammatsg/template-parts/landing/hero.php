@@ -59,7 +59,7 @@ $rhm_heading = $args['is_first'] ? 'h1' : 'h2';
 	<?php if ( $rhm_image ) : ?>
 		<div class="landing-hero__media lg:absolute lg:inset-y-0 lg:right-(--rhm-cta-gutter) lg:w-[calc(50%-var(--rhm-cta-gutter))]">
 			<?php
-			// Desktop: nửa phải màn hình (không giới hạn 1440px vì ảnh tràn mép). Mobile: rộng hết màn hình.
+			// Desktop: nửa phải màn hình (không giới hạn 1280px vì ảnh tràn mép). Mobile: rộng hết màn hình.
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_html_attrs escape từng thuộc tính.
 			echo rhm_landing_picture( $rhm_image, '(min-width: 1024px) 50vw, 100vw', 'block h-auto w-full lg:h-full lg:object-cover lg:object-right', (bool) $args['is_first'], $rhm_mobile, '100vw' );
 			?>

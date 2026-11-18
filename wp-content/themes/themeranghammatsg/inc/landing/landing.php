@@ -52,7 +52,7 @@ function rhm_landing_layouts(): array {
 		'icon-list'    => $layout( __( 'Danh sách có icon + ảnh (trái / phải / trên / dưới)', 'themeranghammatsg' ) ),
 		'photo-groups' => $layout( __( 'Nhóm ảnh 3 cột (tiêu đề + mô tả + hàng ảnh)', 'themeranghammatsg' ), false, true ),
 		'tab-slider'   => $layout( __( 'Ảnh lớn + slider tab (ảnh tròn, tiêu đề, danh sách, nút Tư vấn)', 'themeranghammatsg' ), false, true ),
-		'tab-slider'   => $layout( __( 'Ảnh lớn + slider tab (ảnh tròn, tiêu đề, danh sách, nút Tư vấn)', 'themeranghammatsg' ), false, true ),
+		'price-table'  => $layout( __( 'Bảng giá (bảng nhiều cột, mobile dạng thẻ)', 'themeranghammatsg' ) ),
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ), false, true ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
@@ -251,18 +251,23 @@ function rhm_landing_render( int $post_id ): void {
 		}
 		$used[ $args['id'] ] = true;
 
-		$part = 'template-parts/landing/' . $section['layout'];
-		if ( empty( $layouts[ $section['layout'] ]['boxed'] ) ) {
+		$part  = 'template-parts/landing/' . $section['layout'];
+		$boxed = ! empty( $layouts[ $section['layout'] ]['boxed'] );
+		if ( $boxed ) {
+			$args['span'] = rhm_landing_span( $section['data'] );
+		}
+		// Nền tùy chọn (nhóm "Nền section") gắn vào thẻ gốc có id section → in qua buffer.
+		ob_start();
+		get_template_part( $part, null, $args );
+		$html = rhm_landing_apply_background( trim( (string) ob_get_clean() ), $args['id'], $section['data'] );
+
+		if ( ! $boxed ) {
 			$flush();
-			get_template_part( $part, null, $args );
+			echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML của template-part, nền đã lọc.
 			continue;
 		}
 
 		// Ô: gom vào hàng đến khi đủ 10 phần; ô không vừa phần còn lại → sang hàng mới. Ô thiếu dữ liệu (không in gì) bị bỏ qua.
-		$args['span'] = rhm_landing_span( $section['data'] );
-		ob_start();
-		get_template_part( $part, null, $args );
-		$html = trim( (string) ob_get_clean() );
 		if ( '' === $html ) {
 			continue;
 		}
@@ -410,6 +415,87 @@ function rhm_landing_color( array $data, string $key ): string {
 	return (string) sanitize_hex_color( trim( (string) ( $data[ $key ] ?? '' ) ) );
 }
 
+/**
+ * Màu nền hợp lệ: hex (#rgb / #rrggbb) hoặc rgba() của ô màu ACF có độ trong suốt; '' nếu trống / không hợp lệ.
+ * Chỉ trả chuỗi dựng lại từ số → không chèn được CSS khác.
+ */
+function rhm_landing_bg_color( string $value ): string {
+	$value = trim( $value );
+	$hex   = (string) sanitize_hex_color( $value );
+	if ( '' !== $hex ) {
+		return $hex;
+	}
+	if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*(\d*\.?\d+)\s*)?\)$/i', $value, $m ) ) {
+		[ $r, $g, $b ] = array_map( static fn( string $n ): int => min( 255, (int) $n ), array( $m[1], $m[2], $m[3] ) );
+		$a             = isset( $m[4] ) ? max( 0.0, min( 1.0, (float) $m[4] ) ) : 1.0;
+		return sprintf( 'rgba(%d, %d, %d, %s)', $r, $g, $b, rtrim( rtrim( number_format( $a, 3, '.', '' ), '0' ), '.' ) ?: '0' );
+	}
+	return '';
+}
+
+/**
+ * Nền tùy chọn (nhóm chọn nền của rhm_landing_background_fields(), field <name>_*; 'bg' = Nền section,
+ * 'head_bg' = nền hàng tiêu đề cột bảng giá): [ 'css' => giá trị thuộc tính background ('' = nền thiết kế),
+ * 'light' => bật "Chữ sáng" (<name>_light_text), 'dark' => bật "Chữ tối" (<name>_dark_text) ].
+ * Gradient thiếu màu 2 → màu đơn. Các màu luôn chia đều (không có vị trí từng màu).
+ */
+function rhm_landing_background( array $data, string $name = 'bg' ): array {
+	$type   = (string) ( $data[ $name . '_type' ] ?? '' );
+	$colors = array();
+	foreach ( array( 1, 2, 3 ) as $n ) {
+		$color = rhm_landing_bg_color( (string) ( $data[ $name . '_color_' . $n ] ?? '' ) );
+		if ( '' !== $color && ( 1 === $n || 'solid' !== $type ) ) {
+			$colors[] = $color;
+		}
+	}
+	if ( ! in_array( $type, array( 'solid', 'linear', 'radial' ), true ) || ! $colors ) {
+		return array( 'css' => '', 'light' => false, 'dark' => false );
+	}
+
+	if ( 'solid' === $type || 1 === count( $colors ) ) {
+		$css = $colors[0];
+	} elseif ( 'linear' === $type ) {
+		$angle = is_numeric( $data[ $name . '_angle' ] ?? '' ) ? max( 0, min( 360, (int) $data[ $name . '_angle' ] ) ) : 180;
+		$css   = 'linear-gradient(' . $angle . 'deg, ' . implode( ', ', $colors ) . ')';
+	} else {
+		$shape = 'circle' === ( $data[ $name . '_shape' ] ?? '' ) ? 'circle' : 'ellipse';
+		$x     = is_numeric( $data[ $name . '_pos_x' ] ?? '' ) ? max( 0, min( 100, (int) $data[ $name . '_pos_x' ] ) ) : 50;
+		$y     = is_numeric( $data[ $name . '_pos_y' ] ?? '' ) ? max( 0, min( 100, (int) $data[ $name . '_pos_y' ] ) ) : 50;
+		$css   = 'radial-gradient(' . $shape . ' at ' . $x . '% ' . $y . '%, ' . implode( ', ', $colors ) . ')';
+	}
+	return array(
+		'css'   => $css,
+		'light' => ! empty( $data[ $name . '_light_text' ] ),
+		'dark'  => ! empty( $data[ $name . '_dark_text' ] ),
+	);
+}
+
+/**
+ * Gắn nền tùy chọn vào thẻ gốc của section (thẻ <section>/<div> đầu tiên có id = $id) trong HTML của template-part:
+ * style="background: …" (đứng trước style sẵn có) + data-rhm-bg="custom" | "dark" (Chữ sáng, CSS ở page-about.css).
+ * Không cần sửa template: mọi layout in id section trên thẻ gốc. Không tìm thấy thẻ → giữ nguyên HTML.
+ */
+function rhm_landing_apply_background( string $html, string $id, array $data ): string {
+	$bg = rhm_landing_background( $data );
+	if ( '' === $bg['css'] || '' === $html ) {
+		return $html;
+	}
+	$pattern = '/<(?:section|div)\b[^>]*?\sid="' . preg_quote( esc_attr( $id ), '/' ) . '"[^>]*>/';
+	return (string) preg_replace_callback(
+		$pattern,
+		static function ( array $m ) use ( $bg ): string {
+			$tag  = $m[0];
+			$rule = 'background: ' . $bg['css'] . ';';
+			$tag  = str_contains( $tag, ' style="' )
+				? str_replace( ' style="', ' style="' . esc_attr( $rule ) . ' ', $tag )
+				: substr( $tag, 0, -1 ) . ' style="' . esc_attr( $rule ) . '">';
+			return substr( $tag, 0, -1 ) . ' data-rhm-bg="' . ( $bg['light'] ? 'dark' : 'custom' ) . '">';
+		},
+		$html,
+		1
+	);
+}
+
 /** Thuộc tính style màu chữ cho tiêu đề (' style="color: #…"'), '' nếu không có màu. */
 function rhm_landing_color_attr( string $color ): string {
 	$color = (string) sanitize_hex_color( $color );
@@ -433,19 +519,19 @@ function rhm_landing_enqueue_module( string $name ): void {
 /**
  * sizes cho ảnh nằm trong 1 ô (layout dạng ô) chiếm $fraction độ rộng phần nội dung của ô.
  *
- * Hàng: khung 1440 − lề 2×16 → W = 1408px (≥ 1440px) hoặc 100vw − 32px; lưới 10 cột cách 24px
+ * Hàng: khung 1280 − lề 2×16 → W = 1248px (≥ 1280px) hoặc 100vw − 32px; lưới 10 cột cách 24px
  * → ô span s rộng s×W/10 + 2,4s − 24. Phần nội dung = ô − đệm 2×24 → s×W/10 + 2,4s − 72.
  * Dưới 1024px: ô rộng hết hàng (s = 10, đệm 2×20) → 100vw − 72px. $mobile_fraction: tỉ lệ trên mobile (mặc định = $fraction).
  * $offset: px trừ thêm (khoảng cách giữa các ảnh trong lưới…), áp dụng mọi breakpoint.
  */
 function rhm_landing_box_sizes( int $span, float $fraction, ?float $mobile_fraction = null, int $offset = 0 ): string {
 	$mobile_fraction ??= $fraction;
-	$desktop = (int) round( $fraction * ( $span * 1408 / 10 + 2.4 * $span - 72 ) ) - $offset;
+	$desktop = (int) round( $fraction * ( $span * 1248 / 10 + 2.4 * $span - 72 ) ) - $offset;
 	$vw      = round( $fraction * $span * 10, 2 );
 	$px      = (int) round( $fraction * ( 0.8 * $span + 72 ) ) + $offset;
 	$m_vw    = round( $mobile_fraction * 100, 2 );
 	$m_px    = (int) round( $mobile_fraction * 72 ) + $offset;
-	return "(min-width: 1440px) {$desktop}px, (min-width: 1024px) calc({$vw}vw - {$px}px), calc({$m_vw}vw - {$m_px}px)";
+	return "(min-width: 1280px) {$desktop}px, (min-width: 1024px) calc({$vw}vw - {$px}px), calc({$m_vw}vw - {$m_px}px)";
 }
 
 /* ---------------------------------------------------------------------------

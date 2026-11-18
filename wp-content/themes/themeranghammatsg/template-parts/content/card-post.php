@@ -8,7 +8,7 @@
  * Ngày là 1 phần tử duy nhất, đổi vị trí bằng order (mobile xuống cuối).
  *
  * $args['sizes']: độ rộng hiển thị thật của ảnh theo lưới đang dùng. Bỏ trống = lưới 3 cột của index.php / archive.php / search.php
- * (grid gap-6 sm:grid-cols-2 lg:grid-cols-3 trong .site-container: khung 1440px, lề 16px, khe 24px). Mobile ảnh rộng 38% khung → calc(38vw - 12px).
+ * (grid gap-6 sm:grid-cols-2 lg:grid-cols-3 trong .site-container: khung 1280px, lề 16px, khe 24px). Mobile ảnh rộng 38% khung → calc(38vw - 12px).
  * $args['loading']: 'lazy' (mặc định) | 'eager' (ảnh trong màn hình đầu) | 'lcp' (ảnh LCP: eager + fetchpriority=high) —
  * trang danh sách không có bài nổi bật dùng rhm_list_image_loading() (inc/template-tags.php).
  *
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 $rhm_loading     = $args['loading'] ?? 'lazy';
 $rhm_image_attrs = array(
 	'class'    => 'aspect-[3/2] w-full object-cover',
-	'sizes'    => $args['sizes'] ?? '(min-width: 1440px) 453px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc((100vw - 56px) / 2), calc(38vw - 12px)',
+	'sizes'    => $args['sizes'] ?? '(min-width: 1280px) 400px, (min-width: 1024px) calc((100vw - 80px) / 3), (min-width: 640px) calc((100vw - 56px) / 2), calc(38vw - 12px)',
 	'loading'  => 'lazy' === $rhm_loading ? 'lazy' : 'eager',
 	'decoding' => 'lcp' === $rhm_loading ? 'auto' : 'async', // Ảnh LCP: không async (WordPress tự gắn async nếu bỏ trống).
 );

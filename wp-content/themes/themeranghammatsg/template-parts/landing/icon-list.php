@@ -36,11 +36,11 @@ $rhm_position = in_array( $rhm_position, array( 'left', 'right', 'top', 'bottom'
 $rhm_side     = $rhm_image && in_array( $rhm_position, array( 'left', 'right' ), true );
 $rhm_head_id  = $args['id'] . '-title';
 
-// sizes: cạnh nhau = 1 cột của lưới 2 cột cách 32px → (1408 − 32) / 2 = 688px | (100vw − 32 − 32) / 2; dưới 1024px rộng hết khung.
-// Trên / dưới: rộng hết khung 1408px | 100vw − 32px.
+// sizes: cạnh nhau = 1 cột của lưới 2 cột cách 32px → (1248 − 32) / 2 = 608px | (100vw − 32 − 32) / 2; dưới 1024px rộng hết khung.
+// Trên / dưới: rộng hết khung 1248px | 100vw − 32px.
 $rhm_sizes = $rhm_side
-	? '(min-width: 1440px) 688px, (min-width: 1024px) calc(50vw - 32px), calc(100vw - 32px)'
-	: '(min-width: 1440px) 1408px, calc(100vw - 32px)';
+	? '(min-width: 1280px) 608px, (min-width: 1024px) calc(50vw - 32px), calc(100vw - 32px)'
+	: '(min-width: 1280px) 1248px, calc(100vw - 32px)';
 
 // Section đứng đầu trang → ảnh là LCP (fetchpriority=high), còn lại lazy. rhm_html_attrs escape từng thuộc tính.
 $rhm_image_html = $rhm_image

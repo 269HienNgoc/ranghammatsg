@@ -22,7 +22,7 @@ Không dùng `<source media>` với density (`1x/2x`) cho ảnh co giãn theo `v
 ## 2. Số px phải khớp CSS
 
 - `rhm_get_picture()`: px mỗi media = độ rộng của class `w-*` ở breakpoint đó (vd `w-36 lg:w-40 xl:w-44` → `'' => 144, '(min-width: 1024px)' => 160, '(min-width: 1280px)' => 176`). Media lớn đặt TRƯỚC (trình duyệt lấy `<source>` khớp đầu tiên). Viết comment nhắc khớp class cạnh lời gọi.
-- `sizes`: tính theo bố cục thật (khung `.site-container` max 1440px, lề 16px, gap, padding, số cột) cho từng breakpoint, viết comment cách tính cạnh biến `$rhm_*_sizes`.
+- `sizes`: tính theo bố cục thật (khung `.site-container` max 1280px → nội dung 1248px, lề 16px, gap, padding, số cột) cho từng breakpoint, viết comment cách tính cạnh biến `$rhm_*_sizes`.
 - Ảnh `object-cover` phủ khung cao hơn tỉ lệ ảnh: độ rộng tải về ≈ chiều cao khung × tỉ lệ ảnh, KHÔNG phải độ rộng cột → đo thực tế rồi đặt `sizes` (vd `featured-post.php`).
 - srcset chỉ gom các size CÙNG tỉ lệ với file nguồn: dùng size `rhm-*` có sẵn (`inc/setup.php`); `rhm-card` (600×400 crop) chỉ dành cho khung 3:2. Không thêm image size mới nếu size có sẵn đủ dùng.
 

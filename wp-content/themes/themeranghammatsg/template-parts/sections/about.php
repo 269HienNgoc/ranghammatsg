@@ -44,8 +44,8 @@ if ( $rhm_video && file_exists( RHM_THEME_DIR . '/dist/js/embed.js' ) ) {
 						false,
 						array(
 							'class'    => 'absolute inset-0 size-full object-cover',
-							// Độ rộng cột ảnh thật: 581px khi khung 1440px, ~39vw từ 1024px, full màn hình trừ lề trên mobile.
-							'sizes'    => '(min-width: 1440px) 581px, (min-width: 1024px) 39vw, calc(100vw - 32px)',
+							// Độ rộng cột ảnh thật: 515px khi khung 1280px, ~39vw từ 1024px, full màn hình trừ lề trên mobile.
+							'sizes'    => '(min-width: 1280px) 515px, (min-width: 1024px) 39vw, calc(100vw - 32px)',
 							'loading'  => 'lazy',
 							'decoding' => 'async',
 						)

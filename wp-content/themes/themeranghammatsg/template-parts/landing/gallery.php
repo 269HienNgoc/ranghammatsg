@@ -41,9 +41,9 @@ $rhm_nav = match ( true ) {
 	default          => '',
 };
 
-// Độ rộng ảnh: khung 1408px − 2 × (nút 44 + cách 16) = 1288 / 3 − đệm 24 = 405px; 1024–1439px: (100vw − 32 − 120) / 3 − 24;
+// Độ rộng ảnh: khung 1248px − 2 × (nút 44 + cách 16) = 1128 / 3 − đệm 24 = 352px; 1024–1279px: (100vw − 32 − 120) / 3 − 24;
 // 768–1023px: (100vw − 32 − 2 × (40 + 12)) / 2 − 16; 640–767px: (100vw − 16) / 2 − 16; < 640px: 85% × (100vw − 16) − 16.
-$rhm_sizes = '(min-width: 1440px) 405px, (min-width: 1024px) calc(33.33vw - 75px), (min-width: 768px) calc(50vw - 84px), (min-width: 640px) calc(50vw - 24px), calc(85vw - 30px)';
+$rhm_sizes = '(min-width: 1280px) 352px, (min-width: 1024px) calc(33.33vw - 75px), (min-width: 768px) calc(50vw - 84px), (min-width: 640px) calc(50vw - 24px), calc(85vw - 30px)';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">

@@ -35,12 +35,12 @@ if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 }
 
 // Độ rộng 1 cột ảnh (chân dung / trước / sau cùng cột rộng; chân dung nên là ảnh dọc ~3:4 để object-cover không cần file lớn hơn).
-// Khung nội dung W = min(100vw, 1440px) − 32px.
-// ≥ 1440px: thẻ (1408 − 24) / 2 = 692 → trừ đệm 2×16 = 660 → (660 − 8) / 2 = 326px.
+// Khung nội dung W = min(100vw, 1280px) − 32px.
+// ≥ 1280px: thẻ (1248 − 24) / 2 = 612 → trừ đệm 2×16 = 580 → (580 − 8) / 2 = 286px.
 // 1024–1439px: thẻ 50vw − 28 → trừ đệm 32 → (50vw − 60 − 8) / 2 = 25vw − 34px.
 // 768–1023px: thẻ W/2 − 8 = 50vw − 24 → trừ đệm 2×12 → (50vw − 48 − 8) / 2 = 25vw − 28px.
 // < 768px: thẻ 88% W = 88vw − 28 → trừ đệm 24 → (88vw − 52 − 8) / 2 = 44vw − 30px.
-$rhm_sizes = '(min-width: 1440px) 326px, (min-width: 1024px) calc(25vw - 34px), (min-width: 768px) calc(25vw - 28px), calc(44vw - 30px)';
+$rhm_sizes = '(min-width: 1280px) 286px, (min-width: 1024px) calc(25vw - 34px), (min-width: 768px) calc(25vw - 28px), calc(44vw - 30px)';
 
 $rhm_image = static function ( int $id, string $alt, string $class ) use ( $rhm_sizes ): string {
 	return wp_get_attachment_image(

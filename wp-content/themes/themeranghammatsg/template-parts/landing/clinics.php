@@ -48,14 +48,14 @@ if ( $rhm_multi ) {
 	rhm_landing_enqueue_module( 'carousel' );
 }
 
-// Ảnh lớn rộng hết khung W = 1408px (≥ 1440px) hoặc 100vw − 32px.
+// Ảnh lớn rộng hết khung W = 1248px (≥ 1280px) hoặc 100vw − 32px.
 // ≥ 640px khung 16:9 = tỉ lệ ảnh khuyến nghị → tải theo độ rộng khung.
 // < 640px khung 4:3 phủ ảnh 16:9 (object-cover): độ rộng ảnh cần = cao khung × 16/9 = (100vw − 32) × 4/3 → calc(133.33vw − 43px).
-$rhm_sizes = '(min-width: 1440px) 1408px, (min-width: 640px) calc(100vw - 32px), calc(133.33vw - 43px)';
+$rhm_sizes = '(min-width: 1280px) 1248px, (min-width: 640px) calc(100vw - 32px), calc(133.33vw - 43px)';
 // Ảnh nhỏ 16:9: dải có đệm 4px mỗi bên (chừa chỗ viền ô đang xem), ô cách 12px.
 // ≥ 1024px 6 ô: (W − 8 − 60) / 6 → 223px | calc(16.67vw − 17px). 640–1023px 4 ô: (W − 8 − 36) / 4 → calc(25vw − 19px).
 // < 640px ô 40%: 0,4 × (100vw − 40) → calc(40vw − 16px).
-$rhm_thumb_sizes = '(min-width: 1440px) 223px, (min-width: 1024px) calc(16.67vw - 17px), (min-width: 640px) calc(25vw - 19px), calc(40vw - 16px)';
+$rhm_thumb_sizes = '(min-width: 1280px) 197px, (min-width: 1024px) calc(16.67vw - 17px), (min-width: 640px) calc(25vw - 19px), calc(40vw - 16px)';
 
 $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justify-center rounded-full border border-line bg-white/90 text-primary shadow-card transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-0 lg:size-11';
 ?>

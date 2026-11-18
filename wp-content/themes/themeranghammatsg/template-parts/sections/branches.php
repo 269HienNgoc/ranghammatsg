@@ -52,8 +52,8 @@ $rhm_nav_hidden = match ( $rhm_count ) {
 };
 
 // Độ rộng ảnh thật = slide − đệm slide (8px / 12px từ lg mỗi bên) − viền thẻ 1px mỗi bên.
-// Khung .swiper = khung nội dung (min(100vw, 1440px) − lề 32px) + lề âm 2 bên.
-$rhm_sizes = '(min-width: 1440px) 332px, (min-width: 1024px) calc(25vw - 28px), (min-width: 768px) calc(33.33vw - 24px), (min-width: 640px) calc(50vw - 26px), calc(80vw - 31px)';
+// Khung .swiper = khung nội dung (min(100vw, 1280px) − lề 32px) + lề âm 2 bên.
+$rhm_sizes = '(min-width: 1280px) 292px, (min-width: 1024px) calc(25vw - 28px), (min-width: 768px) calc(33.33vw - 24px), (min-width: 640px) calc(50vw - 26px), calc(80vw - 31px)';
 
 $rhm_nav_class = 'flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-primary shadow-[0_4px_14px_rgb(16_42_67/0.1)] transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-primary';
 ?>

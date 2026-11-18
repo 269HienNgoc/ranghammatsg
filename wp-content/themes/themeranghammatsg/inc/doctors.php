@@ -232,4 +232,4 @@ function rhm_get_doctor_image_sizes( int $id, string $sizes, float $frame_ratio 
 }
 
 // Cột chân dung 36% của (khung - gap 48px), mobile rộng tối đa 400px. Dùng chung cho ảnh và preload.
-const RHM_DOCTOR_PORTRAIT_SIZES = '(min-width: 1440px) 490px, (min-width: 1024px) calc(36vw - 29px), (min-width: 432px) 400px, calc(100vw - 32px)';
+const RHM_DOCTOR_PORTRAIT_SIZES = '(min-width: 1280px) 432px, (min-width: 1024px) calc(36vw - 29px), (min-width: 432px) 400px, calc(100vw - 32px)';

@@ -46,8 +46,8 @@ $rhm_nav_hidden = match ( true ) {
 	default          => '',
 };
 
-// Độ rộng ảnh thật: khung 1440px, lề 16px, nút 40/44px + khoảng cách, đệm slide 8/12/32px, đệm + viền thẻ 7px mỗi bên.
-$rhm_sizes = '(min-width: 1440px) 242px, (min-width: 1280px) calc(25vw - 118px), (min-width: 1024px) calc(25vw - 76px), (min-width: 768px) calc(33.33vw - 76px), (min-width: 640px) calc(50vw - 38px), calc(80vw - 43px)';
+// Độ rộng ảnh thật: khung 1280px, lề 16px, nút 40/44px + khoảng cách, đệm slide 8/12/32px, đệm + viền thẻ 7px mỗi bên.
+$rhm_sizes = '(min-width: 1280px) 202px, (min-width: 1024px) calc(25vw - 76px), (min-width: 768px) calc(33.33vw - 76px), (min-width: 640px) calc(50vw - 38px), calc(80vw - 43px)';
 ?>
 <section<?php echo '' !== $rhm_id ? ' id="' . esc_attr( $rhm_id ) . '"' : ''; ?> class="py-8 lg:py-10" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
 	<div class="site-container">

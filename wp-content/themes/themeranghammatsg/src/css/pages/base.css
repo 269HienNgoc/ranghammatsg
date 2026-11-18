@@ -35,7 +35,7 @@
 }
 
 @layer components {
-	/* Khung nội dung 1440px, lề 16px. */
+	/* Khung nội dung 1280px, lề 16px. */
 	.site-container {
 		@apply mx-auto w-full max-w-site px-4;
 	}

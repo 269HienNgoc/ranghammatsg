@@ -1,7 +1,7 @@
 <?php
 /**
  * Landing – Banner ảnh: <picture> ảnh desktop (1920 × 650) + ảnh mobile (828 × 620, < 768px), link tùy chọn bao cả banner.
- * Độ rộng: "full" tràn màn hình (không bo góc) | "container" trong .site-container (tối đa 1408px, bo góc).
+ * Độ rộng: "full" tràn màn hình (không bo góc) | "container" trong .site-container (tối đa 1248px, bo góc).
  * Ảnh giữ nguyên tỉ lệ file (h-auto w-full; width/height của từng nhánh <source>/<img> = kích thước file → CLS 0).
  * Field: inc/landing/layouts/banner.php. Không có ảnh desktop → không hiện.
  *
@@ -20,11 +20,11 @@ $rhm_mobile = rhm_landing_image( $rhm_data, 'image_mobile' );
 $rhm_url    = rhm_landing_url( $rhm_data, 'link' );
 $rhm_full   = 'container' !== ( $rhm_data['layout'] ?? 'full' );
 
-// sizes: tràn màn hình = 100vw. Trong khung = khung 1408px (≥ 1440px) hoặc 100vw − lề 2 × 16px.
+// sizes: tràn màn hình = 100vw. Trong khung = khung 1248px (≥ 1280px) hoặc 100vw − lề 2 × 16px.
 // Nhánh mobile (< 768px) dùng ảnh 828px: 100vw (tràn) | 100vw − 32px (trong khung).
-// Không đứng đầu trang: 1024–1639px section lùi vào 90px mỗi bên (chừa cột nút liên hệ nhanh, page-about.css) → 100vw − 180px.
-$rhm_full_sizes   = $args['is_first'] ? '100vw' : '(min-width: 1024px) and (max-width: 1639px) calc(100vw - 180px), 100vw';
-$rhm_sizes        = $rhm_full ? $rhm_full_sizes : '(min-width: 1440px) 1408px, calc(100vw - 32px)';
+// Không đứng đầu trang: 1024–1479px section lùi vào 90px mỗi bên (chừa cột nút liên hệ nhanh, page-about.css) → 100vw − 180px.
+$rhm_full_sizes   = $args['is_first'] ? '100vw' : '(min-width: 1024px) and (max-width: 1479px) calc(100vw - 180px), 100vw';
+$rhm_sizes        = $rhm_full ? $rhm_full_sizes : '(min-width: 1280px) 1248px, calc(100vw - 32px)';
 $rhm_mobile_sizes = $rhm_full ? '100vw' : 'calc(100vw - 32px)';
 
 // Section đứng đầu trang → banner là ảnh LCP (fetchpriority=high, không lazy).

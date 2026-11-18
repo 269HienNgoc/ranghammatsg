@@ -18,8 +18,8 @@ if ( ! $rhm_main['query']->have_posts() && ! $rhm_side['query']->have_posts() ) 
 	return;
 }
 
-// Độ rộng ảnh bài lớn theo bố cục (khung 1440px, lề 16px, thẻ đệm 16/24px, khoảng cách cột 24px).
-$rhm_featured_sizes = '(min-width: 1440px) 425px, (min-width: 1024px) calc(33.33vw - 55px), (min-width: 768px) calc(50vw - 52px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 64px)';
+// Độ rộng ảnh bài lớn theo bố cục (khung 1280px, lề 16px, thẻ đệm 16/24px, khoảng cách cột 24px).
+$rhm_featured_sizes = '(min-width: 1280px) 372px, (min-width: 1024px) calc(33.33vw - 55px), (min-width: 768px) calc(50vw - 52px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 64px)';
 ?>
 <section class="bg-[#f6f9fe] py-12 lg:py-16">
 	<div class="site-container grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">

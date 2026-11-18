@@ -26,10 +26,10 @@ if ( '' === $rhm_title || ! $rhm_items ) {
 }
 
 $rhm_head_id = $args['id'] . '-title';
-// Ảnh = 1 cột. ≥ 640px lưới 3 cột trong khung W (1408px ≥ 1440px, còn lại 100vw − 32px), cách 16px (sm) / 24px (lg):
-// ≥ 1440px (1408 − 48) / 3 = 453px | 1024–1439px (100vw − 32 − 48) / 3 | 640–1023px (100vw − 32 − 32) / 3.
+// Ảnh = 1 cột. ≥ 640px lưới 3 cột trong khung W (1248px ≥ 1280px, còn lại 100vw − 32px), cách 16px (sm) / 24px (lg):
+// ≥ 1280px (1248 − 48) / 3 = 400px | 1024–1279px (100vw − 32 − 48) / 3 | 640–1023px (100vw − 32 − 32) / 3.
 // < 640px thẻ 80% khung (hé ảnh kế): 0,8 × (100vw − 32) → calc(80vw − 26px); chỉ 1 ảnh → rộng hết khung.
-$rhm_desktop_sizes = '(min-width: 1440px) 453px, (min-width: 1024px) calc(33.33vw - 27px), (min-width: 640px) calc(33.33vw - 21px), ';
+$rhm_desktop_sizes = '(min-width: 1280px) 400px, (min-width: 1024px) calc(33.33vw - 27px), (min-width: 640px) calc(33.33vw - 21px), ';
 ?>
 <section id="<?php echo esc_attr( $args['id'] ); ?>" class="py-6 lg:py-8" aria-labelledby="<?php echo esc_attr( $rhm_head_id ); ?>">
 	<div class="site-container">

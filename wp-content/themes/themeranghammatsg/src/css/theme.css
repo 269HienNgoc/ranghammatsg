@@ -32,7 +32,7 @@
 	--color-footer-muted: #a3bdc8;   /* chân trang: dòng bản quyền */
 
 	/* Khung nội dung: max-w-site */
-	--container-site: 90rem;         /* 1440px */
+	--container-site: 80rem;         /* 1280px */
 
 	/* Breakpoint bổ sung: xs = 560px (mặc định: sm 640, md 768, lg 1024, xl 1280, 2xl 1536) */
 	--breakpoint-xs: 35rem;
