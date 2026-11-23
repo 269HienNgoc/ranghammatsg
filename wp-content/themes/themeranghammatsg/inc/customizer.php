@@ -320,14 +320,14 @@ function rhm_customize_certificates( WP_Customize_Manager $wp_customize ): void 
 add_action( 'customize_register', 'rhm_customize_certificates' );
 
 /**
- * Chân trang (inc/footer.php). Địa chỉ / hotline / email / giờ làm việc lấy từ "Thông tin phòng khám".
+ * Chân trang (inc/footer.php). Địa chỉ / hotline / email / giờ làm việc lấy từ "Thông tin phòng khám"; tên công ty + MST nhập ở đây.
  */
 function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
 	$wp_customize->add_section(
 		'rhm_footer',
 		array(
 			'title'       => __( 'Chân trang (Footer)', 'themeranghammatsg' ),
-			'description' => __( 'Logo: Biểu tượng trang web (Nhận diện website). Địa chỉ, hotline, email, giờ làm việc: sửa ở "Thông tin phòng khám". Điều khoản chính sách: Menu → vị trí "Menu chân trang".', 'themeranghammatsg' ),
+			'description' => __( 'Logo: Biểu tượng trang web (Nhận diện website). Địa chỉ, hotline, email, giờ làm việc: sửa ở "Thông tin phòng khám". GPHĐ, hotline, email, giờ của từng chi nhánh: menu admin "Chi nhánh". Điều khoản chính sách: Menu → vị trí "Menu chân trang".', 'themeranghammatsg' ),
 			'priority'    => 36,
 		)
 	);
@@ -344,14 +344,12 @@ function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
 		$wp_customize,
 		'rhm_footer',
 		array(
-			'rhm_footer_slogan'             => $text( 'slogan', __( 'Khẩu hiệu dưới logo', 'themeranghammatsg' ) ),
-			'rhm_footer_title'              => $text( 'title', __( 'Tiêu đề cột liên hệ', 'themeranghammatsg' ) ),
-			'rhm_footer_branch_title'       => $text( 'branch_title', __( 'Chi nhánh – tiêu đề', 'themeranghammatsg' ) ),
-			'rhm_footer_branch_button_text' => $text( 'branch_button_text', __( 'Chi nhánh – chữ nút (để trống: ẩn nút)', 'themeranghammatsg' ) ),
-			'rhm_footer_branch_button_link' => array( __( 'Chi nhánh – link nút (để trống: trang Liên hệ / Đặt lịch)', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
-			'rhm_footer_policy_title'       => $text( 'policy_title', __( 'Điều khoản chính sách – tiêu đề', 'themeranghammatsg' ) ),
-			'rhm_footer_social_title'       => $text( 'social_title', __( 'Mạng xã hội – tiêu đề', 'themeranghammatsg' ) ),
-			'rhm_footer_copyright'          => $text( 'copyright', __( 'Dòng bản quyền ({year} = năm hiện tại)', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_footer_title'        => $text( 'title', __( 'Tên công ty (cạnh logo)', 'themeranghammatsg' ) ),
+			'rhm_footer_tax_code'     => $text( 'tax_code', __( 'Mã số thuế (MST) – để trống: ẩn dòng', 'themeranghammatsg' ) ),
+			'rhm_footer_social_title' => $text( 'social_title', __( 'Cột liên hệ + mạng xã hội – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_footer_policy_title' => $text( 'policy_title', __( 'Điều khoản chính sách – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_footer_branch_title' => $text( 'branch_title', __( 'Chi nhánh – tiêu đề (đọc cho trình đọc màn hình; hiện ở trang Liên hệ)', 'themeranghammatsg' ) ),
+			'rhm_footer_copyright'    => $text( 'copyright', __( 'Dòng bản quyền ({year} = năm hiện tại)', 'themeranghammatsg' ), 'textarea' ),
 		)
 	);
 
@@ -362,7 +360,7 @@ function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
 		__( 'Chi nhánh hiển thị', 'themeranghammatsg' ),
 		__( 'Chi nhánh', 'themeranghammatsg' ),
 		rhm_footer_branch_fields(),
-		__( 'Chọn chi nhánh (nhập ở menu admin "Chi nhánh") và sắp thứ tự bằng ↑↓. Footer chỉ hiện địa chỉ của chi nhánh. Không chọn chi nhánh nào thì ẩn cột này.', 'themeranghammatsg' )
+		__( 'Chọn chi nhánh (nhập ở menu admin "Chi nhánh") và sắp thứ tự bằng ↑↓. Mỗi chi nhánh hiện "Chi nhánh N: tên" + địa chỉ, link bản đồ, GPHĐ, hotline, email, giờ làm việc (ô trống thì ẩn dòng). Không chọn chi nhánh nào thì ẩn cả hàng.', 'themeranghammatsg' )
 	);
 
 	rhm_customize_list(

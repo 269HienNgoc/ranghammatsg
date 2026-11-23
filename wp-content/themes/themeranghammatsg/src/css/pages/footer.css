@@ -27,12 +27,17 @@
 		@apply mb-4 text-[15px] leading-snug font-bold text-footer-accent uppercase lg:text-base;
 	}
 
-	/* Menu "Điều khoản chính sách" (wp_nav_menu vị trí footer, class "footer-nav"): mỗi mục có dấu chấm đầu dòng. */
+	/* Menu "Điều khoản chính sách" (wp_nav_menu vị trí footer, class "footer-nav"): mỗi mục có dấu › đầu dòng. */
 	.footer-nav li + li {
 		@apply mt-2;
 	}
 
 	.footer-nav a {
-		@apply flex gap-2 text-footer-text before:content-['·'] hover:text-footer-accent;
+		@apply flex gap-2.5 text-footer-text before:content-['›'] hover:text-footer-accent;
+	}
+
+	/* Tiêu đề từng chi nhánh ("Chi nhánh N: tên"): viên nền primary, chữ trắng in hoa. */
+	.footer-branch-title {
+		@apply inline-block rounded-2xl bg-primary px-4 py-1.5 text-sm leading-snug font-bold text-white uppercase lg:text-[15px];
 	}
 }

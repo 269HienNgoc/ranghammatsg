@@ -2,10 +2,11 @@
 /**
  * Chân trang: dữ liệu từ Customizer → "Chân trang (Footer)". Hiển thị: footer.php. CSS: footer.css (@source file này).
  *
- * - Logo: Biểu tượng trang web (Nhận diện website → huy hiệu tròn, hợp nền tối); chưa có thì dùng Logo.
- * - Địa chỉ / hotline / email / giờ làm việc: dùng chung "Thông tin phòng khám".
- * - Chi nhánh ("Hệ thống đối tác"): chọn + sắp thứ tự chi nhánh (CPT, inc/branches.php) trong Tùy biến, chỉ in địa chỉ;
- *   không chọn chi nhánh nào thì ẩn cột.
+ * - Cột công ty: logo (Biểu tượng trang web → huy hiệu tròn, hợp nền tối; chưa có thì dùng Logo) + tên công ty
+ *   (rhm_footer_title), địa chỉ ("Thông tin phòng khám") + mã số thuế (rhm_footer_tax_code).
+ * - Cột "Kết nối với chúng tôi": hotline / email / giờ làm việc ("Thông tin phòng khám") + mạng xã hội.
+ * - Hàng chi nhánh: chọn + sắp thứ tự chi nhánh (CPT, inc/branches.php) trong Tùy biến; mỗi chi nhánh in địa chỉ,
+ *   link bản đồ, GPHĐ, hotline, email, giờ làm việc (dòng trống bỏ qua). Không chọn chi nhánh nào thì ẩn cả hàng.
  * - Mạng xã hội, huy hiệu (Bộ Công Thương, DMCA…): danh sách động (inc/customize-list.php).
  * - Điều khoản chính sách: menu vị trí "footer" (Giao diện → Menu).
  *
@@ -20,14 +21,13 @@ defined( 'ABSPATH' ) || exit;
  */
 function rhm_footer_defaults(): array {
 	return array(
-		'title'              => get_bloginfo( 'name' ),
-		'slogan'             => __( 'Vì nụ cười Việt Nam', 'themeranghammatsg' ),
-		'branch_title'       => __( 'Hệ thống đối tác', 'themeranghammatsg' ),
-		'branch_button_text' => __( 'Xem chi tiết địa chỉ', 'themeranghammatsg' ),
-		'policy_title'       => __( 'Điều khoản chính sách', 'themeranghammatsg' ),
-		'social_title'       => __( 'Kết nối với chúng tôi', 'themeranghammatsg' ),
+		'title'        => get_bloginfo( 'name' ),
+		'tax_code'     => '',
+		'branch_title' => __( 'Hệ thống đối tác', 'themeranghammatsg' ),
+		'policy_title' => __( 'Điều khoản chính sách', 'themeranghammatsg' ),
+		'social_title' => __( 'Kết nối với chúng tôi', 'themeranghammatsg' ),
 		/* translators: %s: site name */
-		'copyright'          => sprintf( __( '© {year} %s. Giữ bản quyền nội dung trên website này.', 'themeranghammatsg' ), get_bloginfo( 'name' ) ),
+		'copyright'    => sprintf( __( '© {year} %s. Giữ bản quyền nội dung trên website này.', 'themeranghammatsg' ), get_bloginfo( 'name' ) ),
 	);
 }
 
@@ -91,31 +91,65 @@ function rhm_get_footer_logo_id(): int {
 }
 
 /**
- * Dòng liên hệ (địa chỉ, hotline, email, giờ làm việc) dạng tên icon => HTML đã escape; dòng trống bị bỏ.
+ * Dòng thông tin công ty dưới logo (địa chỉ, mã số thuế): tên icon => HTML đã escape; dòng trống bị bỏ.
  *
  * @return array<string, string>
  */
-function rhm_get_footer_contacts(): array {
-	$hotline = rhm_get_option( 'rhm_hotline' );
-	$email   = rhm_get_option( 'rhm_email' );
+function rhm_get_footer_company_lines(): array {
+	$tax_code = rhm_footer_text( 'tax_code' );
 
 	return array_filter(
 		array(
-			'map-pin' => nl2br( esc_html( rhm_get_option( 'rhm_address' ) ) ),
-			'phone'   => $hotline ? sprintf( '<a class="font-bold text-white hover:text-footer-accent" href="%s">%s</a>', esc_url( rhm_get_tel_href( $hotline ) ), esc_html( $hotline ) ) : '',
-			'mail'    => $email ? sprintf( '<a class="wrap-anywhere text-footer-text hover:text-footer-accent" href="%s">%s</a>', esc_url( 'mailto:' . $email ), esc_html( $email ) ) : '',
-			'clock'   => nl2br( esc_html( rhm_get_option( 'rhm_working_hours' ) ) ),
+			'map-pin'  => nl2br( esc_html( rhm_get_option( 'rhm_address' ) ) ),
+			'document' => '' !== $tax_code ? sprintf( '<strong class="font-bold text-white">%s</strong> %s', esc_html__( 'MST:', 'themeranghammatsg' ), esc_html( $tax_code ) ) : '',
 		)
 	);
 }
 
 /**
- * Chi nhánh hiển thị ở cột "Hệ thống đối tác": chọn + sắp thứ tự trong Tùy biến (setting rhm_footer_branch_ids).
- * Footer chỉ in địa chỉ; trang Liên hệ (tpl-lien-he.php) in tên + link Google Maps.
- * Bỏ: ID trùng, chi nhánh đã xóa / nháp / trong thùng rác, chi nhánh chưa có địa chỉ.
- * Không chọn chi nhánh nào → mảng rỗng → footer.php ẩn cả cột.
+ * Cột "Kết nối với chúng tôi": hotline, email, giờ làm việc. Dòng trống bị bỏ.
  *
- * @return array<int, array{id:int, name:string, address:string, map_url:string}> đã làm sạch, chưa escape (address có thể nhiều dòng).
+ * @return array<string, array{label:string, html:string}> tên icon => nhãn (chưa escape) + giá trị HTML đã escape.
+ */
+function rhm_get_footer_contacts(): array {
+	$hotline = rhm_get_option( 'rhm_hotline' );
+	$email   = rhm_get_option( 'rhm_email' );
+	$hours   = rhm_get_option( 'rhm_working_hours' );
+	$items   = array(
+		'phone' => array(
+			__( 'Hotline', 'themeranghammatsg' ),
+			$hotline ? sprintf( '<a class="text-lg font-bold text-white hover:text-footer-accent" href="%s">%s</a>', esc_url( rhm_get_tel_href( $hotline ) ), esc_html( $hotline ) ) : '',
+		),
+		'mail'  => array(
+			__( 'Email', 'themeranghammatsg' ),
+			$email ? sprintf( '<a class="wrap-anywhere text-white hover:text-footer-accent" href="%s">%s</a>', esc_url( 'mailto:' . $email ), esc_html( $email ) ) : '',
+		),
+		'clock' => array(
+			__( 'Giờ làm việc', 'themeranghammatsg' ),
+			'' !== trim( $hours ) ? '<span class="text-white">' . nl2br( esc_html( $hours ) ) . '</span>' : '',
+		),
+	);
+
+	$lines = array();
+	foreach ( $items as $icon => $item ) {
+		if ( '' !== $item[1] ) {
+			$lines[ $icon ] = array(
+				'label' => $item[0],
+				'html'  => $item[1],
+			);
+		}
+	}
+	return $lines;
+}
+
+/**
+ * Chi nhánh hiển thị ở hàng chi nhánh của footer: chọn + sắp thứ tự trong Tùy biến (setting rhm_footer_branch_ids).
+ * Footer in tên, địa chỉ, bản đồ, GPHĐ, hotline, email, giờ; trang Liên hệ (tpl-lien-he.php) in tên + link Google Maps.
+ * Bỏ: ID trùng, chi nhánh đã xóa / nháp / trong thùng rác, chi nhánh chưa có địa chỉ.
+ * Không chọn chi nhánh nào → mảng rỗng → footer.php ẩn cả hàng.
+ *
+ * @return array<int, array{id:int, name:string, address:string, map_url:string, hotline:string, license:string, email:string, hours:string}>
+ *         đã làm sạch, chưa escape (address, hours có thể nhiều dòng).
  */
 function rhm_get_footer_branches(): array {
 	$branches = array_column( rhm_get_branches(), null, 'id' ); // Chi nhánh đã xuất bản (có cache) theo ID.
@@ -131,6 +165,10 @@ function rhm_get_footer_branches(): array {
 			'name'    => (string) ( $branches[ $id ]['name'] ?? '' ),
 			'address' => $branches[ $id ]['address'],
 			'map_url' => (string) ( $branches[ $id ]['map_url'] ?? '' ),
+			'hotline' => (string) ( $branches[ $id ]['hotline'] ?? '' ),
+			'license' => (string) ( $branches[ $id ]['license'] ?? '' ),
+			'email'   => (string) ( $branches[ $id ]['email'] ?? '' ),
+			'hours'   => (string) ( $branches[ $id ]['hours'] ?? '' ),
 		);
 	}
 
