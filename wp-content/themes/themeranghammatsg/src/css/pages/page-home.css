@@ -18,6 +18,7 @@
 
 @source "../../../front-page.php";
 @source "../../../template-parts/sections/";
+@source "../../../template-parts/components/before-after-card.php";
 @source "../../../inc/hero.php";
 @source "../../../inc/news.php";
 @source "../../../inc/home-doctors.php";

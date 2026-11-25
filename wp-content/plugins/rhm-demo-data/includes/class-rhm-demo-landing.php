@@ -61,6 +61,13 @@ final class RHM_Demo_Landing {
 		$list['landing-stack-1'] = array( 1600, 700, $photo( 'Khu đón tiếp', 'primary', 'teal' ) + array( 'caption' => 'Khu đón tiếp rộng rãi tại chi nhánh Quận 1, mở cửa từ 8:00 đến 20:00 mỗi ngày.' ) );
 		$list['landing-stack-2'] = array( 1600, 1000, $photo( 'Phòng phẫu thuật Implant', 'deep', 'primary' ) + array( 'caption' => "Phòng phẫu thuật Implant vô trùng một chiều.\nTrang bị đèn mổ, máy cấy ghép và hệ thống lọc khí HEPA." ) );
 		$list['landing-stack-3'] = array( 1600, 900, $photo( 'Phòng chỉnh nha', 'teal', 'deep' ) );
+		// Section "Ảnh trước – sau khách hàng": chân dung dọc 3:4 + ảnh trước / sau ngang 3:2.
+		foreach ( array( 'Cô Phương Nguyễn', 'Cô Xuân Lê', 'Chú Văn Huy' ) as $i => $name ) {
+			$n = $i + 1;
+			$list[ 'landing-ba-portrait-' . $n ] = array( 600, 800, array( 'style' => 'portrait', 'from' => $i % 2 ? 'teal' : 'mint', 'to' => 'primary', 'title' => $name, 'alt' => 'Khách hàng ' . $name ) );
+			$list[ 'landing-ba-before-' . $n ]   = array( 900, 600, array( 'style' => 'before', 'title' => 'Trước', 'alt' => 'Răng trước điều trị – ' . $name ) );
+			$list[ 'landing-ba-after-' . $n ]    = array( 900, 600, array( 'style' => 'after', 'title' => 'Sau', 'alt' => 'Răng sau điều trị – ' . $name ) );
+		}
 		// Section "Banner ảnh": desktop 1920 × 650, mobile 828 × 620 (đúng kích thước khuyến nghị của layout).
 		$banner                      = array( 'style' => 'banner', 'from' => 'primary', 'to' => 'deep', 'title' => 'Ưu đãi Implant tháng này', 'subtitle' => 'Giảm 30% chi phí trụ Implant · Dữ liệu mẫu', 'alt' => 'Ưu đãi giảm 30% chi phí trồng răng Implant' );
 		$list['landing-banner']        = array( 1920, 650, $banner );
@@ -346,6 +353,9 @@ final class RHM_Demo_Landing {
 					. '<h3>Hôm nay</h3>'
 					. '<p>Sau hơn 15 năm, phòng khám có 3 chi nhánh tại TP.HCM, hơn 30 bác sĩ chuyên khoa và đã đồng hành cùng hơn 100.000 khách hàng. Chúng tôi tiếp tục đầu tư công nghệ và đào tạo để mỗi lần điều trị đều an toàn, nhẹ nhàng và bền lâu.</p>',
 				'image'         => $img['landing-text-image'],
+				// Nút "Xem thêm": cắt giữa danh sách "Giá trị cốt lõi" (theme ≥ 1.4.29).
+				'readmore'       => true,
+				'readmore_chars' => 250,
 			),
 			array(
 				'acf_fc_layout' => 'image-stack',
@@ -455,6 +465,43 @@ final class RHM_Demo_Landing {
 				'form_id'       => '', // Trống → form đặt lịch mặc định (theme mod rhm_booking_form_id).
 				'form_title'    => 'Để lại thông tin, chúng tôi gọi lại ngay',
 				'anchor'        => 'dang-ky', // Banner mẫu + nút đặt lịch trỏ #dang-ky.
+			),
+			// Ảnh trước – sau khách hàng: checklist + 3 khách (slider 2 thẻ / khung từ 768px).
+			array(
+				'acf_fc_layout' => 'before-after',
+				'title'         => 'Đối tượng nên trồng răng Implant',
+				'eyebrow'       => '',
+				'points'        => "Mất răng đơn lẻ\nMất nhiều răng\nMất nhiều răng liền kề\nMất răng toàn hàm\nMất răng lâu năm",
+				'points_icon'   => 'tich',
+				'items'         => array(
+					array(
+						'portrait' => $img['landing-ba-portrait-1'],
+						'before'   => $img['landing-ba-before-1'],
+						'after'    => $img['landing-ba-after-1'],
+						'name'     => 'Cô Phương Nguyễn',
+						'location' => 'TP Hồ Chí Minh',
+						'service'  => 'Trồng răng Implant All on 4 2 hàm',
+						'product'  => 'Implant Straumann Thụy Sĩ',
+					),
+					array(
+						'portrait' => $img['landing-ba-portrait-2'],
+						'before'   => $img['landing-ba-before-2'],
+						'after'    => $img['landing-ba-after-2'],
+						'name'     => 'Cô Xuân Lê',
+						'location' => 'TP Hồ Chí Minh',
+						'service'  => 'Trồng răng Implant đơn lẻ',
+						'product'  => 'Implant Straumann Thụy Sĩ',
+					),
+					array(
+						'portrait' => $img['landing-ba-portrait-3'],
+						'before'   => $img['landing-ba-before-3'],
+						'after'    => $img['landing-ba-after-3'],
+						'name'     => 'Chú Văn Huy',
+						'location' => 'Đồng Nai',
+						'service'  => 'Trồng răng Implant All on 6 hàm trên',
+						'product'  => 'Implant Nobel Biocare Thụy Điển',
+					),
+				),
 			),
 			// Bảng giá 5 cột (tên + 3 giá + nút) → mobile dạng thẻ; ô trống = dịch vụ không có gói đó.
 			array(

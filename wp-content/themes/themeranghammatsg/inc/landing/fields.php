@@ -402,6 +402,22 @@ function rhm_landing_common_fields( string $prefix ): array {
 	);
 }
 
+/**
+ * Sắp layout theo nhãn A → Z (bảng chữ cái tiếng Việt: A Ă Â B C D Đ E Ê…) → menu "Thêm section" trong admin dễ tìm.
+ * Chỉ đổi thứ tự trong menu; dữ liệu section đã lưu (theo tên layout) không bị ảnh hưởng. Layout mới tự vào đúng chỗ.
+ * Server có intl → Collator vi_VN; không có → so sánh sau khi bỏ dấu (Đ ≈ D, Ă/Â ≈ A).
+ */
+function rhm_landing_sort_layouts( array $layouts ): array {
+	$collator = class_exists( 'Collator' ) ? new Collator( 'vi_VN' ) : null;
+	uasort(
+		$layouts,
+		static fn( array $a, array $b ): int => $collator
+			? (int) $collator->compare( $a['label'], $b['label'] )
+			: strcasecmp( remove_accents( $a['label'] ), remove_accents( $b['label'] ) )
+	);
+	return $layouts;
+}
+
 function rhm_landing_register_fields(): void {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 		return;
@@ -456,7 +472,7 @@ function rhm_landing_register_fields(): void {
 						'label'        => __( 'Các section của trang', 'themeranghammatsg' ),
 						'type'         => 'flexible_content',
 						'button_label' => __( 'Thêm section', 'themeranghammatsg' ),
-						'layouts'      => $layouts,
+						'layouts'      => rhm_landing_sort_layouts( $layouts ),
 						'instructions' => __( 'Section hiện theo đúng thứ tự bên dưới (kéo để sắp xếp). Section đầu là "Banner đầu trang" thì trang dùng tiêu đề của banner làm H1. Chưa thêm section nào: trang hiện tiêu đề + nội dung trình soạn thảo. Hướng dẫn: docs/landing-pages.md của theme.', 'themeranghammatsg' ),
 					),
 				),

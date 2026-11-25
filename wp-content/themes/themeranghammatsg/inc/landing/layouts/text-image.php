@@ -22,6 +22,57 @@ function rhm_landing_layout_text_image_fields( string $prefix ): array {
 				'instructions' => __( 'Dùng "Tiêu đề 3" cho tiêu đề phụ (không dùng Tiêu đề 1/2 — trang đã có H1, section đã có H2).', 'themeranghammatsg' ),
 			)
 		),
+		// Nút "Xem thêm": rút gọn nội dung dài còn N ký tự chữ (rhm_landing_readmore_split(), inc/landing/landing.php).
+		rhm_landing_field(
+			$prefix,
+			'readmore',
+			__( 'Rút gọn nội dung (nút Xem thêm)', 'themeranghammatsg' ),
+			'true_false',
+			array(
+				'ui'            => 1,
+				'default_value' => 0,
+				'wrapper'       => array( 'width' => 25 ),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			'readmore_chars',
+			__( 'Số ký tự hiện trước nút', 'themeranghammatsg' ),
+			'number',
+			array(
+				'default_value'     => 600,
+				'min'               => 100,
+				'max'               => 5000,
+				'step'              => 50,
+				'instructions'      => __( 'Đếm chữ (không tính thẻ HTML), cắt ở hết từ gần nhất. Nội dung chỉ dài hơn số này một chút (≤ 80 ký tự) thì không rút gọn.', 'themeranghammatsg' ),
+				'wrapper'           => array( 'width' => 25 ),
+				'conditional_logic' => array( array( array( 'field' => 'field_rhm_landing_' . $prefix . '_readmore', 'operator' => '==', 'value' => '1' ) ) ),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			'readmore_text',
+			__( 'Chữ nút (đang thu gọn)', 'themeranghammatsg' ),
+			'text',
+			array(
+				'placeholder'       => __( 'Xem thêm', 'themeranghammatsg' ),
+				'instructions'      => __( 'Trống = "Xem thêm".', 'themeranghammatsg' ),
+				'wrapper'           => array( 'width' => 25 ),
+				'conditional_logic' => array( array( array( 'field' => 'field_rhm_landing_' . $prefix . '_readmore', 'operator' => '==', 'value' => '1' ) ) ),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			'readmore_less_text',
+			__( 'Chữ nút (đang mở)', 'themeranghammatsg' ),
+			'text',
+			array(
+				'placeholder'       => __( 'Thu gọn', 'themeranghammatsg' ),
+				'instructions'      => __( 'Trống = "Thu gọn".', 'themeranghammatsg' ),
+				'wrapper'           => array( 'width' => 25 ),
+				'conditional_logic' => array( array( array( 'field' => 'field_rhm_landing_' . $prefix . '_readmore', 'operator' => '==', 'value' => '1' ) ) ),
+			)
+		),
 		rhm_landing_image_field(
 			$prefix,
 			'image',

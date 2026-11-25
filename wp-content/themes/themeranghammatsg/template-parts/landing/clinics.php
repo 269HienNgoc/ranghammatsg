@@ -16,7 +16,13 @@
 defined( 'ABSPATH' ) || exit;
 
 $rhm_data  = $args['data'] ?? array();
-$rhm_h3_attr = rhm_landing_color_attr( rhm_landing_color( $rhm_data, 'h3_color' ) ); // Màu mọi H3 của section ('' = màu thiết kế).
+// Thanh tiêu đề ảnh (H3): nền mặc định bg-deep + chữ trắng; nhóm "Nền tiêu đề ảnh (H3)" (h3_bg_*) → style background inline
+// (thắng bg-deep), "Chữ tối" → text-dark. "Màu tiêu đề con (H3)" (h3_color) thắng cả 2. Gộp vào 1 thuộc tính style.
+$rhm_h3_bg    = rhm_landing_background( $rhm_data, 'h3_bg' );
+$rhm_h3_color = rhm_landing_color( $rhm_data, 'h3_color' );
+$rhm_h3_style = trim( ( '' !== $rhm_h3_bg['css'] ? 'background: ' . $rhm_h3_bg['css'] . ';' : '' ) . ( '' !== $rhm_h3_color ? ' color: ' . $rhm_h3_color . ';' : '' ) );
+$rhm_h3_attr  = '' !== $rhm_h3_style ? ' style="' . esc_attr( $rhm_h3_style ) . '"' : '';
+$rhm_h3_class = 'px-4 py-2.5 text-lg leading-snug font-bold lg:px-5 ' . ( '' !== $rhm_h3_bg['css'] && $rhm_h3_bg['dark'] ? 'bg-deep text-dark' : 'bg-deep text-white' );
 $rhm_title = rhm_landing_text( $rhm_data, 'title' );
 
 $rhm_items = array();
@@ -105,7 +111,7 @@ $rhm_arrow = 'pointer-events-auto flex size-10 cursor-pointer items-center justi
 							?>
 						</span>
 						<div class="mt-4 flex-1 overflow-hidden rounded-lg border border-line bg-mint">
-							<h3 class="bg-deep px-4 py-2.5 text-lg leading-snug font-bold text-white lg:px-5"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_color_attr(). ?>><?php echo esc_html( $rhm_name ); ?></h3>
+							<h3 class="<?php echo esc_attr( $rhm_h3_class ); ?>"<?php echo $rhm_h3_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr() ở trên. ?>><?php echo esc_html( $rhm_name ); ?></h3>
 							<?php if ( '' !== $rhm_lines ) : ?>
 								<div class="rhm-rich px-4 py-3 leading-relaxed text-body lg:px-5 lg:py-4"><?php echo $rhm_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
 							<?php endif; ?>

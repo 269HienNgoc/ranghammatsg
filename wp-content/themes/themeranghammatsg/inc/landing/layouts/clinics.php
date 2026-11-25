@@ -2,6 +2,7 @@
 /**
  * Layout "Hệ thống phòng khám": tiêu đề + mô tả, hàng chi nhánh (tên + nút Chỉ đường), slider ảnh lớn (1 ảnh / lần,
  * mỗi ảnh có tiêu đề + chú thích riêng), dải ảnh nhỏ để chọn ảnh. Hiển thị: template-parts/landing/clinics.php.
+ * Nền thanh tiêu đề ảnh (H3) chỉnh được: nhóm "Nền tiêu đề ảnh (H3)" (h3_bg_*, cùng bộ chọn với Nền section, có gradient).
  *
  * @package themeranghammatsg
  */
@@ -48,5 +49,8 @@ function rhm_landing_layout_clinics_fields( string $prefix ): array {
 				),
 			)
 		),
+		// Nền thanh tiêu đề ảnh (H3, mặc định xanh đậm "deep" + chữ trắng): áp dụng cho mọi ảnh của section.
+		// Nền sáng → bật "Chữ tối". Màu chữ chọn riêng ở "Màu tiêu đề con (H3)" vẫn được ưu tiên.
+		...rhm_landing_background_fields( $prefix, 'h3_bg', __( 'Nền tiêu đề ảnh (H3)', 'themeranghammatsg' ), true ),
 	);
 }

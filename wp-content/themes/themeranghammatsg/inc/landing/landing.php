@@ -56,6 +56,7 @@ function rhm_landing_layouts(): array {
 		'stats'        => $layout( __( 'Số liệu nổi bật', 'themeranghammatsg' ) ),
 		'timeline'     => $layout( __( 'Chặng đường phát triển', 'themeranghammatsg' ), false, true ),
 		'gallery'      => $layout( __( 'Thư viện ảnh (slider)', 'themeranghammatsg' ) ),
+		'before-after' => $layout( __( 'Ảnh trước – sau khách hàng (slider)', 'themeranghammatsg' ), false, true ),
 		'clinics'      => $layout( __( 'Hệ thống phòng khám (chi nhánh + ảnh theo nhóm)', 'themeranghammatsg' ), false, true ),
 		'doctors'      => $layout( __( 'Đội ngũ bác sĩ (slider như trang chủ)', 'themeranghammatsg' ), false, true ),
 		'form'         => $layout( __( 'Form đăng ký (Fluent Forms)', 'themeranghammatsg' ), false, true ),
@@ -70,7 +71,7 @@ function rhm_landing_layouts(): array {
  * - slug:    định danh ngắn (key field group / field ACF), KHÔNG đổi sau khi đã có dữ liệu.
  * - label:   tên chủ đề trong tiêu đề field group.
  * - bundle:  file CSS trong dist/css/ (rhm_page_style_bundle()).
- * - layouts: các layout content được chọn, theo thứ tự hiện trong menu "Thêm section".
+ * - layouts: các layout content được chọn (menu "Thêm section" tự sắp theo nhãn A → Z: rhm_landing_sort_layouts(), fields.php).
  *
  * @return array<string, array{slug:string, label:string, bundle:string, layouts:string[]}>
  */
@@ -353,6 +354,95 @@ function rhm_landing_html( array $data, string $key ): string {
 }
 
 /**
+ * Nút "Xem thêm": đánh dấu phần nội dung sau $limit ký tự chữ (HTML đã qua rhm_landing_html()).
+ *
+ * Cắt ở khoảng trắng đầu tiên từ ký tự thứ $limit (không cắt giữa từ, kể cả giữa đoạn / trong <strong>, <a>, <li>):
+ * text node bị cắt → phần đầu + <span class="rhm-readmore-dots">…</span> + <span data-rhm-more>phần còn lại</span>;
+ * mọi nút anh em phía sau, ở mọi cấp tới gốc, gắn data-rhm-more (text node thì bọc span). CSS ẩn [data-rhm-more]
+ * khi khối .rhm-readmore chưa .is-open (page-about.css) → mở ra thì chữ nối liền đúng chỗ, nội dung đầy đủ vẫn trong HTML.
+ * '' = không cần rút gọn (tổng chữ ≤ $limit + 80: tránh nút chỉ mở ra vài từ).
+ */
+function rhm_landing_readmore_split( string $html, int $limit ): string {
+	$plain = trim( (string) preg_replace( '/\s+/u', ' ', html_entity_decode( wp_strip_all_tags( $html ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) );
+	if ( $limit < 1 || mb_strlen( $plain ) <= $limit + 80 || ! class_exists( 'DOMDocument' ) ) {
+		return '';
+	}
+
+	$doc      = new DOMDocument();
+	$previous = libxml_use_internal_errors( true );
+	// Tiền tố xml encoding: libxml đọc đúng UTF-8 (mặc định ISO-8859-1). NOIMPLIED: không tự thêm <html><body>.
+	$loaded = $doc->loadHTML( '<?xml encoding="utf-8"?><div>' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $previous );
+	$root = $loaded ? $doc->getElementsByTagName( 'div' )->item( 0 ) : null;
+	if ( ! $root ) {
+		return '';
+	}
+
+	// Ẩn mọi nút anh em sau $from (element: thuộc tính; text khác rỗng: bọc span).
+	$hide = static function ( DOMNode $from ) use ( $doc ): void {
+		for ( $sibling = $from->nextSibling; $sibling; $sibling = $next ) {
+			$next = $sibling->nextSibling;
+			if ( $sibling instanceof DOMElement ) {
+				$sibling->setAttribute( 'data-rhm-more', '' );
+			} elseif ( $sibling instanceof DOMText && '' !== trim( $sibling->nodeValue ) ) {
+				$span = $doc->createElement( 'span' );
+				$span->setAttribute( 'data-rhm-more', '' );
+				$sibling->parentNode->replaceChild( $span, $sibling );
+				$span->appendChild( $sibling );
+			}
+		}
+	};
+
+	$count = 0;
+	foreach ( ( new DOMXPath( $doc ) )->query( './/text()', $root ) as $node ) {
+		$text = (string) $node->nodeValue;
+		if ( '' === trim( $text ) ) {
+			continue;
+		}
+		$len = mb_strlen( $text );
+		if ( $count + $len <= $limit ) {
+			$count += $len;
+			continue;
+		}
+
+		// Vị trí cắt: khoảng trắng đầu tiên từ ký tự thứ ($limit − đã đếm) của node; không có → cắt cuối node.
+		$need = $limit - $count;
+		$tail = mb_substr( $text, $need );
+		$cut  = preg_match( '/\s/u', $tail, $match, PREG_OFFSET_CAPTURE ) ? $need + mb_strlen( substr( $tail, 0, $match[0][1] ) ) : $len;
+		$rest = mb_substr( $text, $cut );
+
+		$parent          = $node->parentNode;
+		$next            = $node->nextSibling;
+		$node->nodeValue = mb_substr( $text, 0, $cut );
+		$dots            = $doc->createElement( 'span', '…' );
+		$dots->setAttribute( 'class', 'rhm-readmore-dots' );
+		$dots->setAttribute( 'aria-hidden', 'true' );
+		$parent->insertBefore( $dots, $next );
+		$last = $dots;
+		if ( '' !== $rest ) {
+			$last = $doc->createElement( 'span' );
+			$last->setAttribute( 'data-rhm-more', '' );
+			$last->appendChild( $doc->createTextNode( $rest ) );
+			$parent->insertBefore( $last, $next );
+		}
+
+		$hide( $last );
+		for ( $el = $parent; $el && ! $el->isSameNode( $root ); $el = $el->parentNode ) {
+			$hide( $el );
+		}
+
+		$out = '';
+		foreach ( $root->childNodes as $child ) {
+			$out .= $doc->saveHTML( $child );
+		}
+		return $out;
+	}
+
+	return '';
+}
+
+/**
  * Thẻ được giữ trong ô chữ có định dạng (rhm_landing_rich_field): đoạn, xuống dòng, đậm, nghiêng, gạch chân, màu/canh lề
  * (style — WP chỉ giữ thuộc tính CSS an toàn: color, text-align, text-decoration…), link, danh sách.
  * Không có heading/ảnh/iframe → dán nội dung từ nơi khác không phá cấu trúc H1/H2 của trang.
@@ -514,6 +604,34 @@ function rhm_landing_enqueue_module( string $name ): void {
 	if ( file_exists( RHM_THEME_DIR . '/' . $relative ) ) {
 		wp_enqueue_script_module( 'rhm-' . $name, RHM_THEME_URI . '/' . $relative, array(), rhm_asset_version( $relative ) );
 	}
+}
+
+/**
+ * Nút ‹ › của slider native (_tiles.js, nạp qua rhm_landing_enqueue_module( 'carousel' )): khối [data-rhm-tiles-controls]
+ * + 2 nút tròn 44px trỏ track $track_id. Đặt NGAY SAU track, trong khối cha `relative` có [data-rhm-tiles].
+ * Giữ chỗ bằng `invisible` (_tiles.js bỏ khi track tràn) → không xô bố cục.
+ * $edge = true: ≥ 1024px nút ở 2 mép slider, giữa chiều cao, đè nửa lên mép thẻ (lớp phủ pointer-events-none, nút -auto);
+ *   < 1024px dưới slider (chưa có khoảng chừa cột nút liên hệ nhanh → nút mép trái sẽ lòi khỏi lề 16px).
+ * $edge = false: luôn dưới slider — dùng khi section ĐỨNG ĐẦU trang (tràn màn hình: mép phải bị cột nút liên hệ nhanh che,
+ *   mép trái lòi ra ngoài màn hình). Gọi: rhm_landing_tiles_nav( $track, empty( $args['is_first'] ), …).
+ * Dùng ở: before-after, services (chế độ slider).
+ */
+function rhm_landing_tiles_nav( string $track_id, bool $edge, string $prev_label, string $next_label ): void {
+	$controls = $edge
+		? 'invisible mt-4 flex items-center justify-center gap-3 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-1/2 lg:mt-0 lg:-translate-y-1/2 lg:justify-between'
+		: 'invisible mt-4 flex items-center justify-center gap-3';
+	$button   = 'flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-primary shadow-[0_4px_14px_rgb(16_42_67/0.1)] transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-primary lg:pointer-events-auto';
+	printf(
+		'<div class="%1$s" data-rhm-tiles-controls><button class="%2$s" type="button" aria-label="%3$s" aria-controls="%4$s" data-rhm-tiles-prev disabled>%5$s</button><button class="%6$s" type="button" aria-label="%7$s" aria-controls="%4$s" data-rhm-tiles-next disabled>%8$s</button></div>',
+		esc_attr( $controls ),
+		esc_attr( $button . ( $edge ? ' lg:-translate-x-1/2' : '' ) ),
+		esc_attr( $prev_label ),
+		esc_attr( $track_id ),
+		rhm_get_icon( 'arrow-right', 'size-5 rotate-180' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		esc_attr( $button . ( $edge ? ' lg:translate-x-1/2' : '' ) ),
+		esc_attr( $next_label ),
+		rhm_get_icon( 'arrow-right', 'size-5' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+	);
 }
 
 /**

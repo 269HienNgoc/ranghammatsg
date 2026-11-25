@@ -3,8 +3,7 @@
  * Section: Ảnh trước – sau của khách hàng (trang chủ). Dữ liệu: inc/home-before-after.php
  * (Tùy biến → "Trước – sau (Trang chủ)"). CSS: utility (page-home.css).
  *
- * Mỗi thẻ: ảnh chân dung (trái, cao bằng cột phải) | ảnh "Trước" + ảnh "Sau" xếp dọc (phải, 3:2)
- * → tên khách (H3) + tỉnh/thành → dòng dịch vụ + dòng loại implant/vật liệu (có icon, trống thì không in).
+ * Thẻ khách hàng: template-parts/components/before-after-card.php (dùng chung với landing "before-after").
  *
  * Slider native (scroll-snap, không Swiper) + nút ‹ › do src/js/_tiles.js xử lý (nạp động từ carousel.js):
  * - ≥ 1024px: mỗi "trang" = 4 thẻ (lưới 2×2) rộng hết khung, nút cuộn đúng 1 trang.
@@ -42,23 +41,7 @@ if ( $rhm_count > 1 && file_exists( RHM_THEME_DIR . '/dist/js/carousel.js' ) ) {
 // < 768px: thẻ 88% W = 88vw − 28 → trừ đệm 24 → (88vw − 52 − 8) / 2 = 44vw − 30px.
 $rhm_sizes = '(min-width: 1280px) 286px, (min-width: 1024px) calc(25vw - 34px), (min-width: 768px) calc(25vw - 28px), calc(44vw - 30px)';
 
-$rhm_image = static function ( int $id, string $alt, string $class ) use ( $rhm_sizes ): string {
-	return wp_get_attachment_image(
-		$id,
-		'full',
-		false,
-		array(
-			'class'    => $class,
-			'alt'      => $alt,
-			'sizes'    => $rhm_sizes,
-			'loading'  => 'lazy',
-			'decoding' => 'async',
-		)
-	);
-};
-
 $rhm_nav_class = 'flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-white text-primary shadow-[0_4px_14px_rgb(16_42_67/0.1)] transition-colors hover:border-primary hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-primary';
-$rhm_label     = 'absolute bottom-0 left-0 rounded-tr-xl bg-deep px-3 py-1 text-sm font-bold text-white lg:px-4 lg:text-base';
 ?>
 <section id="<?php echo esc_attr( $rhm_id ); ?>" class="py-12 lg:py-16" aria-labelledby="<?php echo esc_attr( $rhm_title_id ); ?>">
 	<?php
@@ -94,51 +77,19 @@ $rhm_label     = 'absolute bottom-0 left-0 rounded-tr-xl bg-deep px-3 py-1 text-
 			<?php foreach ( array_chunk( $rhm_items, 4 ) as $rhm_page ) : ?>
 				<div class="contents lg:grid lg:w-full lg:shrink-0 lg:snap-start lg:grid-cols-2 lg:gap-6">
 					<?php foreach ( $rhm_page as $rhm_item ) : ?>
-						<article class="w-[88%] shrink-0 snap-start rounded-3xl bg-white p-3 shadow-[0_6px_20px_rgb(16_42_67/0.1)] md:w-[calc(50%-8px)] lg:w-auto lg:p-4">
-							<div class="grid grid-cols-2 gap-2">
-								<div class="relative row-span-2 overflow-hidden rounded-2xl bg-soft">
-									<?php echo $rhm_image( $rhm_item['portrait'], $rhm_item['name'], 'absolute inset-0 size-full object-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image(). ?>
-								</div>
-								<div class="relative aspect-[3/2] overflow-hidden rounded-2xl bg-soft">
-									<?php
-									/* translators: %s: tên khách hàng. */
-									echo $rhm_image( $rhm_item['before'], sprintf( __( 'Trước điều trị – %s', 'themeranghammatsg' ), $rhm_item['name'] ), 'size-full object-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image().
-									?>
-									<span class="<?php echo esc_attr( $rhm_label ); ?>" aria-hidden="true"><?php esc_html_e( 'Trước', 'themeranghammatsg' ); ?></span>
-								</div>
-								<div class="relative aspect-[3/2] overflow-hidden rounded-2xl bg-soft">
-									<?php
-									/* translators: %s: tên khách hàng. */
-									echo $rhm_image( $rhm_item['after'], sprintf( __( 'Sau điều trị – %s', 'themeranghammatsg' ), $rhm_item['name'] ), 'size-full object-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image().
-									?>
-									<span class="<?php echo esc_attr( $rhm_label ); ?>" aria-hidden="true"><?php esc_html_e( 'Sau', 'themeranghammatsg' ); ?></span>
-								</div>
-							</div>
-
-							<div class="mt-4 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-1 wrap-anywhere">
-								<h3 class="text-base font-bold text-primary uppercase lg:text-lg"><?php echo esc_html( $rhm_item['name'] ); ?></h3>
-								<?php if ( '' !== $rhm_item['location'] ) : ?>
-									<p class="text-sm font-bold text-muted uppercase lg:text-base"><?php echo esc_html( $rhm_item['location'] ); ?></p>
-								<?php endif; ?>
-							</div>
-
-							<?php if ( '' !== $rhm_item['service'] || '' !== $rhm_item['product'] ) : ?>
-								<ul class="mt-2 space-y-1.5 px-1 text-[15px] leading-snug text-body lg:text-base">
-									<?php if ( '' !== $rhm_item['service'] ) : ?>
-										<li class="flex gap-2">
-											<?php echo rhm_icon_svg( 'menu', 'tooth', 'mt-px size-5 shrink-0 text-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG trong theme. ?>
-											<?php echo esc_html( $rhm_item['service'] ); ?>
-										</li>
-									<?php endif; ?>
-									<?php if ( '' !== $rhm_item['product'] ) : ?>
-										<li class="flex gap-2">
-											<?php echo rhm_icon_svg( 'menu', 'implant', 'mt-px size-5 shrink-0 text-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG trong theme. ?>
-											<?php echo esc_html( $rhm_item['product'] ); ?>
-										</li>
-									<?php endif; ?>
-								</ul>
-							<?php endif; ?>
-						</article>
+						<?php
+						get_template_part(
+							'template-parts/components/before-after-card',
+							null,
+							array(
+								'item'  => $rhm_item,
+								'sizes' => $rhm_sizes,
+								'card'  => 'w-[88%] shrink-0 snap-start rounded-3xl bg-white p-3 shadow-[0_6px_20px_rgb(16_42_67/0.1)] md:w-[calc(50%-8px)] lg:w-auto lg:p-4',
+								'media' => 'rounded-2xl',
+								'label' => 'rounded-tr-xl',
+							)
+						);
+						?>
 					<?php endforeach; ?>
 				</div>
 			<?php endforeach; ?>

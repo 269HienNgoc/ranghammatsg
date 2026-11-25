@@ -27,6 +27,7 @@
 @source "../../../inc/template-tags.php";
 @source "../../../template-parts/components/page-title.php";
 @source "../../../template-parts/landing/";
+@source "../../../template-parts/components/before-after-card.php";
 @source "../../../template-parts/sections/doctors.php";
 @source "../../../template-parts/sections/booking-cta.php";
 
@@ -42,6 +43,29 @@
 
 	.site-main .entry-content .rhm-table table {
 		font-size: var(--entry-font-size);
+	}
+
+	/*
+	 * Nút "Xem thêm" (landing text-image): PHP đánh dấu phần sau N ký tự [data-rhm-more] (rhm_landing_readmore_split());
+	 * chưa mở → ẩn phần đó, hiện "…"; mở (.is-open, src/js/readmore.js) → chữ nối liền đúng chỗ cắt. Mũi tên nút xoay khi mở.
+	 */
+	.rhm-readmore:not(.is-open) [data-rhm-more],
+	.rhm-readmore.is-open .rhm-readmore-dots {
+		display: none;
+	}
+
+	.rhm-readmore-toggle svg {
+		transition: rotate 0.2s;
+	}
+
+	.rhm-readmore-toggle[aria-expanded="true"] svg {
+		rotate: 180deg;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.rhm-readmore-toggle svg {
+			transition: none;
+		}
 	}
 
 	/* Nền chung của các section landing (rhm_landing_render bọc .rhm-landing): mint nhạt → trắng, thẻ trắng nổi lên trên. */
