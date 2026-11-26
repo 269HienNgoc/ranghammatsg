@@ -14,7 +14,7 @@ function rhm_landing_layout_hero_fields( string $prefix ): array {
 			rhm_landing_field( $prefix, 'title', __( 'Tiêu đề (H1)', 'themeranghammatsg' ), 'text', array( 'instructions' => __( 'Để trống: dùng tiêu đề trang.', 'themeranghammatsg' ) ) ),
 			rhm_landing_rich_field( $prefix, 'lead', __( 'Đoạn nổi bật (chữ đậm)', 'themeranghammatsg' ) ),
 			rhm_landing_rich_field( $prefix, 'description', __( 'Mô tả', 'themeranghammatsg' ) ),
-			rhm_landing_image_field( $prefix, 'image', __( 'Ảnh desktop — khuyến nghị 1600 × 1000', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 50 ), 'instructions' => __( 'Nửa phải màn hình, mép trái tự mờ dần vào nền; chủ thể nên nằm lệch phải. Ảnh tải đầu tiên: nén WebP, nên ≤ 150 kB. Để trống: banner chỉ có chữ.', 'themeranghammatsg' ) ) ),
+			rhm_landing_image_field( $prefix, 'image', __( 'Ảnh desktop — khuyến nghị 1600 × 1600 (vuông 1:1)', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 50 ), 'instructions' => __( 'Phủ nửa phải màn hình, cao bằng khối chữ (chữ dài → khung cao, chữ ngắn → khung thấp) nên ảnh luôn bị cắt bớt cho vừa khung: ảnh vuông bị cắt ít nhất. Đặt chủ thể (biển hiệu, mặt tiền, bác sĩ…) ở vùng giữa ảnh, chừa khoảng 30% mép trái (tự mờ dần vào nền) và khoảng 20% mép trên/dưới. Không dùng ảnh có chữ quan trọng sát mép. Ảnh tải đầu tiên: nén WebP, nên ≤ 200 kB. Để trống: banner chỉ có chữ.', 'themeranghammatsg' ) ) ),
 			rhm_landing_image_field( $prefix, 'image_mobile', __( 'Ảnh mobile — khuyến nghị 828 × 620', 'themeranghammatsg' ), array( 'wrapper' => array( 'width' => 50 ), 'instructions' => __( 'Hiện dưới chữ, màn hình < 768px. Để trống: dùng ảnh desktop.', 'themeranghammatsg' ) ) ),
 			rhm_landing_field(
 				$prefix,

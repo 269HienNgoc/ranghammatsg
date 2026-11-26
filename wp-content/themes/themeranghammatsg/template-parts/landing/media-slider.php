@@ -5,8 +5,9 @@
  * (image_position, mặc định phải) và độ rộng ảnh khi trái/phải (image_width, mặc định 3/5); < 640px luôn ảnh trên, chữ dưới.
  * Field: inc/landing/layouts/media-slider.php. Thiếu tiêu đề section hoặc không có item hợp lệ → không hiện.
  * Chế độ slider (field slider bật VÀ số item > số cột): các item trên 1 hàng trượt ngang, ≥ 1024px N item / khung,
- * < 1024px thẻ 88% (hé thẻ kế); nút ‹ › chuyển item luôn dưới slider (rhm_landing_tiles_nav( …, false )) để không lẫn
- * với nút ‹ › slider ảnh trong thẻ. Slider lồng nhau: _tiles.js chỉ lấy khối nút của chính [data-rhm-tiles].
+ * < 1024px thẻ 88% (hé thẻ kế); nút ‹ › chuyển item (rhm_landing_tiles_nav()) ≥ 1024px ở 2 mép trái / phải slider
+ * (2026-11-26, người dùng yêu cầu), < 1024px hoặc section đứng đầu trang (tràn màn hình, cột nút liên hệ nhanh che mép
+ * phải) → dưới slider. Slider lồng nhau: _tiles.js chỉ lấy khối nút của chính [data-rhm-tiles].
  *
  * Hiệu năng / truy cập:
  * - DOM mỗi thẻ luôn ảnh → chữ (= thứ tự mobile); vị trí phải / dưới đảo bằng sm:order-last (chỉ CSS).
@@ -115,6 +116,11 @@ $rhm_layout = $rhm_side
 	? 'flex h-full flex-col gap-4 sm:grid sm:items-center lg:gap-6 ' . ( 'left' === $rhm_position ? $rhm_ratio[1] : $rhm_ratio[2] )
 	: 'flex h-full flex-col gap-4 lg:gap-5';
 $rhm_media  = in_array( $rhm_position, array( 'right', 'bottom' ), true ) ? 'relative min-w-0 sm:order-last' : 'relative min-w-0';
+// Lớp nút ‹ › ảnh trong thẻ. Chế độ slider ≥ 1024px: nút item nằm đè nửa lên mép slider → lùi nút ảnh vào thêm 20px
+// (lg:px-7) để 2 cặp nút không sát nhau (đo 2026-11-26: còn cách 3px khi ảnh Trái/Phải).
+$rhm_img_nav = $rhm_slider
+	? 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2 lg:px-7'
+	: 'pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2';
 $rhm_arrow  = 'pointer-events-auto flex size-9 cursor-pointer items-center justify-center rounded-full border border-line bg-white/90 text-primary shadow-card transition-colors hover:bg-primary hover:text-white disabled:cursor-default disabled:opacity-0';
 $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 ?>
@@ -155,7 +161,7 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 								</div>
 
 								<?php if ( $rhm_multi ) : ?>
-									<div class="pointer-events-none invisible absolute inset-x-0 top-0 flex aspect-[4/3] items-center justify-between px-2" data-rhm-tiles-controls>
+									<div class="<?php echo esc_attr( $rhm_img_nav ); ?>" data-rhm-tiles-controls>
 										<button type="button" class="<?php echo esc_attr( $rhm_arrow ); ?>" aria-label="<?php esc_attr_e( 'Ảnh trước', 'themeranghammatsg' ); ?>" aria-controls="<?php echo esc_attr( $rhm_track ); ?>" data-rhm-tiles-prev disabled>
 											<?php echo rhm_get_icon( 'chevron', 'size-5 rotate-90' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 										</button>
@@ -182,7 +188,7 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 			<?php endforeach; ?>
 		</ul>
 		<?php if ( $rhm_slider ) : ?>
-				<?php rhm_landing_tiles_nav( $rhm_list_id, false, __( 'Item trước', 'themeranghammatsg' ), __( 'Item tiếp theo', 'themeranghammatsg' ) ); ?>
+				<?php rhm_landing_tiles_nav( $rhm_list_id, empty( $args['is_first'] ), __( 'Item trước', 'themeranghammatsg' ), __( 'Item tiếp theo', 'themeranghammatsg' ) ); ?>
 			</div>
 		<?php endif; ?>
 	</div>

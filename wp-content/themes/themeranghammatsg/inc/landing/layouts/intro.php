@@ -2,6 +2,8 @@
 /**
  * Layout "Ảnh lớn + chữ + ô nổi bật": ảnh 4:3 (có thể kèm video "bấm mới tải") + tiêu đề + nội dung + nút,
  * kèm ô nổi bật (icon, tiêu đề, mô tả, nút). Vd Đầu tư cơ sở vật chất + Chi phí hợp lý. Hiển thị: template-parts/landing/intro.php.
+ * Kiểu hiển thị (style, 2026-11-26): '' = ảnh 4:3 cạnh chữ | card = ảnh hiện trọn (vd ảnh ghép sẵn) đè lên mép thẻ trắng chứa chữ,
+ * thẻ có ảnh trang trí nền tùy chọn (card_bg).
  *
  * @package themeranghammatsg
  */
@@ -37,6 +39,32 @@ function rhm_landing_layout_intro_fields( string $prefix ): array {
 						'right' => __( 'Phải', 'themeranghammatsg' ),
 					),
 					'default_value' => 'left',
+					'wrapper'       => array( 'width' => 40 ),
+				)
+			),
+			rhm_landing_field(
+				$prefix,
+				'style',
+				__( 'Kiểu hiển thị', 'themeranghammatsg' ),
+				'button_group',
+				array(
+					'choices'       => array(
+						''     => __( 'Ảnh 4:3 cạnh chữ', 'themeranghammatsg' ),
+						'card' => __( 'Ảnh tự do + nội dung trong thẻ', 'themeranghammatsg' ),
+					),
+					'default_value' => '',
+					'allow_null'    => 0,
+					'wrapper'       => array( 'width' => 60 ),
+					'instructions'  => __( 'Ảnh tự do: ảnh hiện trọn đúng tỉ lệ file (dùng được ảnh ghép sẵn, PNG/WebP nền trong suốt), đè lên mép thẻ trắng chứa chữ. Khuyến nghị ảnh rộng khoảng 900px.', 'themeranghammatsg' ),
+				)
+			),
+			rhm_landing_image_field(
+				$prefix,
+				'card_bg',
+				__( 'Ảnh trang trí nền thẻ (tùy chọn, vd bản đồ mờ)', 'themeranghammatsg' ),
+				array(
+					'instructions'      => __( 'Ảnh đã làm mờ sẵn, phủ kín thẻ, canh góc dưới – phải; không chứa chữ quan trọng. Khuyến nghị 1800 × 1200. Để trống: thẻ trắng trơn.', 'themeranghammatsg' ),
+					'conditional_logic' => array( array( array( 'field' => 'field_rhm_landing_' . $prefix . '_style', 'operator' => '==', 'value' => 'card' ) ) ),
 				)
 			),
 		),

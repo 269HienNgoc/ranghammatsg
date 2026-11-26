@@ -161,6 +161,8 @@ final class RHM_Demo_Landing {
 			),
 			array(
 				'acf_fc_layout' => 'highlights',
+				'title'         => '',
+				'description'   => '',
 				'items'         => array(
 					array( 'icon' => 'doi-ngu', 'label' => 'Đội ngũ bác sĩ giỏi' ),
 					array( 'icon' => 'rang', 'label' => 'Implant & chỉnh nha' ),
@@ -293,6 +295,7 @@ final class RHM_Demo_Landing {
 				'image'               => $img['landing-facility'],
 				'video'               => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 				'image_position'      => 'left',
+				'style'               => '',
 				'button_text'         => '',
 				'button_link'         => '',
 				'callout_icon'        => 'heo-dat',

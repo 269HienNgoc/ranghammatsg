@@ -141,7 +141,7 @@ function rhm_landing_sections( int $post_id ): array {
 }
 
 /**
- * Section đầu là banner (có H1) → template không in khối tiêu đề trang, để trang chỉ có 1 <h1>.
+ * Section đầu (đang hiển thị) là banner (có H1) → rhm_landing_render() không in H1 ẩn, để trang chỉ có 1 <h1>.
  */
 function rhm_landing_has_hero( int $post_id ): bool {
 	return 'hero' === ( rhm_landing_sections( $post_id )[0]['layout'] ?? '' );
@@ -215,9 +215,12 @@ function rhm_landing_span_class( int $span ): string {
 function rhm_landing_render( int $post_id ): void {
 	$sections = rhm_landing_sections( $post_id );
 
-	// if ( ! rhm_landing_has_hero( $post_id ) ) {
-	// 	get_template_part( 'template-parts/components/page-title' );
-	// }
+	// Trang phải có đúng 1 <h1>. Section đầu là banner "hero" → H1 nằm trong banner. Còn lại → H1 = tiêu đề trang,
+	// ẩn khỏi giao diện (khối tiêu đề trang components/page-title đã bỏ theo yêu cầu 2026-11-26) nhưng vẫn có trong HTML
+	// cho bot / trình đọc màn hình (.screen-reader-text trong base.css: clip-path 1px, không phải display:none).
+	if ( ! rhm_landing_has_hero( $post_id ) ) {
+		echo '<h1 class="screen-reader-text">' . esc_html( rhm_get_page_title() ) . '</h1>';
+	}
 
 	if ( ! $sections ) {
 		// Giữ đúng giao diện trước khi có landing: nội dung editor (cột rộng) + kêu gọi đặt lịch.
@@ -614,7 +617,7 @@ function rhm_landing_enqueue_module( string $name ): void {
  *   < 1024px dưới slider (chưa có khoảng chừa cột nút liên hệ nhanh → nút mép trái sẽ lòi khỏi lề 16px).
  * $edge = false: luôn dưới slider — dùng khi section ĐỨNG ĐẦU trang (tràn màn hình: mép phải bị cột nút liên hệ nhanh che,
  *   mép trái lòi ra ngoài màn hình). Gọi: rhm_landing_tiles_nav( $track, empty( $args['is_first'] ), …).
- * Dùng ở: before-after, services (chế độ slider), media-slider (chế độ slider, luôn $edge = false).
+ * Dùng ở: before-after, services (chế độ slider), media-slider (chế độ slider).
  */
 function rhm_landing_tiles_nav( string $track_id, bool $edge, string $prev_label, string $next_label ): void {
 	$controls = $edge
