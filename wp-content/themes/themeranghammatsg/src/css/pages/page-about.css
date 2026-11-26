@@ -371,6 +371,11 @@
 		text-transform: uppercase;
 	}
 
+	/* Ô giá là trình soạn thảo: danh sách trong thẻ mobile canh trái (ô canh phải làm dấu chấm cách xa chữ). */
+	.price-table--cards .price-table__value:has(ul, ol) {
+		text-align: left;
+	}
+
 	.price-table--cards td.is-empty {
 		display: none;
 	}

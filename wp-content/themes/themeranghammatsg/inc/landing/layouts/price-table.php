@@ -59,7 +59,9 @@ function rhm_landing_layout_price_table_fields( string $prefix ): array {
 				'button_label' => __( 'Thêm dòng', 'themeranghammatsg' ),
 				'instructions' => __( 'Mỗi dòng = 1 dịch vụ. Dòng không có tên bị bỏ qua.', 'themeranghammatsg' ),
 				'sub_fields'   => array(
-					rhm_landing_field( $row, 'name', __( 'Tên dịch vụ', 'themeranghammatsg' ), 'text', array( 'placeholder' => 'Implant DIO (Hàn Quốc - Bảo hành 7 năm)' ) ),
+					// Tên + ô giá là trình soạn thảo (2026-11-25, content cần xuống dòng / danh sách): toolbar có danh sách, TinyMCE chỉ
+					// khởi tạo khi bấm vào ô (delay) → 40 dòng × 6 ô vẫn nhẹ. Dữ liệu chữ thuần cũ vẫn đọc được (ACF tự bọc <p>).
+					rhm_landing_rich_field( $row, 'name', __( 'Tên dịch vụ', 'themeranghammatsg' ), array( 'toolbar' => 'rhm_content' ) ),
 					rhm_landing_field(
 						$row,
 						'cells',
@@ -67,12 +69,12 @@ function rhm_landing_layout_price_table_fields( string $prefix ): array {
 						'repeater',
 						array(
 							'max'          => 6,
-							'layout'       => 'table',
+							'layout'       => 'block',
 							'button_label' => __( 'Thêm ô giá', 'themeranghammatsg' ),
-							'instructions' => __( 'Ô thứ 1 = cột giá thứ 1, ô thứ 2 = cột giá thứ 2… Cột không có giá: để trống ô đó (vẫn giữ ô để các ô sau đúng cột). Nhập dạng chữ: giá (vd 15.000.000, Liên hệ) hoặc chữ dài (mô tả, ưu điểm…) — ô tự xuống dòng, chữ dài (trên 40 ký tự) canh trái.', 'themeranghammatsg' ),
+							'instructions' => __( 'Ô thứ 1 = cột giá thứ 1, ô thứ 2 = cột giá thứ 2… Cột không có giá: để trống ô đó (vẫn giữ ô để các ô sau đúng cột). Ô "Giá / nội dung ô" là trình soạn thảo: giá (vd 15.000.000, Liên hệ) hoặc nội dung dài (mô tả, ưu điểm…) — Enter = đoạn mới, Shift + Enter = xuống dòng, dùng danh sách cho các ưu điểm. Cột có ô dài (trên 40 ký tự), nhiều dòng hoặc danh sách → cả cột canh trái.', 'themeranghammatsg' ),
 							'sub_fields'   => array(
-								rhm_landing_field( $cell, 'price', __( 'Giá', 'themeranghammatsg' ), 'text', array( 'placeholder' => '117.000.000' ) ),
-								rhm_landing_field( $cell, 'old_price', __( 'Giá gốc (gạch ngang, tùy chọn)', 'themeranghammatsg' ), 'text', array( 'placeholder' => '130.000.000' ) ),
+								rhm_landing_rich_field( $cell, 'price', __( 'Giá / nội dung ô', 'themeranghammatsg' ), array( 'toolbar' => 'rhm_content', 'wrapper' => array( 'width' => 70 ) ) ),
+								rhm_landing_field( $cell, 'old_price', __( 'Giá gốc (gạch ngang, tùy chọn)', 'themeranghammatsg' ), 'text', array( 'placeholder' => '130.000.000', 'wrapper' => array( 'width' => 30 ) ) ),
 							),
 						)
 					),

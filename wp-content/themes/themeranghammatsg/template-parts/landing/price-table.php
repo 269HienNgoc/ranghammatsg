@@ -28,10 +28,11 @@ foreach ( rhm_landing_rows( $rhm_data, 'columns' ) as $rhm_i => $rhm_column ) {
 }
 
 $rhm_rows = array();
+// Tên dịch vụ = ô chữ có định dạng (HTML đã lọc, rhm_landing_rich()) + bản chữ thuần (chữ ẩn của nút Tư vấn). Tên rỗng → bỏ dòng.
 foreach ( rhm_landing_rows( $rhm_data, 'rows' ) as $rhm_row ) {
-	$rhm_name = rhm_landing_text( $rhm_row, 'name' );
+	$rhm_name = rhm_landing_rich( $rhm_row, 'name' );
 	if ( '' !== $rhm_name ) {
-		$rhm_rows[] = array( $rhm_name, rhm_landing_rows( $rhm_row, 'cells' ) );
+		$rhm_rows[] = array( $rhm_name, rhm_landing_rows( $rhm_row, 'cells' ), trim( preg_replace( '/\s+/u', ' ', html_entity_decode( wp_strip_all_tags( $rhm_name ) ) ) ) );
 	}
 }
 if ( '' === $rhm_title || ! $rhm_columns || ! $rhm_rows ) {
@@ -58,13 +59,15 @@ $rhm_head_dark = '' !== $rhm_head['css'] && $rhm_head['dark'];
 $rhm_head_tr   = $rhm_head_dark ? 'bg-primary text-dark' : 'bg-primary text-white';
 $rhm_head_vars = '' !== $rhm_head['css'] ? '--rhm-head-bg: ' . $rhm_head['css'] . ';' . ( $rhm_head_dark ? ' --rhm-head-fg: var(--color-dark);' : '' ) : '';
 
-// Cột chữ: cột có ít nhất 1 ô dài > 40 ký tự (mô tả, ưu điểm…) → mọi ô của cột canh trái, chữ thường (đồng bộ cả cột);
-// cột còn lại giữ kiểu giá (đậm, canh giữa). Khóa = chỉ số gốc của cột.
+// Cột chữ: cột có ít nhất 1 ô dài > 40 ký tự (mô tả, ưu điểm…) HOẶC nhiều dòng / danh sách (ô giá là trình soạn thảo) → mọi ô
+// của cột canh trái, chữ thường (đồng bộ cả cột); cột còn lại giữ kiểu giá (đậm, canh giữa). Khóa = chỉ số gốc của cột.
 $rhm_text_cols = array();
 foreach ( $rhm_rows as [ , $rhm_cells ] ) {
 	foreach ( array_keys( $rhm_columns ) as $rhm_i ) {
 		$rhm_cell = $rhm_cells[ $rhm_i ] ?? array();
-		if ( mb_strlen( rhm_landing_text( $rhm_cell, 'price' ) ) > 40 || mb_strlen( rhm_landing_text( $rhm_cell, 'old_price' ) ) > 40 ) {
+		$rhm_html = rhm_landing_rich( $rhm_cell, 'price' );
+		$rhm_multi = preg_match( '#<(ul|ol|br)\b#i', $rhm_html ) || substr_count( strtolower( $rhm_html ), '<p' ) > 1;
+		if ( $rhm_multi || mb_strlen( trim( wp_strip_all_tags( $rhm_html ) ) ) > 40 || mb_strlen( rhm_landing_text( $rhm_cell, 'old_price' ) ) > 40 ) {
 			$rhm_text_cols[ $rhm_i ] = true;
 		}
 	}
@@ -102,16 +105,17 @@ $rhm_table = $rhm_cards
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ( $rhm_rows as [ $rhm_name, $rhm_cells ] ) : ?>
+					<?php foreach ( $rhm_rows as [ $rhm_name, $rhm_cells, $rhm_name_text ] ) : ?>
 						<tr class="even:bg-mint/60">
-							<th scope="row" class="min-w-36 px-4 py-4 text-left leading-snug font-medium text-primary lg:min-w-44 lg:px-5"><?php echo esc_html( $rhm_name ); ?></th>
+							<th scope="row" class="min-w-36 px-4 py-4 text-left leading-snug font-medium text-primary lg:min-w-44 lg:px-5"><div class="rhm-rich"><?php echo $rhm_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div></th>
 							<?php foreach ( $rhm_columns as $rhm_i => [ $rhm_label ] ) : ?>
 								<?php
-								$rhm_price = rhm_landing_text( $rhm_cells[ $rhm_i ] ?? array(), 'price' );
+								// Giá = HTML đã lọc (trình soạn thảo, rhm_landing_rich()); giá gốc = chữ thuần.
+								$rhm_price = rhm_landing_rich( $rhm_cells[ $rhm_i ] ?? array(), 'price' );
 								$rhm_old   = rhm_landing_text( $rhm_cells[ $rhm_i ] ?? array(), 'old_price' );
 								if ( '' === $rhm_price ) {
 									// Chỉ nhập giá gốc → coi là giá.
-									[ $rhm_price, $rhm_old ] = array( $rhm_old, '' );
+									[ $rhm_price, $rhm_old ] = array( esc_html( $rhm_old ), '' );
 								}
 								// Cột chữ ($rhm_text_cols) → canh trái, chữ thường; cột giá → số đậm canh giữa.
 								// Không nowrap: số tiền không có dấu cách nên không bị ngắt, chữ dài xuống dòng → bảng vừa khung.
@@ -124,14 +128,15 @@ $rhm_table = $rhm_cards
 								?>
 								<td data-label="<?php echo esc_attr( $rhm_label ); ?>" class="<?php echo esc_attr( $rhm_td ); ?>">
 									<?php if ( '' !== $rhm_price ) : ?>
-										<span class="<?php echo esc_attr( $rhm_long ? 'price-table__value inline-block text-sm leading-relaxed font-medium lg:text-[15px]' : 'price-table__value inline-block text-base leading-snug font-bold lg:text-[17px]' ); ?>">
+										<?php // div (không span): giá là HTML của trình soạn thảo (<p>, <ul>…) — khối không được nằm trong span. ?>
+										<div class="<?php echo esc_attr( $rhm_long ? 'price-table__value rhm-rich inline-block text-sm leading-relaxed font-medium lg:text-[15px]' : 'price-table__value rhm-rich inline-block text-base leading-snug font-bold lg:text-[17px]' ); ?>">
 											<?php if ( '' !== $rhm_old ) : ?>
 												<del class="block text-muted"><span class="sr-only"><?php esc_html_e( 'Giá gốc:', 'themeranghammatsg' ); ?> </span><?php echo esc_html( $rhm_old ); ?></del>
-												<span class="mt-1 block text-[#c62828]"><span class="sr-only"><?php esc_html_e( 'Giá ưu đãi:', 'themeranghammatsg' ); ?> </span><?php echo esc_html( $rhm_price ); ?></span>
+												<div class="mt-1 text-[#c62828]"><span class="sr-only"><?php esc_html_e( 'Giá ưu đãi:', 'themeranghammatsg' ); ?> </span><?php echo $rhm_price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich() / esc_html(). ?></div>
 											<?php else : ?>
-												<span class="block text-primary"><?php echo esc_html( $rhm_price ); ?></span>
+												<div class="text-primary"><?php echo $rhm_price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich() / esc_html(). ?></div>
 											<?php endif; ?>
-										</span>
+										</div>
 									<?php endif; ?>
 								</td>
 							<?php endforeach; ?>
@@ -142,7 +147,7 @@ $rhm_table = $rhm_cards
 										<span class="sr-only">
 											<?php
 											/* translators: %s: tên dịch vụ */
-											echo esc_html( sprintf( __( 'về %s', 'themeranghammatsg' ), $rhm_name ) );
+											echo esc_html( sprintf( __( 'về %s', 'themeranghammatsg' ), $rhm_name_text ) );
 											?>
 										</span>
 									</a>
