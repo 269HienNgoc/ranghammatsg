@@ -3,6 +3,8 @@
  * Landing – Ảnh slider + chữ (nhiều item): tiêu đề section (H2, canh giữa) + mô tả → lưới item (1/2/3 cột từ 1024px).
  * Mỗi item = thẻ nền gradient mint → trắng: slider ảnh + tiêu đề (H3) + nội dung. Vị trí ảnh chung cho mọi item
  * (image_position, mặc định phải) và độ rộng ảnh khi trái/phải (image_width, mặc định 3/5); < 640px luôn ảnh trên, chữ dưới.
+ * Ảnh so le (alternate, 2026-11-26): ảnh trái/phải + 1 cột → item 1 theo image_position, item 2 đảo phía, item 3 như item 1…
+ * (2/3 cột bỏ qua). Chỉ đổi class theo item, sizes giữ nguyên (cùng tỉ lệ ảnh).
  * Field: inc/landing/layouts/media-slider.php. Thiếu tiêu đề section hoặc không có item hợp lệ → không hiện.
  * Chế độ slider (field slider bật VÀ số item > số cột): các item trên 1 hàng trượt ngang, ≥ 1024px N item / khung,
  * < 1024px thẻ 88% (hé thẻ kế); nút ‹ › chuyển item (rhm_landing_tiles_nav()) ≥ 1024px ở 2 mép trái / phải slider
@@ -43,6 +45,7 @@ $rhm_position = in_array( $rhm_position, array( 'left', 'right', 'top', 'bottom'
 $rhm_side     = in_array( $rhm_position, array( 'left', 'right' ), true );
 $rhm_columns  = (int) ( $rhm_data['columns'] ?? 1 );
 $rhm_columns  = in_array( $rhm_columns, array( 1, 2, 3 ), true ) ? $rhm_columns : 1;
+$rhm_alternate = $rhm_side && 1 === $rhm_columns && ! empty( $rhm_data['alternate'] );
 $rhm_id       = $args['id'];
 $rhm_slider   = ! empty( $rhm_data['slider'] ) && count( $rhm_items ) > $rhm_columns;
 $rhm_list_id  = $rhm_id . '-track'; // Track item; track ảnh trong thẻ là <id>-item-N-track → không trùng.
@@ -107,15 +110,24 @@ if ( $rhm_slider ) {
 	};
 	rhm_landing_enqueue_module( 'carousel' ); // carousel.js nạp _tiles.js khi có [data-rhm-tiles-controls].
 }
-$rhm_card   = 'left' === $rhm_position
-	? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-4 shadow-card lg:p-4'
-	: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-4 shadow-card lg:p-4';
-// Cạnh nhau: khung cao hết thẻ (thẻ cùng hàng cao hơn → ảnh + chữ vẫn canh giữa theo chiều dọc).
-// 640px+: ảnh / chữ theo $rhm_ratio, mọi số cột.
-$rhm_layout = $rhm_side
-	? 'flex h-full flex-col gap-4 sm:grid sm:items-center lg:gap-6 ' . ( 'left' === $rhm_position ? $rhm_ratio[1] : $rhm_ratio[2] )
-	: 'flex h-full flex-col gap-4 lg:gap-5';
-$rhm_media  = in_array( $rhm_position, array( 'right', 'bottom' ), true ) ? 'relative min-w-0 sm:order-last' : 'relative min-w-0';
+// Class theo vị trí ảnh: [thẻ, bố cục, khối ảnh]. Tính cho cả phía ngược để ảnh so le chỉ cần tra theo item.
+// Thẻ: gradient nhạt dần về phía chữ. Cạnh nhau: khung cao hết thẻ (thẻ cùng hàng cao hơn → ảnh + chữ vẫn canh giữa
+// theo chiều dọc); 640px+: ảnh / chữ theo $rhm_ratio, mọi số cột. Ảnh phải / dưới: sm:order-last (DOM luôn ảnh → chữ).
+$rhm_variant = static function ( string $position ) use ( $rhm_side, $rhm_ratio ): array {
+	return array(
+		'left' === $position
+			? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-4 shadow-card lg:p-4'
+			: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-4 shadow-card lg:p-4',
+		$rhm_side
+			? 'flex h-full flex-col gap-4 sm:grid sm:items-center lg:gap-6 ' . ( 'left' === $position ? $rhm_ratio[1] : $rhm_ratio[2] )
+			: 'flex h-full flex-col gap-4 lg:gap-5',
+		in_array( $position, array( 'right', 'bottom' ), true ) ? 'relative min-w-0 sm:order-last' : 'relative min-w-0',
+	);
+};
+$rhm_variants = array( $rhm_variant( $rhm_position ) );
+if ( $rhm_alternate ) {
+	$rhm_variants[] = $rhm_variant( 'left' === $rhm_position ? 'right' : 'left' );
+}
 // Lớp nút ‹ › ảnh trong thẻ. Chế độ slider ≥ 1024px: nút item nằm đè nửa lên mép slider → lùi nút ảnh vào thêm 20px
 // (lg:px-7) để 2 cặp nút không sát nhau (đo 2026-11-26: còn cách 3px khi ảnh Trái/Phải).
 $rhm_img_nav = $rhm_slider
@@ -144,6 +156,7 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 					rhm_landing_enqueue_module( 'carousel' );
 				}
 				$rhm_label = '' !== $rhm_name ? $rhm_name : $rhm_title;
+				[ $rhm_card, $rhm_layout, $rhm_media ] = $rhm_variants[ $rhm_n % count( $rhm_variants ) ];
 				?>
 				<li class="<?php echo esc_attr( $rhm_slider ? $rhm_card . $rhm_slide : $rhm_card ); ?>">
 					<div class="<?php echo esc_attr( $rhm_images ? $rhm_layout : 'flex h-full flex-col' ); ?>">

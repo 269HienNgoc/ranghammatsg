@@ -4,6 +4,7 @@
  * (nút ‹ › + vuốt) + tiêu đề (H3) + nội dung. Vị trí ảnh (trái / phải / trên / dưới) và số cột chung cho cả section.
  * Mobile (< 640px) luôn ảnh trên, chữ dưới. Hiển thị: template-parts/landing/media-slider.php.
  * Chế độ slider (field slider, 2026-11-26): các item trên 1 hàng trượt ngang, N item / khung (N = số cột).
+ * Ảnh so le (field alternate, 2026-11-26): ảnh Trái/Phải + 1 cột → item chẵn đảo phía (item 1 theo Vị trí ảnh).
  * Bản dạng ô trước đó (text/images ở cấp section) không còn được đọc: section cũ phải nhập lại ảnh + nội dung vào Item.
  *
  * @package themeranghammatsg
@@ -42,7 +43,7 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 				'ui'            => 1,
 				'default_value' => 0,
 				'wrapper'       => array( 'width' => 20 ),
-				'instructions'  => __( 'Bật: các item trên 1 hàng trượt ngang, số item mỗi khung = Số cột (máy tính), nút trái/phải dưới slider. Mobile/tablet: 1 item, hé item kế. Số item ≤ số cột thì vẫn hiện dạng lưới.', 'themeranghammatsg' ),
+				'instructions'  => __( 'Bật: các item trên 1 hàng trượt ngang, số item mỗi khung = Số cột (máy tính), nút trái/phải ở 2 mép slider (dưới slider trên mobile/tablet hoặc khi section đứng đầu trang). Mobile/tablet: 1 item, hé item kế. Số item ≤ số cột thì vẫn hiện dạng lưới.', 'themeranghammatsg' ),
 			)
 		),
 		rhm_landing_field(
@@ -76,10 +77,33 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 					'67' => '2/3',
 				),
 				'default_value'     => '60',
+				'wrapper'           => array( 'width' => 70 ),
 				'instructions'      => __( 'Phần bề ngang thẻ dành cho ảnh, phần còn lại cho chữ. Chỉ khi ảnh Trái/Phải, từ màn hình ≥ 640px (Trên/Dưới: ảnh luôn rộng hết thẻ). 3 cột nên chọn 1/2 trở xuống để chữ không quá hẹp.', 'themeranghammatsg' ),
 				'conditional_logic' => array(
 					array( array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'left' ) ),
 					array( array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'right' ) ),
+				),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			'alternate',
+			__( 'Ảnh so le trái / phải', 'themeranghammatsg' ),
+			'true_false',
+			array(
+				'ui'                => 1,
+				'default_value'     => 0,
+				'wrapper'           => array( 'width' => 30 ),
+				'instructions'      => __( 'Item 1 theo Vị trí ảnh, item 2 đảo phía, item 3 như item 1… Chỉ khi 1 cột, từ màn hình ≥ 640px (mobile luôn ảnh trên).', 'themeranghammatsg' ),
+				'conditional_logic' => array(
+					array(
+						array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'left' ),
+						array( 'field' => 'field_rhm_landing_' . $prefix . '_columns', 'operator' => '==', 'value' => '1' ),
+					),
+					array(
+						array( 'field' => 'field_rhm_landing_' . $prefix . '_image_position', 'operator' => '==', 'value' => 'right' ),
+						array( 'field' => 'field_rhm_landing_' . $prefix . '_columns', 'operator' => '==', 'value' => '1' ),
+					),
 				),
 			)
 		),
