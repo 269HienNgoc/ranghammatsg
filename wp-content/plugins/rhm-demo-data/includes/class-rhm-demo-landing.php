@@ -271,6 +271,7 @@ final class RHM_Demo_Landing {
 				'columns'        => '2',
 				'image_position' => 'right',
 				'image_width'    => '60',
+				'slider'         => 0,
 				'items'          => array(
 					array(
 						'images' => array( $img['landing-device-1'], $img['landing-device-2'], $img['landing-device-3'] ),

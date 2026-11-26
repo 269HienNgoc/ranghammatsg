@@ -3,6 +3,7 @@
  * Layout "Ảnh slider + chữ (nhiều item)": tiêu đề section (H2) + mô tả, rồi danh sách item; mỗi item = thẻ có slider ảnh
  * (nút ‹ › + vuốt) + tiêu đề (H3) + nội dung. Vị trí ảnh (trái / phải / trên / dưới) và số cột chung cho cả section.
  * Mobile (< 640px) luôn ảnh trên, chữ dưới. Hiển thị: template-parts/landing/media-slider.php.
+ * Chế độ slider (field slider, 2026-11-26): các item trên 1 hàng trượt ngang, N item / khung (N = số cột).
  * Bản dạng ô trước đó (text/images ở cấp section) không còn được đọc: section cũ phải nhập lại ảnh + nội dung vào Item.
  *
  * @package themeranghammatsg
@@ -28,8 +29,20 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 					'3' => __( '3 cột', 'themeranghammatsg' ),
 				),
 				'default_value' => '1',
-				'wrapper'       => array( 'width' => 50 ),
+				'wrapper'       => array( 'width' => 40 ),
 				'instructions'  => __( 'Từ 1024px. Dưới 1024px: 1 item / hàng. 3 cột thẻ hẹp → nên chọn ảnh Trên/Dưới.', 'themeranghammatsg' ),
+			)
+		),
+		rhm_landing_field(
+			$prefix,
+			'slider',
+			__( 'Hiển thị dạng slider', 'themeranghammatsg' ),
+			'true_false',
+			array(
+				'ui'            => 1,
+				'default_value' => 0,
+				'wrapper'       => array( 'width' => 20 ),
+				'instructions'  => __( 'Bật: các item trên 1 hàng trượt ngang, số item mỗi khung = Số cột (máy tính), nút trái/phải dưới slider. Mobile/tablet: 1 item, hé item kế. Số item ≤ số cột thì vẫn hiện dạng lưới.', 'themeranghammatsg' ),
 			)
 		),
 		rhm_landing_field(
@@ -45,7 +58,7 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 					'bottom' => __( 'Dưới', 'themeranghammatsg' ),
 				),
 				'default_value' => 'right',
-				'wrapper'       => array( 'width' => 50 ),
+				'wrapper'       => array( 'width' => 40 ),
 				'instructions'  => __( 'Áp dụng từ màn hình ≥ 640px. Mobile luôn: ảnh trên, chữ dưới.', 'themeranghammatsg' ),
 			)
 		),
@@ -80,7 +93,7 @@ function rhm_landing_layout_media_slider_fields( string $prefix ): array {
 				'layout'       => 'block',
 				'collapsed'    => 'field_rhm_landing_' . $item . '_title',
 				'button_label' => __( 'Thêm item', 'themeranghammatsg' ),
-				'instructions' => __( 'Mỗi item = 1 thẻ: slider ảnh + tiêu đề + nội dung. Kéo để sắp xếp. Item không có ảnh lẫn chữ bị bỏ qua.', 'themeranghammatsg' ),
+				'instructions' => __( 'Mỗi item = 1 thẻ: slider ảnh + tiêu đề + nội dung. Kéo để sắp xếp. Nhiều item → bật "Hiển thị dạng slider" ở trên. Item không có ảnh lẫn chữ bị bỏ qua.', 'themeranghammatsg' ),
 				'sub_fields'   => array(
 					rhm_landing_field(
 						$item,

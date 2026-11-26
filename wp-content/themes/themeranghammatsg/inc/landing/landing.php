@@ -614,7 +614,7 @@ function rhm_landing_enqueue_module( string $name ): void {
  *   < 1024px dưới slider (chưa có khoảng chừa cột nút liên hệ nhanh → nút mép trái sẽ lòi khỏi lề 16px).
  * $edge = false: luôn dưới slider — dùng khi section ĐỨNG ĐẦU trang (tràn màn hình: mép phải bị cột nút liên hệ nhanh che,
  *   mép trái lòi ra ngoài màn hình). Gọi: rhm_landing_tiles_nav( $track, empty( $args['is_first'] ), …).
- * Dùng ở: before-after, services (chế độ slider).
+ * Dùng ở: before-after, services (chế độ slider), media-slider (chế độ slider, luôn $edge = false).
  */
 function rhm_landing_tiles_nav( string $track_id, bool $edge, string $prev_label, string $next_label ): void {
 	$controls = $edge

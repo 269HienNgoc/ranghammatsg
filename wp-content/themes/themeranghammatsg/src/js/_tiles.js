@@ -1,14 +1,16 @@
 /**
  * Nút điều hướng cho ô ảnh cuộn ngang: bố cục và thao tác vuốt do CSS/native scroll xử lý.
  * Nạp động từ carousel.js khi có nút điều hướng; không tạo entry Vite mới.
- * Dùng ở: landing "Ô lưới ảnh", "Hệ thống phòng khám", "Ảnh lớn + slider tab"; trang chủ "Trước – sau" (template-parts/sections/before-after.php).
+ * Dùng ở: landing "Ô lưới ảnh", "Hệ thống phòng khám", "Ảnh lớn + slider tab", "Danh sách dịch vụ", "Trước – sau",
+ * "Ảnh slider + chữ" (slider item lồng slider ảnh); trang chủ "Trước – sau" (template-parts/sections/before-after.php).
+ * Slider lồng nhau: mỗi [data-rhm-tiles] chỉ lấy khối nút của chính nó (không lấy khối nút của [data-rhm-tiles] con).
  * Track = phần tử mà nút trước trỏ tới qua aria-controls (1 section có thể có nhiều track, vd landing "Hệ thống phòng khám"),
  * không có thì lấy [data-rhm-tiles-track] đầu tiên của section. Track trong khối đang ẩn: ResizeObserver cập nhật khi hiện.
  */
 document.querySelectorAll( '[data-rhm-tiles]' ).forEach( ( heading ) => {
-	const controls = heading.querySelector( '[data-rhm-tiles-controls]' );
-	const previous = heading.querySelector( '[data-rhm-tiles-prev]' );
-	const next = heading.querySelector( '[data-rhm-tiles-next]' );
+	const controls = [ ...heading.querySelectorAll( '[data-rhm-tiles-controls]' ) ].find( ( el ) => el.closest( '[data-rhm-tiles]' ) === heading );
+	const previous = controls?.querySelector( '[data-rhm-tiles-prev]' );
+	const next = controls?.querySelector( '[data-rhm-tiles-next]' );
 	const target = previous?.getAttribute( 'aria-controls' );
 	const track = ( target && document.getElementById( target ) ) || heading.closest( 'section' )?.querySelector( '[data-rhm-tiles-track]' );
 	if ( ! track || ! controls || ! previous || ! next ) {

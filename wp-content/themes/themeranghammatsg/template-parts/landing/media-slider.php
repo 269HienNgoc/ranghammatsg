@@ -4,6 +4,9 @@
  * Mỗi item = thẻ nền gradient mint → trắng: slider ảnh + tiêu đề (H3) + nội dung. Vị trí ảnh chung cho mọi item
  * (image_position, mặc định phải) và độ rộng ảnh khi trái/phải (image_width, mặc định 3/5); < 640px luôn ảnh trên, chữ dưới.
  * Field: inc/landing/layouts/media-slider.php. Thiếu tiêu đề section hoặc không có item hợp lệ → không hiện.
+ * Chế độ slider (field slider bật VÀ số item > số cột): các item trên 1 hàng trượt ngang, ≥ 1024px N item / khung,
+ * < 1024px thẻ 88% (hé thẻ kế); nút ‹ › chuyển item luôn dưới slider (rhm_landing_tiles_nav( …, false )) để không lẫn
+ * với nút ‹ › slider ảnh trong thẻ. Slider lồng nhau: _tiles.js chỉ lấy khối nút của chính [data-rhm-tiles].
  *
  * Hiệu năng / truy cập:
  * - DOM mỗi thẻ luôn ảnh → chữ (= thứ tự mobile); vị trí phải / dưới đảo bằng sm:order-last (chỉ CSS).
@@ -40,6 +43,8 @@ $rhm_side     = in_array( $rhm_position, array( 'left', 'right' ), true );
 $rhm_columns  = (int) ( $rhm_data['columns'] ?? 1 );
 $rhm_columns  = in_array( $rhm_columns, array( 1, 2, 3 ), true ) ? $rhm_columns : 1;
 $rhm_id       = $args['id'];
+$rhm_slider   = ! empty( $rhm_data['slider'] ) && count( $rhm_items ) > $rhm_columns;
+$rhm_list_id  = $rhm_id . '-track'; // Track item; track ảnh trong thẻ là <id>-item-N-track → không trùng.
 $rhm_head_id  = $rhm_id . '-title';
 
 // Độ rộng ảnh khi cạnh nhau (field image_width, mặc định 3/5): [phần ảnh, lưới ảnh trái, lưới ảnh phải].
@@ -60,6 +65,9 @@ $rhm_frac  = round( $rhm_ratio[0], 4 );
 // 2 cột: thẻ = (W − 24) / 2 = 612 | 50vw − 28 → cạnh nhau 538 | 50vw − 102; trên/dưới 562 | 50vw − 78.
 // 3 cột: thẻ = (W − 48) / 3 = 400 | 33.33vw − 27 → cạnh nhau 326 | 33.33vw − 101; trên/dưới 350 | 33.33vw − 77.
 // 1024–1479px dư nhẹ do chừa chỗ cột nút liên hệ nhanh (giống các section khác).
+// Slider: ≥ 1024px thẻ rộng như lưới (N thẻ cách 24px) → không đổi; < 1024px thẻ = 88% × (100vw − 32) = 88vw − 28
+// → xếp dọc 88vw − 70px, cạnh nhau (640–1023px) (88vw − 86px) × phần ảnh.
+$rhm_m_stack = $rhm_slider ? '88vw - 70px' : '100vw - 74px';
 if ( $rhm_side ) {
 	[ $rhm_px, $rhm_vw ] = match ( $rhm_columns ) {
 		2       => array( 538, '50vw - 102px' ),
@@ -67,16 +75,18 @@ if ( $rhm_side ) {
 		default => array( 1174, '100vw - 106px' ),
 	};
 	$rhm_sizes = sprintf(
-		'(max-width: 639px) calc(100vw - 74px), (min-width: 1280px) %1$dpx, (min-width: 1024px) calc((%2$s) * %3$s), calc((100vw - 90px) * %3$s)',
+		'(max-width: 639px) calc(%4$s), (min-width: 1280px) %1$dpx, (min-width: 1024px) calc((%2$s) * %3$s), calc((%5$s) * %3$s)',
 		(int) ceil( $rhm_px * $rhm_ratio[0] ),
 		$rhm_vw,
-		$rhm_frac
+		$rhm_frac,
+		$rhm_m_stack,
+		$rhm_slider ? '88vw - 86px' : '100vw - 90px'
 	);
 } else {
 	$rhm_sizes = match ( $rhm_columns ) {
-		2       => '(min-width: 1280px) 562px, (min-width: 1024px) calc(50vw - 78px), calc(100vw - 74px)',
-		3       => '(min-width: 1280px) 350px, (min-width: 1024px) calc(33.33vw - 77px), calc(100vw - 74px)',
-		default => '(min-width: 1280px) 1198px, (min-width: 1024px) calc(100vw - 82px), calc(100vw - 74px)',
+		2       => '(min-width: 1280px) 562px, (min-width: 1024px) calc(50vw - 78px), calc(' . $rhm_m_stack . ')',
+		3       => '(min-width: 1280px) 350px, (min-width: 1024px) calc(33.33vw - 77px), calc(' . $rhm_m_stack . ')',
+		default => '(min-width: 1280px) 1198px, (min-width: 1024px) calc(100vw - 82px), calc(' . $rhm_m_stack . ')',
 	};
 }
 
@@ -85,9 +95,20 @@ $rhm_grid   = match ( $rhm_columns ) {
 	3       => 'grid gap-5 lg:grid-cols-3 lg:gap-6',
 	default => 'grid gap-5 lg:gap-6',
 };
+// Slider: track + độ rộng thẻ (class nguyên văn). Đệm 8px ngang / 12px dọc + lề âm (≥ 1024px): bóng thẻ không bị
+// overflow của track cắt; scroll-padding giữ điểm dừng thẳng mép khung. Thẻ ≥ 1024px = (khung − (N − 1) × 24px) / N.
+if ( $rhm_slider ) {
+	$rhm_grid  = '-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto overscroll-x-contain px-4 pb-2 [scrollbar-width:none] lg:-mx-2 lg:-my-3 lg:scroll-px-2 lg:gap-6 lg:px-2 lg:py-3';
+	$rhm_slide = match ( $rhm_columns ) {
+		2       => ' w-[88%] shrink-0 snap-start lg:w-[calc((100%-24px)/2)]',
+		3       => ' w-[88%] shrink-0 snap-start lg:w-[calc((100%-48px)/3)]',
+		default => ' w-[88%] shrink-0 snap-start lg:w-full',
+	};
+	rhm_landing_enqueue_module( 'carousel' ); // carousel.js nạp _tiles.js khi có [data-rhm-tiles-controls].
+}
 $rhm_card   = 'left' === $rhm_position
-	? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-5 shadow-card lg:p-6'
-	: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-5 shadow-card lg:p-6';
+	? 'overflow-hidden rounded-lg border border-line bg-linear-to-l from-mint to-white p-4 shadow-card lg:p-4'
+	: 'overflow-hidden rounded-lg border border-line bg-linear-to-r from-mint to-white p-4 shadow-card lg:p-4';
 // Cạnh nhau: khung cao hết thẻ (thẻ cùng hàng cao hơn → ảnh + chữ vẫn canh giữa theo chiều dọc).
 // 640px+: ảnh / chữ theo $rhm_ratio, mọi số cột.
 $rhm_layout = $rhm_side
@@ -104,7 +125,10 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 			<div class="rhm-rich mx-auto -mt-2 mb-6 max-w-4xl text-center leading-relaxed text-body/85 lg:mb-8"><?php echo $rhm_rich; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rhm_landing_rich(). ?></div>
 		<?php endif; ?>
 
-		<ul class="<?php echo esc_attr( $rhm_grid ); ?>">
+		<?php if ( $rhm_slider ) : ?>
+			<div class="relative" data-rhm-tiles>
+		<?php endif; ?>
+		<ul<?php echo $rhm_slider ? ' id="' . esc_attr( $rhm_list_id ) . '" aria-labelledby="' . esc_attr( $rhm_head_id ) . '" tabindex="0" data-rhm-tiles-track' : ''; ?> class="<?php echo esc_attr( $rhm_grid ); ?>">
 			<?php foreach ( $rhm_items as $rhm_n => [ $rhm_images, $rhm_name, $rhm_text ] ) : ?>
 				<?php
 				$rhm_track = $rhm_id . '-item-' . ( $rhm_n + 1 ) . '-track';
@@ -115,7 +139,7 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 				}
 				$rhm_label = '' !== $rhm_name ? $rhm_name : $rhm_title;
 				?>
-				<li class="<?php echo esc_attr( $rhm_card ); ?>">
+				<li class="<?php echo esc_attr( $rhm_slider ? $rhm_card . $rhm_slide : $rhm_card ); ?>">
 					<div class="<?php echo esc_attr( $rhm_images ? $rhm_layout : 'flex h-full flex-col' ); ?>">
 						<?php if ( $rhm_images ) : ?>
 							<div class="<?php echo esc_attr( $rhm_media ); ?>" data-rhm-tiles>
@@ -157,5 +181,9 @@ $rhm_rich   = rhm_landing_rich( $rhm_data, 'description' );
 				</li>
 			<?php endforeach; ?>
 		</ul>
+		<?php if ( $rhm_slider ) : ?>
+				<?php rhm_landing_tiles_nav( $rhm_list_id, false, __( 'Item trước', 'themeranghammatsg' ), __( 'Item tiếp theo', 'themeranghammatsg' ) ); ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </section>
