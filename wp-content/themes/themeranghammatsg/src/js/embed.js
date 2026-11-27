@@ -2,7 +2,8 @@
  * Nội dung nhúng "bấm mới tải" (facade): nút [data-embed-src] che chỗ; khi bấm mới tạo iframe / <video>.
  * Trước khi bấm không tải gì từ YouTube / Google Maps → không ảnh hưởng tốc độ trang / PageSpeed.
  * data-embed-type: youtube (iframe youtube-nocookie, tự phát) | map (iframe Google Maps) | file (<video> .mp4/.webm).
- * Nạp bởi: template-parts/sections/about.php (video), page-templates/tpl-lien-he.php (bản đồ).
+ * Nạp bởi: template-parts/sections/about.php (video) và các section landing / hồ sơ bác sĩ có video.
+ * (Trang Liên hệ không còn bản đồ từ 2026-11-27; kiểu "map" vẫn giữ để dùng lại.)
  */
 document.querySelectorAll( '[data-embed-src]' ).forEach( ( button ) => {
 	button.addEventListener(

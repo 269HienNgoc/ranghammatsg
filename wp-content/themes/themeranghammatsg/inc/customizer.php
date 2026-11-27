@@ -24,7 +24,6 @@ function rhm_customizer_fields(): array {
 		'rhm_email'           => array( __( 'Email', 'themeranghammatsg' ), 'email', 'sanitize_email' ),
 		'rhm_address'         => array( __( 'Địa chỉ', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
 		'rhm_working_hours'   => array( __( 'Giờ làm việc', 'themeranghammatsg' ), 'textarea', 'sanitize_textarea_field' ),
-		'rhm_map_url'         => array( __( 'Link nhúng Google Maps (Chia sẻ → Nhúng bản đồ → lấy link trong src). Trống: tự tạo từ địa chỉ', 'themeranghammatsg' ), 'url', 'esc_url_raw' ),
 		'rhm_booking_page'    => array( __( 'Trang Liên hệ / Đặt lịch', 'themeranghammatsg' ), 'dropdown-pages', 'absint' ),
 		'rhm_booking_form_id' => array( __( 'ID form đặt lịch (Fluent Forms)', 'themeranghammatsg' ), 'number', 'absint' ),
 	);
@@ -386,14 +385,14 @@ function rhm_customize_footer( WP_Customize_Manager $wp_customize ): void {
 add_action( 'customize_register', 'rhm_customize_footer' );
 
 /**
- * Trang Liên hệ – Đặt lịch (inc/contact.php). Thông tin liên hệ, bản đồ, ID form: "Thông tin phòng khám"; chi nhánh, mạng xã hội: "Chân trang (Footer)".
+ * Trang Liên hệ – Đặt lịch (inc/contact.php). Thông tin liên hệ, ID form: "Thông tin phòng khám".
  */
 function rhm_customize_contact( WP_Customize_Manager $wp_customize ): void {
 	$wp_customize->add_section(
 		'rhm_contact',
 		array(
 			'title'       => __( 'Trang Liên hệ', 'themeranghammatsg' ),
-			'description' => __( 'Hotline, email, địa chỉ, giờ làm việc, link bản đồ, ID form đặt lịch: sửa ở "Thông tin phòng khám". Chi nhánh và mạng xã hội: "Chân trang (Footer)". Bản đồ tự tạo từ địa chỉ nếu không nhập link embed.', 'themeranghammatsg' ),
+			'description' => __( 'Tiêu đề lớn (H1) = tiêu đề trang. Hotline, email, địa chỉ, giờ làm việc, ID form đặt lịch: sửa ở "Thông tin phòng khám" (ô trống thì dòng đó ẩn). Ô chữ để trống thì dòng đó ẩn.', 'themeranghammatsg' ),
 			'priority'    => 37,
 		)
 	);
@@ -410,11 +409,17 @@ function rhm_customize_contact( WP_Customize_Manager $wp_customize ): void {
 		$wp_customize,
 		'rhm_contact',
 		array(
-			'rhm_contact_intro'      => $text( 'intro', __( 'Đoạn giới thiệu dưới tiêu đề trang', 'themeranghammatsg' ), 'textarea' ),
-			'rhm_contact_form_title' => $text( 'form_title', __( 'Form – tiêu đề', 'themeranghammatsg' ) ),
-			'rhm_contact_form_note'  => $text( 'form_note', __( 'Form – mô tả', 'themeranghammatsg' ), 'textarea' ),
-			'rhm_contact_cta_title'  => $text( 'cta_title', __( 'Khối hotline – tiêu đề', 'themeranghammatsg' ) ),
-			'rhm_contact_cta_text'   => $text( 'cta_text', __( 'Khối hotline – mô tả', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_hero_eyebrow' => $text( 'hero_eyebrow', __( 'Banner – dòng nhỏ trên tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_contact_intro'        => $text( 'intro', __( 'Banner – đoạn giới thiệu dưới tiêu đề', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_info_eyebrow' => $text( 'info_eyebrow', __( 'Khối thông tin – dòng nhỏ', 'themeranghammatsg' ) ),
+			'rhm_contact_info_title'   => $text( 'info_title', __( 'Khối thông tin – tiêu đề (H2)', 'themeranghammatsg' ) ),
+			'rhm_contact_info_text'    => $text( 'info_text', __( 'Khối thông tin – mô tả', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_card_title'   => $text( 'card_title', __( 'Thẻ liên hệ – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_contact_card_text'    => $text( 'card_text', __( 'Thẻ liên hệ – mô tả', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_card_note'    => $text( 'card_note', __( 'Thẻ liên hệ – ô ghi chú cuối thẻ', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_form_title'   => $text( 'form_title', __( 'Form – tiêu đề', 'themeranghammatsg' ) ),
+			'rhm_contact_form_note'    => $text( 'form_note', __( 'Form – mô tả (dùng chung khối đặt lịch hồ sơ bác sĩ)', 'themeranghammatsg' ), 'textarea' ),
+			'rhm_contact_form_privacy' => $text( 'form_privacy', __( 'Form – chú thích nhỏ dưới form', 'themeranghammatsg' ), 'textarea' ),
 		)
 	);
 }

@@ -14,18 +14,32 @@
 @source "../../../page-templates/tpl-lien-he.php";
 @source "../../../inc/template-tags.php";
 
-@layer components {
-	/* Nền ô bản đồ trước khi tải (lưới mờ gợi hình bản đồ). */
-	.map-facade {
-		@apply bg-soft;
-		background-image:
-			linear-gradient(var(--color-mint-dark) 1px, transparent 1px),
-			linear-gradient(90deg, var(--color-mint-dark) 1px, transparent 1px);
-		background-size: 40px 40px;
-	}
+/*
+ * Form trang Liên hệ (.contact-form): ô nhập + nút gửi bo góc nhỏ theo thiết kế, CHỈ trang này
+ * (popup, hồ sơ bác sĩ, landing giữ kiểu chung của components/_booking-form.css).
+ * Viết NGOÀI @layer + thêm .contact-form để thắng _booking-form.css và <style> nội tuyến của Fluent cho nút gửi.
+ */
+.contact-form.rhm-booking .ff-el-form-control {
+	min-height: 2.75rem;
+	padding: 0.625rem 0.875rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+}
 
-	/* Iframe bản đồ do src/js/embed.js tạo khi bấm. */
-	.embed-player {
-		@apply absolute inset-0 size-full border-0;
-	}
+.contact-form.rhm-booking textarea.ff-el-form-control {
+	min-height: 7rem;
+}
+
+.contact-form.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style) {
+	gap: 0.5rem;
+	min-height: 2.75rem;
+	padding-inline: 1.5rem;
+	border-radius: 0.5rem;
+	font-size: 0.9375rem;
+}
+
+/* Mũi tên sau chữ nút (trình đọc màn hình bỏ qua: content … / ""). */
+.contact-form.rhm-booking .fluentform .ff-btn-submit:not(.ff_btn_no_style)::after {
+	content: "→";
+	content: "→" / "";
 }
